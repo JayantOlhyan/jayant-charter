@@ -248,6 +248,43 @@ export const ClaimEvidenceSchema = z.object({
   publicApproval: z.boolean(),
 });
 
+export const SceneKeyframeSchema = z.object({
+  thetaDeg: z.number(),
+  phiDeg: z.number(),
+  radiusPct: z.number().positive(),
+  fieldOfViewDeg: z.number().positive(),
+});
+
+export const LightingModeSchema = z.object({
+  id: z.enum(["twilight", "daylight", "dusk"]),
+  label: z.string().min(3).max(40),
+  exposure: z.number().positive(),
+  shadowIntensity: z.number().min(0).max(2),
+  shadowSoftness: z.number().min(0).max(1),
+  surface: z.enum(["dark", "light"]),
+});
+
+export const SceneSchema = z.object({
+  id: z.string().regex(/^[a-z0-9-]+$/),
+  aircraftId: z.string().min(1),
+  configurationId: z.enum(["flight", "parked", "boarding"]),
+  environmentUrl: z.string().startsWith("/models/"),
+  motionMode: z.enum(["scroll-scrubbed-profile", "interactive-orbit", "static"]),
+  fallbackMediaId: z.string().min(1),
+  secondaryFallbackMediaId: z.string().min(1),
+  keyframes: z.object({
+    arrival: SceneKeyframeSchema,
+    approach: SceneKeyframeSchema,
+  }),
+  lightingModes: z.array(LightingModeSchema).min(1),
+  qualityPolicy: z.object({
+    desktopAutoUpgrade: z.boolean(),
+    mobileExplicitOnly: z.boolean(),
+    reducedMotionStatic: z.boolean(),
+    timeoutMs: z.number().int().positive(),
+  }),
+});
+
 export type SiteSettings = z.infer<typeof SiteSettingsSchema>;
 export type MediaAsset = z.infer<typeof MediaAssetSchema>;
 export type AircraftRecord = z.infer<typeof AircraftSchema>;
@@ -259,3 +296,5 @@ export type TestimonialRecord = z.infer<typeof TestimonialSchema>;
 export type EditorialEntry = z.infer<typeof EditorialEntrySchema>;
 export type CampaignPage = z.infer<typeof CampaignPageSchema>;
 export type ClaimEvidence = z.infer<typeof ClaimEvidenceSchema>;
+export type SceneRecord = z.infer<typeof SceneSchema>;
+export type LightingMode = z.infer<typeof LightingModeSchema>;

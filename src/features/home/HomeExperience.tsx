@@ -10,11 +10,15 @@ import type {
   ExampleScenario,
   FaqItem,
   MediaAsset,
+  SceneRecord,
   ServiceRecord,
   SiteSettings,
   TestimonialRecord,
 } from "@/content/schemas";
+import { ArrivalApproachStage } from "@/features/scroll/ArrivalApproachStage";
 import { AircraftStudioViewer } from "@/features/aircraft/AircraftStudioViewer";
+import { ConfigurationCompareSlider } from "@/features/aircraft/ConfigurationCompareSlider";
+import { TrustEditorialSplit } from "@/features/home/TrustEditorialSplit";
 import { ProgressiveInquiryForm } from "@/features/inquiry/ProgressiveInquiryForm";
 import { FaqBlock } from "@/components/blocks/FaqBlock";
 import { ConditionalProofSection } from "@/components/blocks/ConditionalProofSection";
@@ -25,6 +29,8 @@ interface HomeExperienceProps {
   settings: SiteSettings;
   services: ServiceRecord[];
   aircraftList: AircraftRecord[];
+  arrivalScene: SceneRecord;
+  hangarScene: SceneRecord;
   scenarios: ExampleScenario[];
   faqs: FaqItem[];
   caseStudies: CaseStudyRecord[];
@@ -32,43 +38,12 @@ interface HomeExperienceProps {
   mediaById: Record<string, MediaAsset>;
 }
 
-const PROCESS_STEPS = [
-  {
-    num: "01",
-    title: "Tell Jayant about the trip",
-    body: "Name and phone number are enough to begin. Add your route, travel window, passenger count, or venue if you already have them.",
-  },
-  {
-    num: "02",
-    title: "Review feasible aircraft options",
-    body: "The aviation team checks routing, airports, helipad permissions, and live availability before returning suitable aircraft options and a written quote.",
-  },
-  {
-    num: "03",
-    title: "Confirm with the booking party",
-    body: "You see the exact aircraft, operating carrier, and contract terms before confirming or paying anything.",
-  },
-];
-
-const TRUST_PILLARS = [
-  {
-    title: "One accountable contact",
-    body: "Jayant receives your first inquiry personally and coordinates follow-up so you are never handed between anonymous call desks.",
-  },
-  {
-    title: "Permission before sharing",
-    body: "Your phone number and itinerary are shared with an aviation sourcing team or operator only after you confirm permission for your trip.",
-  },
-  {
-    title: "Transparent operating role",
-    body: "Flights are operated by licensed air carriers identified in your quote. Models presented here are illustrative exterior examples.",
-  },
-];
-
 export function HomeExperience({
   settings,
   services,
   aircraftList,
+  arrivalScene,
+  hangarScene,
   scenarios,
   faqs,
   caseStudies,
@@ -84,6 +59,8 @@ export function HomeExperience({
   const skyPlate = mediaById["hero-sky-plate"];
   const heroJet = mediaById["hawker-hero"];
   const approachJet = mediaById["hawker-low-angle"];
+  const hawkerParked = mediaById["hawker-parked"];
+  const hawkerBoarding = mediaById["hawker-boarding"];
   const falconHero = mediaById["falcon-hero"];
   const groupImg = mediaById["group-charter-editorial"];
   const heliImg = mediaById["helicopter-editorial"];
@@ -92,7 +69,10 @@ export function HomeExperience({
   const gearDetail = mediaById["hawker-gear-detail"];
   const falconEngine = mediaById["falcon-engine-detail"];
 
-  // Centralized single ScrollTrigger choreography (PRD §15.5, §18.2, AC07)
+  const arrivalAircraft =
+    aircraftList.find((a) => a.id === arrivalScene.aircraftId) || aircraftList[0];
+
+  // Subtle composited depth parallax for macro plate below fold (desktop non-reduced-motion only)
   useEffect(() => {
     const root = rootRef.current;
     if (!root) return;
@@ -102,68 +82,11 @@ export function HomeExperience({
     if (prefersReduced || !isDesktop) return;
 
     const ctx = gsap.context(() => {
-      // Chapter 1: Multi-plane atmospheric depth on hero scroll
-      gsap.to("[data-plane='sky']", {
-        yPercent: 14,
-        scale: 1.09,
-        ease: "none",
-        scrollTrigger: {
-          trigger: "[data-chapter='arrival']",
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
-
-      gsap.to("[data-plane='hero-jet']", {
-        y: -44,
-        x: -36,
-        scale: 1.04,
-        ease: "none",
-        scrollTrigger: {
-          trigger: "[data-chapter='arrival']",
-          start: "top top",
-          end: "bottom top",
-          scrub: true,
-        },
-      });
-
-      gsap.to("[data-plane='hero-copy']", {
-        y: 36,
-        opacity: 0.32,
-        ease: "none",
-        scrollTrigger: {
-          trigger: "[data-chapter='arrival']",
-          start: "top top",
-          end: "80% top",
-          scrub: true,
-        },
-      });
-
-      // Chapter 2: Signature Move — The Approach (bounded flight glide into profile framing)
-      gsap.fromTo(
-        "[data-plane='approach-jet']",
-        { xPercent: 8, y: 24, scale: 0.96 },
-        {
-          xPercent: -6,
-          y: -18,
-          scale: 1.03,
-          ease: "none",
-          scrollTrigger: {
-            trigger: "[data-chapter='approach']",
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        }
-      );
-
-      // Chapter 5: Subtle differential parallax on detail macro plate
       gsap.fromTo(
         "[data-plane='macro-lead']",
-        { y: 28 },
+        { y: 26 },
         {
-          y: -24,
+          y: -22,
           ease: "none",
           scrollTrigger: {
             trigger: "[data-chapter='detail']",
@@ -194,139 +117,24 @@ export function HomeExperience({
   return (
     <div ref={rootRef}>
       {/* =====================================================================
-          CHAPTER 1: ARRIVAL — Multi-plane dimensional hero (fits 1280x800 cleanly)
+          CHAPTERS 1 & 2: CONTINUOUS ARRIVAL -> APPROACH 3D AIRCRAFT STAGE
       ===================================================================== */}
-      <section
-        data-chapter="arrival"
-        data-surface="dark"
-        className="relative overflow-hidden bg-[var(--jc-teal-deep)] text-[var(--jc-ivory)]"
-      >
-        {/* Plane 0: High-altitude twilight sky plate */}
-        <div
-          data-plane="sky"
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 origin-center will-change-transform"
-        >
-          <img
-            src={skyPlate.path}
-            alt=""
-            width={skyPlate.width}
-            height={skyPlate.height}
-            fetchPriority="high"
-            className="h-full w-full object-cover object-bottom opacity-95"
-          />
-        </div>
+      <ArrivalApproachStage
+        scene={arrivalScene}
+        aircraft={arrivalAircraft}
+        skyPlate={skyPlate}
+        heroPoster={heroJet}
+        approachPoster={approachJet}
+        enableLive3D={settings.featureFlags.enableLive3D}
+      />
 
-        {/* Plane 1: Targeted reading scrim (left edge & bottom caption lip, keeping twilight horizon crisp) */}
-        <div
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(102deg, rgba(10,29,28,0.88) 0%, rgba(16,43,42,0.54) 46%, rgba(16,43,42,0.14) 100%), linear-gradient(180deg, transparent 72%, rgba(10,29,28,0.68) 100%)",
-          }}
-        />
-
-        {/* Plane 2 + Plane 3: Semantic HTML hierarchy & transparent Hawker 4000 */}
-        <div className="jc-container relative z-10 grid min-h-[calc(100svh-114px)] grid-cols-1 items-center gap-10 py-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.18fr)] lg:gap-8 lg:py-14">
-          <div data-plane="hero-copy" className="max-w-[560px] will-change-transform">
-            <h1 className="jc-display-hero text-[var(--jc-ivory)]">
-              Private charter for your itinerary.
-            </h1>
-
-            <p className="mt-6 max-w-[46ch] text-[18px] leading-[1.6] text-[var(--jc-ivory-soft)]">
-              Private jets, group charters, and helicopters arranged around your schedule, with Jayant as your first point of contact.
-            </p>
-
-            <div className="mt-8 flex flex-wrap items-center gap-3.5">
-              <a href="#inquire" className="jc-btn-gold">
-                Request a callback
-              </a>
-              <a href="#inspect-aircraft" className="jc-btn-outline-light">
-                Explore aircraft
-              </a>
-            </div>
-          </div>
-
-          <div
-            data-plane="hero-jet"
-            className="relative flex flex-col items-end will-change-transform"
-          >
-            <img
-              src={heroJet.path}
-              alt={heroJet.alt}
-              width={heroJet.width}
-              height={heroJet.height}
-              fetchPriority="high"
-              className="jc-aircraft-shadow w-full max-w-[780px] object-contain lg:w-[112%] lg:max-w-none"
-            />
-            <p className="mt-4 max-w-[44ch] text-right text-[13px] leading-snug text-[var(--jc-ivory-soft)]">
-              {heroJet.caption}
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* Multi-stop eased atmospheric tonal bridge (Deep Teal horizon -> Warm Ivory) */}
+      <div aria-hidden="true" className="jc-tonal-bridge w-full" />
 
       {/* =====================================================================
-          CHAPTER 2: THE APPROACH — Scroll-scrubbed flight glide into editorial clarity
+          CHAPTER 3: CHOOSE THE JOURNEY — Distinct editorial compositions
       ===================================================================== */}
-      <section
-        data-chapter="approach"
-        className="surface-ivory relative overflow-hidden border-b border-[var(--jc-line-light)] py-20 md:py-28"
-      >
-        <div className="jc-container">
-          <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-16">
-            <div>
-              <h2 className="jc-display-section text-[var(--jc-ink)]">
-                Built around the flight you actually need.
-              </h2>
-              <p className="mt-5 max-w-[50ch] text-[17px] leading-relaxed text-[var(--jc-muted)]">
-                Whether you are an executive assistant coordinating a same-day board return, a luxury travel advisor sourcing a family jet, or a planner arranging wedding transfers, you start with one calm conversation instead of an instant-booking algorithm.
-              </p>
-
-              <dl className="mt-8 grid grid-cols-1 gap-6 border-t border-[var(--jc-line-light)] pt-7 sm:grid-cols-2">
-                <div>
-                  <dt className="text-[14px] font-semibold text-[var(--jc-ink)]">
-                    Custom itineraries
-                  </dt>
-                  <dd className="mt-1.5 m-0 text-[14px] leading-relaxed text-[var(--jc-muted)]">
-                    One-way, return, and multi-stop requests checked directly for airport, runway, and timing feasibility.
-                  </dd>
-                </div>
-                <div>
-                  <dt className="text-[14px] font-semibold text-[var(--jc-ink)]">
-                    Active corridor focus
-                  </dt>
-                  <dd className="mt-1.5 m-0 text-[14px] leading-relaxed text-[var(--jc-muted)]">
-                    Dubai, Delhi NCR, and Mumbai, with wedding and event movements across Rajasthan and Goa.
-                  </dd>
-                </div>
-              </dl>
-            </div>
-
-            <div className="relative rounded-[4px] border border-[var(--jc-line-light)] bg-[linear-gradient(180deg,var(--jc-stone)_0%,var(--jc-paper)_100%)] p-6 sm:p-10">
-              <div data-plane="approach-jet" className="will-change-transform">
-                <img
-                  src={approachJet.path}
-                  alt={approachJet.alt}
-                  width={approachJet.width}
-                  height={approachJet.height}
-                  loading="lazy"
-                  className="jc-aircraft-shadow-light w-full object-contain"
-                />
-              </div>
-              <p className="mt-5 mb-0 text-[13px] text-[var(--jc-muted)]">
-                Hawker 4000 exterior display study. Aircraft class is matched to your route, luggage, and party size during feasibility review.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* =====================================================================
-          CHAPTER 3: CHOOSE THE JOURNEY — Asymmetric editorial service rows
-      ===================================================================== */}
-      <section id="services" className="surface-ivory py-24 md:py-32">
+      <section id="services" className="surface-ivory py-20 md:py-28">
         <div className="jc-container">
           <div className="grid grid-cols-1 gap-6 pb-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
             <h2 className="jc-display-section text-[var(--jc-ink)]">
@@ -338,9 +146,9 @@ export function HomeExperience({
           </div>
 
           <div className="divide-y divide-[var(--jc-line-light)] border-y border-[var(--jc-line-light)]">
-            {/* Service 01: Private jets */}
+            {/* 01 Private jets */}
             {privateJetsSvc && (
-              <article className="grid grid-cols-1 items-center gap-10 py-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:gap-16 lg:py-20">
+              <article className="grid grid-cols-1 items-center gap-10 py-14 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.96fr)] lg:gap-16 lg:py-20">
                 <div className="rounded-[4px] border border-[var(--jc-line-light)] bg-[var(--jc-stone)] p-6 sm:p-10">
                   <img
                     src={falconHero.path}
@@ -389,9 +197,9 @@ export function HomeExperience({
               </article>
             )}
 
-            {/* Service 02: Group charter (reversed editorial composition) */}
+            {/* 02 Group charter */}
             {groupSvc && (
-              <article className="grid grid-cols-1 items-center gap-10 py-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.08fr)] lg:gap-16 lg:py-20">
+              <article className="grid grid-cols-1 items-center gap-10 py-14 lg:grid-cols-[minmax(0,0.96fr)_minmax(0,1.1fr)] lg:gap-16 lg:py-20">
                 <div className="order-2 lg:order-1">
                   <span className="font-serif text-[20px] text-[var(--jc-muted)] tabular-nums">
                     02
@@ -440,9 +248,9 @@ export function HomeExperience({
               </article>
             )}
 
-            {/* Service 03: Helicopters */}
+            {/* 03 Helicopters */}
             {heliSvc && (
-              <article className="grid grid-cols-1 items-center gap-10 py-14 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,1fr)] lg:gap-16 lg:py-20">
+              <article className="grid grid-cols-1 items-center gap-10 py-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.96fr)] lg:gap-16 lg:py-20">
                 <figure className="m-0 overflow-hidden rounded-[4px] border border-[var(--jc-line-light)] bg-[var(--jc-teal-deep)]">
                   <img
                     src={heliImg.path}
@@ -495,7 +303,7 @@ export function HomeExperience({
       </section>
 
       {/* =====================================================================
-          CHAPTER 4: INSPECT THE AIRCRAFT (Engineered Peak — Digital Jets 3D Hangar)
+          CHAPTER 4: AIRCRAFT EXPLORATION (Engineered Peak — Digital Jets 3D Hangar)
       ===================================================================== */}
       <section
         id="inspect-aircraft"
@@ -512,7 +320,7 @@ export function HomeExperience({
             </div>
             <div className="lg:justify-self-end">
               <p className="m-0 max-w-[50ch] text-[17px] leading-relaxed text-[var(--jc-ivory-soft)]">
-                Inspect two photo-referenced exterior models up close: the Hawker 4000 and the original Dassault Falcon 2000 Classic. Switch configurations, examine angles, and attach a preference to your inquiry.
+                Orbit the Hawker 4000 and original Dassault Falcon 2000 Classic at generous scale. Switch exterior configurations, compare twilight and daylight studio lighting, and attach a preference directly to your callback request.
               </p>
             </div>
           </div>
@@ -520,6 +328,7 @@ export function HomeExperience({
           <AircraftStudioViewer
             aircraftList={aircraftList}
             mediaById={mediaById}
+            lightingModes={hangarScene.lightingModes}
             initialAircraftId={aircraftList[0]?.id}
             enableLive3D={settings.featureFlags.enableLive3D}
             mode="hangar"
@@ -529,22 +338,29 @@ export function HomeExperience({
       </section>
 
       {/* =====================================================================
-          CHAPTER 5: DETAIL & ATMOSPHERE — Digital Jets Macro Craftsmanship
+          CHAPTER 5: DETAIL & ATMOSPHERE — Comparison Wipe + Digital Jets Macro Plates
       ===================================================================== */}
       <section
         data-chapter="detail"
-        className="surface-stone border-b border-[var(--jc-line-light)] py-24 md:py-32"
+        className="surface-stone border-b border-[var(--jc-line-light)] py-20 md:py-24"
       >
-        <div className="jc-container">
-          <div className="grid grid-cols-1 gap-6 pb-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
+        <div className="jc-container space-y-10">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
             <h2 className="jc-display-section text-[var(--jc-ink)]">
               Detail examined before you fly.
             </h2>
             <p className="m-0 max-w-[50ch] text-[17px] leading-relaxed text-[var(--jc-muted)] lg:justify-self-end">
-              Studio macro views of exterior nacelles, forward airstair hardware, and undercarriage assemblies from our reference kits.
+              Compare ramp configurations side by side and inspect high-resolution exterior views of nacelles, airstair hardware, and undercarriage assemblies.
             </p>
           </div>
 
+          {/* Digital Jets-inspired Interactive Before/After Configuration Wipe */}
+          <ConfigurationCompareSlider
+            closedMedia={hawkerParked}
+            openMedia={hawkerBoarding}
+          />
+
+          {/* Full-width macro craftsmanship spread */}
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]">
             <figure
               data-plane="macro-lead"
@@ -627,57 +443,20 @@ export function HomeExperience({
       </section>
 
       {/* =====================================================================
-          CHAPTER 6: TRUST, PROCESS & EXAMPLE SCENARIOS
+          CHAPTER 6: TRUST & EXPERIENCE — Jesko-inspired synced 2-column split
       ===================================================================== */}
-      <section className="surface-ivory py-24 md:py-32">
+      <section className="surface-ivory py-20 md:py-24">
         <div className="jc-container">
-          <div className="grid grid-cols-1 gap-6 pb-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
+          <div className="grid grid-cols-1 gap-6 pb-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
             <h2 className="jc-display-section text-[var(--jc-ink)]">
-              From inquiry to a confirmed flight.
+              A calmer way to arrange a charter.
             </h2>
             <p className="m-0 max-w-[50ch] text-[17px] leading-relaxed text-[var(--jc-muted)] lg:justify-self-end">
-              No synthetic instant-booking button pretending to hold live aircraft. A real person checks your trip before you commit.
+              Clear accountability from the first callback to licensed operator confirmation, with zero synthetic instant-booking claims.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-10 border-t border-[var(--jc-line-light)] pt-12 md:grid-cols-3 md:gap-0">
-            {PROCESS_STEPS.map((step, index) => (
-              <div
-                key={step.num}
-                className={
-                  index > 0
-                    ? "md:border-l md:border-[var(--jc-line-light)] md:pl-8 lg:pl-10"
-                    : "md:pr-8 lg:pr-10"
-                }
-              >
-                <span className="font-serif text-[46px] leading-none text-[var(--jc-gold-muted)] tabular-nums">
-                  {step.num}
-                </span>
-                <h3 className="mt-5 jc-display-title text-[var(--jc-ink)]">
-                  {step.title}
-                </h3>
-                <p className="mt-3 m-0 text-[15px] leading-relaxed text-[var(--jc-muted)]">
-                  {step.body}
-                </p>
-              </div>
-            ))}
-          </div>
-
-          <div className="mt-20 grid grid-cols-1 gap-6 border-t border-[var(--jc-line-light)] pt-14 md:grid-cols-3">
-            {TRUST_PILLARS.map((pillar) => (
-              <div
-                key={pillar.title}
-                className="rounded-[4px] border border-[var(--jc-line-light)] bg-[var(--jc-paper)] p-7"
-              >
-                <h3 className="font-serif text-[22px] text-[var(--jc-ink)]">
-                  {pillar.title}
-                </h3>
-                <p className="mt-2.5 m-0 text-[15px] leading-relaxed text-[var(--jc-muted)]">
-                  {pillar.body}
-                </p>
-              </div>
-            ))}
-          </div>
+          <TrustEditorialSplit mediaById={mediaById} />
         </div>
       </section>
 
@@ -739,7 +518,7 @@ export function HomeExperience({
       </section>
 
       {/* =====================================================================
-          CHAPTER 7: FAQ & TELL US ABOUT THE TRIP (Calm Zero-Motion Task Surface)
+          CHAPTER 7: FAQ & INQUIRY (Calm Zero-Motion Task Surface)
       ===================================================================== */}
       <section className="surface-ivory border-b border-[var(--jc-line-light)] py-24 md:py-28">
         <div className="jc-container">

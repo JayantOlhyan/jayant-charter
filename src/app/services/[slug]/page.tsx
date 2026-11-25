@@ -91,7 +91,7 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
             <figure
               className={
                 isTransparentRender
-                  ? "m-0 flex flex-col items-center rounded-[4px] border border-[var(--jc-line-dark)] bg-[radial-gradient(ellipse_at_50%_55%,rgba(32,68,66,0.68)_0%,rgba(10,29,28,0.95)_80%)] p-6 sm:p-10"
+                  ? "jc-stage-twilight m-0 flex flex-col items-center rounded-[4px] border border-[var(--jc-line-dark)] p-6 sm:p-10"
                   : "m-0 overflow-hidden rounded-[4px] border border-[var(--jc-line-dark)] bg-[var(--jc-teal-deep)]"
               }
             >

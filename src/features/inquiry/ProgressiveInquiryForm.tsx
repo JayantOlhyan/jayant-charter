@@ -957,7 +957,7 @@ export function ProgressiveInquiryForm({
           {submitState.kind === "submitting" ? (
             <>
               <Loader2 aria-hidden="true" className="size-4 animate-spin" />
-              <span>Recording your inquiry...</span>
+              <span>Recording your inquiry…</span>
             </>
           ) : (
             <span>Request a callback</span>

@@ -186,6 +186,43 @@
   filter: var(--jc-shadow-aircraft-light);
 }
 
+/* Continuous ambient high-altitude cloud drift (composited transform only; paused on reduced motion) */
+@keyframes jcCloudDrift {
+  0% {
+    transform: translate3d(-12%, 0, 0);
+  }
+  50% {
+    transform: translate3d(12%, 0, 0);
+  }
+  100% {
+    transform: translate3d(-12%, 0, 0);
+  }
+}
+
+.jc-cloud-drift {
+  background-image: var(--jc-cloud-veil);
+  animation: jcCloudDrift 36s linear infinite;
+  will-change: transform;
+}
+
+/* Multi-stop eased atmospheric tonal bridge (Jesko-inspired horizon handoff) */
+.jc-tonal-bridge {
+  height: clamp(64px, 9vw, 132px);
+  background: var(--jc-transition-sky-to-ivory);
+}
+
+.jc-stage-twilight {
+  background: var(--jc-stage-twilight);
+}
+
+.jc-stage-daylight {
+  background: var(--jc-stage-daylight);
+}
+
+.jc-stage-dusk {
+  background: var(--jc-stage-dusk);
+}
+
 /* Primary editorial CTA recipes (single clear primary recipe per surface) */
 .jc-btn-gold {
   display: inline-flex;

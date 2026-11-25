@@ -25,6 +25,7 @@ const files = [
   "testimonials.json",
   "editorial.json",
   "campaigns.json",
+  "scenes.json",
 ];
 
 // 1. Check JSON validity and forbidden private/unapproved copy across all content files

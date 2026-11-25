@@ -22,8 +22,11 @@ Built to **Portfolio Website PRD v1.1** (`25 November 2026`) and the canonical [
 - [x] **Milestone D — Durable Inquiry Backend & Outbox**
   - `POST /api/inquiries` with Zod + `libphonenumber-js` international validation, sliding-window rate limiter, honeypot check, idempotency key + payload hash (`201`/`200`/`409`), internal duplicate flagging, atomic Drizzle/SQLite persistence (`inquiries`, `inquiry_events`, `delivery_jobs`), exponential retry outbox, PII redaction, and explicit onward-handoff consent guard
 - [x] **Milestone E — Signature Scroll Choreography, Visual/A11y Audit & Release Gate**
-  - GSAP `ScrollTrigger` + desktop-only Lenis smooth scroll with full mobile and `prefers-reduced-motion` parity
-  - Automated Vitest contract/privacy suite, real-browser desktop/mobile/reduced-motion visual verification, and Hallmark Floor verification
+  - Live desktop (`1440px`) and mobile (`390px`) reference audit of Jesko Jets and Digital Jets documented in [docs/REFERENCE-AUDIT.md](./docs/REFERENCE-AUDIT.md) and [docs/VISUAL-BOARD.md](./docs/VISUAL-BOARD.md)
+  - Reusable 3D scene specification (`content/scenes.json`) driving the pinned desktop **Arrival → Approach** live 3D scroll transition (`-36°` three-quarter → `0°` broadside profile, bidirectional scrub, zero per-frame React re-renders, single-active-WebGL handoff to Chapter 4)
+  - Digital Jets-inspired studio lighting atmosphere modes (*Twilight hangar*, *Daylight apron*, *Evening silhouette*) in `AircraftStudioViewer` and pixel-matched Before/After **Hawker 4000 ramp comparison slider** (`Parked` vs. `Boarding` airstair)
+  - Jesko-inspired synced two-column **Trust & Experience** editorial split using a zero-JS-overhead CSS opacity stack (`259 kB` homepage First Load JS)
+  - Automated Vitest contract/privacy/scene suite (`13/13` passing), real-browser desktop/mobile/reduced-motion live verification (`scripts/live-verify.mjs`), and repo-wide Hallmark `sloplint` (`0 FAIL` across 44 files)
 
 ---
 
@@ -34,8 +37,8 @@ Built to **Portfolio Website PRD v1.1** (`25 November 2026`) and the canonical [
 | Framework | Next.js 15 (App Router) + React 19 + TypeScript (`strict`) |
 | Styling & Primitives | Tailwind CSS v4 + CSS custom properties + shadcn/ui (`@base-ui/react`) + `lucide-react` |
 | Typography | `Newsreader` (optical display serif) + `Plus Jakarta Sans` (body, UI, `tabular-nums`) via `next/font/google` |
-| Motion & Scroll | GSAP + ScrollTrigger + Lenis (desktop fine-pointer only; auto-disabled under reduced motion) + `motion` |
-| Interactive 3D | Self-hosted pinned Google `model-viewer` v4.1.0 (Apache-2.0, inline Meshopt WASM decoding) |
+| Motion & Scroll | GSAP + ScrollTrigger + Lenis (desktop fine-pointer only; auto-disabled under reduced motion) + GPU-composited CSS transitions |
+| Interactive 3D | Self-hosted pinned Google `model-viewer` v4.1.0 (Apache-2.0) + self-hosted `meshopt_decoder.js` (MIT) driven by `content/scenes.json` |
 | Forms & Validation | `react-hook-form` + `zod` + `libphonenumber-js` |
 | Durable Storage | Drizzle ORM + SQLite (`better-sqlite3`, WAL mode; Postgres-ready adapter seam) |
 | Testing | Vitest + Playwright visual/a11y verification |
@@ -74,7 +77,7 @@ npm run optimize:assets   # Regenerate optimized desktop/mobile GLBs & WebP rend
 
 - **Site Settings & Feature Flags:** Edit `content/site-settings.json` to configure the public brand name, legal entity notice, verified contact channels, staffed response hours, and independent rollback flags (`enableLive3D`, `enableIntake`, `enableSmoothScroll`, `showPreviewBanner`).
 - **Publishing Approved Case Studies or New Aircraft:** Add validated JSON records under `content/` (see [docs/OPERATIONS.md](./docs/OPERATIONS.md)). Empty collections stay hidden from navigation, homepage, and `sitemap.xml` until approved `status: "published"` records exist.
-- **Asset Licensing & Performance Profile:** See [docs/ASSET-LICENSES.md](./docs/ASSET-LICENSES.md) and [docs/PERFORMANCE-PROFILE.md](./docs/PERFORMANCE-PROFILE.md).
+- **Asset Licensing, Reference Audit & Performance Profile:** See [docs/REFERENCE-AUDIT.md](./docs/REFERENCE-AUDIT.md), [docs/VISUAL-BOARD.md](./docs/VISUAL-BOARD.md), [docs/ASSET-LICENSES.md](./docs/ASSET-LICENSES.md), [docs/PERFORMANCE-PROFILE.md](./docs/PERFORMANCE-PROFILE.md), and [docs/ACCEPTANCE-MATRIX.md](./docs/ACCEPTANCE-MATRIX.md).
 
 ---
 

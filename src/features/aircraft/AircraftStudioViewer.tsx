@@ -7,13 +7,16 @@ import {
   Compass,
   Hand,
   Lock,
+  Moon,
   Pause,
   Play,
   RotateCcw,
+  Sun,
+  Sunset,
   Unlock,
   AlertCircle,
 } from "lucide-react";
-import type { AircraftRecord, MediaAsset } from "@/content/schemas";
+import type { AircraftRecord, LightingMode, MediaAsset } from "@/content/schemas";
 import type { ModelViewerElement } from "@/types/model-viewer";
 import {
   detectViewerCapability,
@@ -23,9 +26,37 @@ import {
 import { trackSafeEvent } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
+const DEFAULT_LIGHTING_MODES: LightingMode[] = [
+  {
+    id: "twilight",
+    label: "Twilight hangar",
+    exposure: 1.12,
+    shadowIntensity: 0.48,
+    shadowSoftness: 0.85,
+    surface: "dark",
+  },
+  {
+    id: "daylight",
+    label: "Daylight apron",
+    exposure: 1.24,
+    shadowIntensity: 0.62,
+    shadowSoftness: 0.92,
+    surface: "light",
+  },
+  {
+    id: "dusk",
+    label: "Evening silhouette",
+    exposure: 0.86,
+    shadowIntensity: 0.35,
+    shadowSoftness: 0.9,
+    surface: "dark",
+  },
+];
+
 interface AircraftStudioViewerProps {
   aircraftList: AircraftRecord[];
   mediaById: Record<string, MediaAsset>;
+  lightingModes?: LightingMode[];
   initialAircraftId?: string;
   enableLive3D?: boolean;
   mode?: "hangar" | "detail";
@@ -39,6 +70,7 @@ const LOAD_TIMEOUT_MS = 10_000;
 export function AircraftStudioViewer({
   aircraftList,
   mediaById,
+  lightingModes = DEFAULT_LIGHTING_MODES,
   initialAircraftId,
   enableLive3D = true,
   mode = "detail",
@@ -46,6 +78,13 @@ export function AircraftStudioViewer({
 }: AircraftStudioViewerProps) {
   const [selectedAircraftId, setSelectedAircraftId] = useState<string>(
     initialAircraftId || aircraftList[0]?.id || ""
+  );
+  const [lightingId, setLightingId] = useState<LightingMode["id"]>(
+    lightingModes[0]?.id || "twilight"
+  );
+  const activeLighting = useMemo(
+    () => lightingModes.find((m) => m.id === lightingId) || lightingModes[0],
+    [lightingId, lightingModes]
   );
   const aircraft = useMemo(
     () => aircraftList.find((a) => a.id === selectedAircraftId) || aircraftList[0],
@@ -414,9 +453,26 @@ export function AircraftStudioViewer({
       className="grid grid-cols-1 overflow-hidden rounded-[4px] border border-[var(--jc-line-dark)] bg-[var(--jc-teal-deep)] lg:grid-cols-[minmax(0,1.55fr)_minmax(0,1fr)]"
     >
       {/* Interactive Stage */}
-      <div className="relative flex min-h-[380px] flex-col justify-between bg-[radial-gradient(ellipse_at_50%_54%,rgba(34,74,71,0.72)_0%,rgba(16,43,42,0.92)_58%,rgba(10,29,28,1)_100%)] sm:min-h-[480px] lg:min-h-[600px]">
-        {/* Top stage bar */}
-        <div className="relative z-10 flex flex-wrap items-center justify-between gap-3 border-b border-[var(--jc-line-dark)] px-5 py-3.5">
+      <div
+        data-surface={activeLighting.surface}
+        className={cn(
+          "relative flex min-h-[380px] flex-col justify-between transition-colors duration-300 sm:min-h-[480px] lg:min-h-[600px]",
+          activeLighting.id === "daylight"
+            ? "jc-stage-daylight text-[var(--jc-ink)]"
+            : activeLighting.id === "dusk"
+              ? "jc-stage-dusk text-[var(--jc-ivory)]"
+              : "jc-stage-twilight text-[var(--jc-ivory)]"
+        )}
+      >
+        {/* Top stage bar: Configurations + Digital Jets Studio Lighting Modes */}
+        <div
+          className={cn(
+            "relative z-10 flex flex-wrap items-center justify-between gap-3 border-b px-5 py-3.5",
+            activeLighting.surface === "light"
+              ? "border-[var(--jc-line-light)] bg-[var(--jc-scrim-light)]"
+              : "border-[var(--jc-line-dark)]"
+          )}
+        >
           <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Aircraft configuration">
             {aircraft.configurations.map((cfg) => {
               const selected = cfg.id === activeConfig.id;
@@ -429,8 +485,12 @@ export function AircraftStudioViewer({
                   className={cn(
                     "min-h-10 rounded-[3px] border px-3.5 text-[13px] font-medium whitespace-nowrap transition-colors duration-150 cursor-pointer",
                     selected
-                      ? "border-[var(--jc-gold)] bg-[var(--jc-gold)] text-[var(--jc-teal)]"
-                      : "border-[var(--jc-line-dark-strong)] bg-transparent text-[var(--jc-ivory-soft)] hover:border-[var(--jc-ivory)] hover:text-[var(--jc-ivory)]"
+                      ? activeLighting.surface === "light"
+                        ? "border-[var(--jc-teal)] bg-[var(--jc-teal)] text-[var(--jc-ivory)]"
+                        : "border-[var(--jc-gold)] bg-[var(--jc-gold)] text-[var(--jc-teal)]"
+                      : activeLighting.surface === "light"
+                        ? "border-[var(--jc-line-strong)] bg-transparent text-[var(--jc-ink)] hover:border-[var(--jc-teal)]"
+                        : "border-[var(--jc-line-dark-strong)] bg-transparent text-[var(--jc-ivory-soft)] hover:border-[var(--jc-ivory)] hover:text-[var(--jc-ivory)]"
                   )}
                 >
                   {cfg.label}
@@ -439,14 +499,54 @@ export function AircraftStudioViewer({
             })}
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex flex-wrap items-center gap-2">
+            {/* Studio Lighting Presentation Switcher (Digital Jets lighting reference) */}
+            <div className="flex items-center gap-1" role="group" aria-label="Studio lighting atmosphere">
+              {lightingModes.map((lMode) => {
+                const active = lMode.id === activeLighting.id;
+                const Icon =
+                  lMode.id === "daylight"
+                    ? Sun
+                    : lMode.id === "dusk"
+                      ? Sunset
+                      : Moon;
+                return (
+                  <button
+                    key={lMode.id}
+                    type="button"
+                    aria-pressed={active}
+                    onClick={() => setLightingId(lMode.id)}
+                    title={lMode.label}
+                    className={cn(
+                      "inline-flex min-h-10 items-center gap-1.5 rounded-[3px] border px-2.5 text-[12px] font-medium whitespace-nowrap transition-colors cursor-pointer",
+                      active
+                        ? activeLighting.surface === "light"
+                          ? "border-[var(--jc-teal)] bg-[var(--jc-teal)] text-[var(--jc-ivory)]"
+                          : "border-[var(--jc-ivory)] bg-[var(--jc-teal-elevated)] text-[var(--jc-ivory)]"
+                        : activeLighting.surface === "light"
+                          ? "border-[var(--jc-line-light)] text-[var(--jc-muted)] hover:border-[var(--jc-teal)] hover:text-[var(--jc-ink)]"
+                          : "border-[var(--jc-line-dark)] text-[var(--jc-ivory-muted)] hover:border-[var(--jc-line-dark-strong)] hover:text-[var(--jc-ivory)]"
+                    )}
+                  >
+                    <Icon aria-hidden="true" className="size-3.5" />
+                    <span className="hidden sm:inline">{lMode.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+
             {viewerActivated && status === "ready" && !capability?.prefersReducedMotion && (
               <button
                 type="button"
                 onClick={() => setAutoRotateEnabled((v) => !v)}
                 aria-pressed={autoRotateEnabled}
                 aria-label={autoRotateEnabled ? "Pause turntable rotation" : "Play gentle turntable rotation"}
-                className="inline-flex min-h-10 items-center gap-1.5 rounded-[3px] border border-[var(--jc-line-dark-strong)] px-3 text-[13px] text-[var(--jc-ivory-soft)] hover:border-[var(--jc-ivory)] hover:text-[var(--jc-ivory)] cursor-pointer"
+                className={cn(
+                  "inline-flex min-h-10 items-center gap-1.5 rounded-[3px] border px-3 text-[13px] cursor-pointer",
+                  activeLighting.surface === "light"
+                    ? "border-[var(--jc-line-strong)] text-[var(--jc-ink)] hover:border-[var(--jc-teal)]"
+                    : "border-[var(--jc-line-dark-strong)] text-[var(--jc-ivory-soft)] hover:border-[var(--jc-ivory)] hover:text-[var(--jc-ivory)]"
+                )}
               >
                 {autoRotateEnabled ? (
                   <>
@@ -471,7 +571,9 @@ export function AircraftStudioViewer({
                   "inline-flex min-h-10 items-center gap-1.5 rounded-[3px] border px-3 text-[13px] font-medium cursor-pointer",
                   mobileTouchLocked
                     ? "border-[var(--jc-gold)] bg-[var(--jc-gold)] text-[var(--jc-teal)]"
-                    : "border-[var(--jc-line-dark-strong)] text-[var(--jc-ivory)]"
+                    : activeLighting.surface === "light"
+                      ? "border-[var(--jc-line-strong)] text-[var(--jc-ink)]"
+                      : "border-[var(--jc-line-dark-strong)] text-[var(--jc-ivory)]"
                 )}
               >
                 {mobileTouchLocked ? (
@@ -519,7 +621,7 @@ export function AircraftStudioViewer({
               {(status === "error" || status === "timeout") && (
                 <div
                   role="alert"
-                  className="mt-5 flex max-w-md flex-col items-center gap-3 rounded-[3px] border border-[var(--jc-line-dark-strong)] bg-[rgba(10,29,28,0.88)] px-5 py-4 text-center"
+                  className="mt-5 flex max-w-md flex-col items-center gap-3 rounded-[3px] border border-[var(--jc-line-dark-strong)] bg-[var(--jc-panel-dark-strong)] px-5 py-4 text-center"
                 >
                   <div className="flex items-center gap-2 text-[14px] font-medium text-[var(--jc-gold)]">
                     <AlertCircle aria-hidden="true" className="size-4 shrink-0" />
@@ -572,9 +674,9 @@ export function AircraftStudioViewer({
                 min-field-of-view="18deg"
                 max-field-of-view="42deg"
                 environment-image={aircraft.environmentUrl}
-                exposure="1.12"
-                shadow-intensity="0.45"
-                shadow-softness="0.85"
+                exposure={activeLighting.exposure}
+                shadow-intensity={activeLighting.shadowIntensity}
+                shadow-softness={activeLighting.shadowSoftness}
                 interaction-prompt="none"
                 interpolation-decay={capability?.prefersReducedMotion ? "0" : "120"}
                 auto-rotate={autoRotateEnabled && inView ? "" : undefined}
@@ -587,12 +689,13 @@ export function AircraftStudioViewer({
                   alt={activePoster.alt}
                   className="jc-aircraft-shadow h-full w-full object-contain"
                 />
+                <div slot="progress-bar" aria-hidden="true" hidden />
               </model-viewer>
 
               {status === "loading" && (
                 <div className="pointer-events-none absolute inset-x-0 bottom-2 flex justify-center">
-                  <span className="rounded-[3px] border border-[var(--jc-line-dark-strong)] bg-[rgba(10,29,28,0.88)] px-3.5 py-1.5 text-[13px] text-[var(--jc-ivory)]">
-                    Preparing {activeConfig.label.toLowerCase()} 3D model ({sizeLabelMb} MB)...
+                  <span className="rounded-[3px] border border-[var(--jc-line-dark-strong)] bg-[var(--jc-panel-dark-strong)] px-3.5 py-1.5 text-[13px] text-[var(--jc-ivory)]">
+                    Preparing {activeConfig.label.toLowerCase()} 3D model ({sizeLabelMb} MB)…
                   </span>
                 </div>
               )}
@@ -601,7 +704,14 @@ export function AircraftStudioViewer({
         </div>
 
         {/* Bottom preset toolbar + status live region */}
-        <div className="relative z-10 border-t border-[var(--jc-line-dark)] bg-[rgba(10,29,28,0.72)] px-5 py-3.5">
+        <div
+          className={cn(
+            "relative z-10 border-t px-5 py-3.5 transition-colors duration-300",
+            activeLighting.surface === "light"
+              ? "border-[var(--jc-line-light)] bg-[var(--jc-scrim-light)]"
+              : "border-[var(--jc-line-dark)] bg-[var(--jc-scrim-dark)]"
+          )}
+        >
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label="Camera angles">
               {aircraft.cameraPresets.map((preset) => {
@@ -615,8 +725,12 @@ export function AircraftStudioViewer({
                     className={cn(
                       "min-h-10 rounded-[3px] border px-3 text-[13px] whitespace-nowrap transition-colors duration-150 cursor-pointer",
                       isSelected
-                        ? "border-[var(--jc-ivory)] bg-[var(--jc-teal-elevated)] text-[var(--jc-ivory)]"
-                        : "border-[var(--jc-line-dark)] bg-transparent text-[var(--jc-ivory-soft)] hover:border-[var(--jc-line-dark-strong)] hover:text-[var(--jc-ivory)]"
+                        ? activeLighting.surface === "light"
+                          ? "border-[var(--jc-teal)] bg-[var(--jc-teal)] text-[var(--jc-ivory)]"
+                          : "border-[var(--jc-ivory)] bg-[var(--jc-teal-elevated)] text-[var(--jc-ivory)]"
+                        : activeLighting.surface === "light"
+                          ? "border-[var(--jc-line-strong)] bg-transparent text-[var(--jc-ink)] hover:border-[var(--jc-teal)]"
+                          : "border-[var(--jc-line-dark)] bg-transparent text-[var(--jc-ivory-soft)] hover:border-[var(--jc-line-dark-strong)] hover:text-[var(--jc-ivory)]"
                     )}
                   >
                     {preset.label}
@@ -627,7 +741,12 @@ export function AircraftStudioViewer({
               <button
                 type="button"
                 onClick={handleResetView}
-                className="inline-flex min-h-10 items-center gap-1.5 rounded-[3px] border border-[var(--jc-line-dark)] px-3 text-[13px] text-[var(--jc-ivory-soft)] transition-colors hover:border-[var(--jc-ivory)] hover:text-[var(--jc-ivory)] cursor-pointer"
+                className={cn(
+                  "inline-flex min-h-10 items-center gap-1.5 rounded-[3px] border px-3 text-[13px] transition-colors cursor-pointer",
+                  activeLighting.surface === "light"
+                    ? "border-[var(--jc-line-strong)] text-[var(--jc-ink)] hover:border-[var(--jc-teal)]"
+                    : "border-[var(--jc-line-dark)] text-[var(--jc-ivory-soft)] hover:border-[var(--jc-ivory)] hover:text-[var(--jc-ivory)]"
+                )}
               >
                 <RotateCcw aria-hidden="true" className="size-3.5" />
                 <span>Reset</span>
@@ -637,7 +756,12 @@ export function AircraftStudioViewer({
             <p
               role="status"
               aria-live="polite"
-              className="m-0 flex items-center gap-1.5 text-[12px] text-[var(--jc-ivory-muted)]"
+              className={cn(
+                "m-0 flex items-center gap-1.5 text-[12px]",
+                activeLighting.surface === "light"
+                  ? "text-[var(--jc-muted)]"
+                  : "text-[var(--jc-ivory-muted)]"
+              )}
             >
               <Hand aria-hidden="true" className="size-3.5 shrink-0" />
               <span>
@@ -696,7 +820,7 @@ export function AircraftStudioViewer({
             {aircraft.summary}
           </p>
 
-          <div className="mt-5 rounded-[3px] border border-[var(--jc-line-dark)] bg-[rgba(10,29,28,0.45)] p-4">
+          <div className="mt-5 rounded-[3px] border border-[var(--jc-line-dark)] bg-[var(--jc-panel-dark)] p-4">
             <p className="m-0 text-[13px] font-medium text-[var(--jc-ivory)]">
               Active configuration: {activeConfig.label}
             </p>
@@ -735,7 +859,7 @@ export function AircraftStudioViewer({
               </div>
 
               {activeHotspot && (
-                <div className="mt-3 rounded-[3px] border-l-2 border-[var(--jc-gold)] bg-[rgba(10,29,28,0.5)] px-4 py-3 text-[13px] leading-relaxed text-[var(--jc-ivory-soft)]">
+                <div className="mt-3 rounded-[3px] border-l-2 border-[var(--jc-gold)] bg-[var(--jc-panel-dark)] px-4 py-3 text-[13px] leading-relaxed text-[var(--jc-ivory-soft)]">
                   <strong className="block font-medium text-[var(--jc-ivory)]">
                     {activeHotspot.label}
                   </strong>

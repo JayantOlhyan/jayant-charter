@@ -1,0 +1,96 @@
+[
+  {
+    "id": "home-arrival-approach",
+    "aircraftId": "hawker-4000",
+    "configurationId": "flight",
+    "environmentUrl": "/models/v1/studio-env.hdr",
+    "motionMode": "scroll-scrubbed-profile",
+    "fallbackMediaId": "hawker-hero",
+    "secondaryFallbackMediaId": "hawker-low-angle",
+    "keyframes": {
+      "arrival": {
+        "thetaDeg": -36,
+        "phiDeg": 76,
+        "radiusPct": 82,
+        "fieldOfViewDeg": 30
+      },
+      "approach": {
+        "thetaDeg": 0,
+        "phiDeg": 83,
+        "radiusPct": 88,
+        "fieldOfViewDeg": 29
+      }
+    },
+    "lightingModes": [
+      {
+        "id": "twilight",
+        "label": "Twilight horizon",
+        "exposure": 1.28,
+        "shadowIntensity": 0,
+        "shadowSoftness": 0.85,
+        "surface": "dark"
+      }
+    ],
+    "qualityPolicy": {
+      "desktopAutoUpgrade": true,
+      "mobileExplicitOnly": true,
+      "reducedMotionStatic": true,
+      "timeoutMs": 10000
+    }
+  },
+  {
+    "id": "hangar-studio-explorer",
+    "aircraftId": "hawker-4000",
+    "configurationId": "flight",
+    "environmentUrl": "/models/v1/studio-env.hdr",
+    "motionMode": "interactive-orbit",
+    "fallbackMediaId": "hawker-hero",
+    "secondaryFallbackMediaId": "falcon-hero",
+    "keyframes": {
+      "arrival": {
+        "thetaDeg": -36,
+        "phiDeg": 76,
+        "radiusPct": 72,
+        "fieldOfViewDeg": 30
+      },
+      "approach": {
+        "thetaDeg": 0,
+        "phiDeg": 83,
+        "radiusPct": 74,
+        "fieldOfViewDeg": 28
+      }
+    },
+    "lightingModes": [
+      {
+        "id": "twilight",
+        "label": "Twilight hangar",
+        "exposure": 1.12,
+        "shadowIntensity": 0.48,
+        "shadowSoftness": 0.85,
+        "surface": "dark"
+      },
+      {
+        "id": "daylight",
+        "label": "Daylight apron",
+        "exposure": 1.24,
+        "shadowIntensity": 0.62,
+        "shadowSoftness": 0.92,
+        "surface": "light"
+      },
+      {
+        "id": "dusk",
+        "label": "Evening silhouette",
+        "exposure": 0.86,
+        "shadowIntensity": 0.35,
+        "shadowSoftness": 0.9,
+        "surface": "dark"
+      }
+    ],
+    "qualityPolicy": {
+      "desktopAutoUpgrade": true,
+      "mobileExplicitOnly": true,
+      "reducedMotionStatic": true,
+      "timeoutMs": 10000
+    }
+  }
+]

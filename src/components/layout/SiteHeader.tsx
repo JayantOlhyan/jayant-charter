@@ -47,7 +47,23 @@ export function SiteHeader({
   const [servicesOpen, setServicesOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const headerRef = useRef<HTMLElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = headerRef.current;
+    if (!el) return;
+    const syncChromeHeight = () => {
+      document.documentElement.style.setProperty(
+        "--chrome-height",
+        `${Math.round(el.getBoundingClientRect().height)}px`
+      );
+    };
+    syncChromeHeight();
+    const ro = new ResizeObserver(syncChromeHeight);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [settings.featureFlags.showPreviewBanner]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -83,6 +99,7 @@ export function SiteHeader({
 
   return (
     <header
+      ref={headerRef}
       data-surface="dark"
       className={cn(
         "sticky top-0 z-[var(--z-sticky-nav)] w-full border-b transition-[background-color,border-color] duration-200",
@@ -94,7 +111,7 @@ export function SiteHeader({
       {settings.featureFlags.showPreviewBanner && (
         <div
           role="status"
-          className="border-b border-[rgba(16,43,42,0.14)] bg-[var(--jc-gold)] px-[var(--gutter)] py-2 text-center text-[13px] font-medium text-[var(--jc-teal)]"
+          className="border-b border-[var(--jc-banner-line)] bg-[var(--jc-gold)] px-[var(--gutter)] py-2 text-center text-[13px] font-medium text-[var(--jc-teal)]"
         >
           Preview environment: inquiries are recorded locally while live email and WhatsApp channels remain paused.
         </div>
@@ -136,7 +153,7 @@ export function SiteHeader({
             {servicesOpen && (
               <div
                 id="services-desktop-menu"
-                className="absolute left-0 top-full mt-2 w-[340px] rounded-[4px] border border-[var(--jc-line-dark-strong)] bg-[var(--jc-teal-deep)] p-2 shadow-xl"
+                className="absolute left-0 top-full mt-2 w-[340px] rounded-[4px] border border-[var(--jc-line-dark-strong)] bg-[var(--jc-teal-deep)] p-2"
               >
                 <ul className="m-0 list-none p-0">
                   {SERVICE_LINKS.map((item) => (

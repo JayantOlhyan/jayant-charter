@@ -100,7 +100,7 @@
       {
         "id": "side",
         "label": "Profile",
-        "orbit": "-90deg 84deg 80%",
+        "orbit": "0deg 83deg 74%",
         "target": "auto auto auto",
         "fieldOfView": "28deg"
       },
@@ -326,7 +326,7 @@
       {
         "id": "side",
         "label": "Profile",
-        "orbit": "-90deg 84deg 82%",
+        "orbit": "0deg 83deg 76%",
         "target": "auto auto auto",
         "fieldOfView": "28deg"
       },

@@ -1,9 +1,9 @@
 # Jayant Charter — Canonical Design Record (`DESIGN.md`)
 
-**Status:** Active production design system (v1.1)  
+**Status:** Active production design system (v1.2 — Reference-audited V2 scroll & 3D studio release)  
 **Updated:** 25 November 2026  
 **Public working brand:** Jayant Charter  
-**Primary references:** Jesko Jets (`jeskojets.com`) for overall scroll-led presentation, dimensional atmosphere, and architectural restraint; Digital Jets (`digital-jets.com/products`) for studio-lit aircraft imagery, exterior 3D exploration, and close-up engineering detail. Applied through original compositions, authentic business positioning, and our own aircraft kits.
+**Primary references:** Jesko Jets (`jeskojets.com`) for continuous scroll-led visual narrative, multi-stop atmospheric transitions, monumental display typography, and synced editorial splits; Digital Jets (`digital-jets.com/products`) for studio-lit aircraft imagery, daylight/twilight/evening atmosphere modes, interactive Before/After ramp comparisons, and close-up engineering detail. Full live inspection notes live in [docs/REFERENCE-AUDIT.md](./docs/REFERENCE-AUDIT.md) and [docs/VISUAL-BOARD.md](./docs/VISUAL-BOARD.md).
 
 ---
 
@@ -72,11 +72,11 @@ Upgraded from the baseline Georgia proposal per PRD §14.1 & §15.5, self-hosted
 
 ## 5. Motion, Scroll Choreography & 3D Rules
 
-- **Signature Move (*Altitude Horizon & Live Approach*):** Multi-plane layered hero depth (`100svh`, headline + one sentence + primary CTA guaranteed visible at `1280×800`) gliding into a scroll-scrubbed flight profile transition via a single centralized GSAP `ScrollTrigger` controller.
+- **Signature Move (*Altitude Horizon & Live Approach*):** Pinned desktop two-beat stage (`205svh`, synced to exact `--chrome-height`) that paints an immediate optimized hero poster (`1280×800` above-the-fold safe), upgrades seamlessly to the live Meshopt 3D Hawker 4000 (`-36°` three-quarter, `shadow-intensity="0"` in flight, hidden default progress bar), and scrubs bidirectionally to a true broadside profile (`0°`) while illuminating Approach manifesto lines via DOM refs with zero per-frame React re-renders. Unmounts its WebGL context via `IntersectionObserver` before Chapter 4 so only one `<model-viewer>` context is ever active.
 - **Smooth Scroll:** Lenis active on desktop fine-pointer environments only; automatically disabled under `prefers-reduced-motion: reduce` and on touch devices so native mobile scrolling is never altered.
-- **Composited Properties Only:** Animate `transform`, `opacity`, and `clip-path` only. Never `transition: all`; never animate `width`, `height`, `top`, or `left`.
-- **Reduced Motion:** `prefers-reduced-motion: reduce` disables Lenis and scrubbed camera transitions while preserving the complete 8-chapter visual story, high-res aircraft stills, and optional explicit manual 3D inspection.
-- **3D Hangar Policy:** Poster-first always; maximum one active `<model-viewer>` instance per page; desktop (≤ 6 MB) & mobile (≤ 3 MB) versioned GLB tiers; explicit mobile 3D interaction toggle (`touch-action="pan-y"`); 10s timeout & WebGL context-loss fallback; race-safe configuration switching.
+- **Composited Properties Only:** Animate `transform`, `opacity`, and `clip-path` only. Never `transition: all`; never animate `width`, `height`, `top`, or `left`. Synced editorial imagery (`TrustEditorialSplit`) uses a zero-runtime CSS opacity stack.
+- **Reduced Motion:** `prefers-reduced-motion: reduce` disables Lenis, ambient cloud drift, and scrubbed camera transitions while preserving the complete 8-chapter visual story, high-res aircraft stills, and optional explicit manual 3D inspection.
+- **3D Hangar Policy:** Poster-first always; reusable scene configs in `content/scenes.json`; maximum one active `<model-viewer>` instance per page; desktop (`0.70–1.39 MiB`, ≤ 6 MB) & mobile (`0.61–1.24 MiB`, ≤ 3 MB) versioned GLB tiers; three calibrated studio lighting modes (*Twilight hangar*, *Daylight apron*, *Evening silhouette*); explicit mobile 3D interaction toggle (`touch-action="pan-y"`); 10s timeout & WebGL context-loss fallback; race-safe configuration switching.
 
 ---
 

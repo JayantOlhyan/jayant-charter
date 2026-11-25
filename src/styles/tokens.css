@@ -31,10 +31,48 @@
   --jc-line-dark-strong: rgba(247, 245, 237, 0.34);
   --jc-scrim-dark: rgba(10, 29, 28, 0.72);
   --jc-scrim-light: rgba(247, 245, 237, 0.92);
+  --jc-banner-line: rgba(16, 43, 42, 0.14);
+  --jc-panel-dark: rgba(10, 29, 28, 0.48);
+  --jc-panel-dark-strong: rgba(10, 29, 28, 0.88);
   --jc-shadow-aircraft-dark: drop-shadow(0 38px 46px rgba(6, 18, 17, 0.52));
   --jc-shadow-aircraft-light: drop-shadow(0 28px 34px rgba(16, 43, 42, 0.18));
   --jc-hover-tint-light: rgba(247, 245, 237, 0.08);
   --jc-hover-tint-dark: rgba(16, 43, 42, 0.05);
+  --jc-cloud-veil: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(247, 245, 237, 0.14) 22%,
+    rgba(232, 193, 132, 0.1) 50%,
+    rgba(247, 245, 237, 0.14) 78%,
+    transparent 100%
+  );
+  --jc-transition-sky-to-ivory: linear-gradient(
+    180deg,
+    #0a1d1c 0%,
+    #102b2a 24%,
+    #1e3e3c 48%,
+    #6a7b75 72%,
+    #cfc8b8 88%,
+    #f7f5ed 100%
+  );
+  --jc-stage-twilight: radial-gradient(
+    ellipse at 50% 54%,
+    rgba(34, 74, 71, 0.72) 0%,
+    rgba(16, 43, 42, 0.92) 58%,
+    rgba(10, 29, 28, 1) 100%
+  );
+  --jc-stage-daylight: radial-gradient(
+    ellipse at 50% 56%,
+    #fbf9f3 0%,
+    #eeece2 62%,
+    #dfdbd0 100%
+  );
+  --jc-stage-dusk: radial-gradient(
+    ellipse at 50% 58%,
+    rgba(42, 54, 58, 0.75) 0%,
+    rgba(14, 30, 32, 0.96) 58%,
+    rgba(7, 17, 17, 1) 100%
+  );
 
   /* shadcn/ui semantic mapping */
   --background: var(--jc-ivory);
@@ -91,6 +129,7 @@
   --container-max: 1320px;
   --gutter: clamp(20px, 4.5vw, 56px);
   --header-height: 76px;
+  --chrome-height: 114px;
   --z-base: 1;
   --z-stage: 10;
   --z-sticky: 20;

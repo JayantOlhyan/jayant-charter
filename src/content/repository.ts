@@ -9,6 +9,7 @@ import caseStudiesRaw from "@content/case-studies.json";
 import testimonialsRaw from "@content/testimonials.json";
 import editorialRaw from "@content/editorial.json";
 import campaignsRaw from "@content/campaigns.json";
+import scenesRaw from "@content/scenes.json";
 
 import {
   AircraftSchema,
@@ -19,6 +20,7 @@ import {
   ExampleScenarioSchema,
   FaqItemSchema,
   MediaAssetSchema,
+  SceneSchema,
   ServiceSchema,
   SiteSettingsSchema,
   TestimonialSchema,
@@ -29,6 +31,7 @@ import {
   type ExampleScenario,
   type FaqItem,
   type MediaAsset,
+  type SceneRecord,
   type ServiceRecord,
   type SiteSettings,
   type TestimonialRecord,
@@ -46,9 +49,19 @@ const caseStudiesList: CaseStudyRecord[] = z.array(CaseStudySchema).parse(caseSt
 const testimonialsList: TestimonialRecord[] = z.array(TestimonialSchema).parse(testimonialsRaw);
 const editorialList: EditorialEntry[] = z.array(EditorialEntrySchema).parse(editorialRaw);
 const campaignsList: CampaignPage[] = z.array(CampaignPageSchema).parse(campaignsRaw);
+const scenesList: SceneRecord[] = z.array(SceneSchema).parse(scenesRaw);
 
 const mediaById = new Map<string, MediaAsset>(mediaList.map((m) => [m.id, m]));
 const faqById = new Map<string, FaqItem>(faqsList.map((f) => [f.id, f]));
+const sceneById = new Map<string, SceneRecord>(scenesList.map((s) => [s.id, s]));
+
+export function getSceneById(id: string): SceneRecord {
+  const scene = sceneById.get(id);
+  if (!scene) {
+    throw new Error(`Missing scene definition: ${id}`);
+  }
+  return scene;
+}
 
 export function getSiteSettings(): SiteSettings {
   return siteSettings;

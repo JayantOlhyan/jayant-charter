@@ -45,7 +45,7 @@ export default function AircraftCollectionPage() {
                 >
                   <Link
                     href={`/aircraft/${ac.slug}`}
-                    className="group relative flex min-h-[280px] items-center justify-center bg-[radial-gradient(ellipse_at_50%_55%,rgba(247,245,237,1)_0%,rgba(232,229,218,1)_100%)] p-8 sm:min-h-[340px] sm:p-12"
+                    className="jc-stage-daylight group relative flex min-h-[280px] items-center justify-center p-8 sm:min-h-[340px] sm:p-12"
                   >
                     <img
                       src={poster.path}

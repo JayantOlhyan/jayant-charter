@@ -7,6 +7,7 @@ import {
   getPublishedCaseStudies,
   getPublishedServices,
   getPublicNavigationVisibility,
+  getSceneById,
   getServiceBySlug,
   getSiteSettings,
 } from "@/content/repository";
@@ -60,5 +61,23 @@ describe("Content integrity, aircraft identity, and privacy rules (AC03, AC17, A
     }
     expect(getPublishedServices()).toHaveLength(3);
     expect(getPublishedAircraft()).toHaveLength(2);
+  });
+
+  it("Validates reusable 3D scene records, broadside profile keyframes, and lighting modes", () => {
+    const arrivalScene = getSceneById("home-arrival-approach");
+    expect(arrivalScene).toBeDefined();
+    expect(arrivalScene?.aircraftId).toBe("hawker-4000");
+    expect(arrivalScene?.keyframes.arrival.thetaDeg).toBe(-36);
+    expect(arrivalScene?.keyframes.approach.thetaDeg).toBe(0);
+    expect(arrivalScene?.qualityPolicy.mobileExplicitOnly).toBe(true);
+    expect(arrivalScene?.qualityPolicy.reducedMotionStatic).toBe(true);
+
+    const hangarScene = getSceneById("hangar-studio-explorer");
+    expect(hangarScene).toBeDefined();
+    expect(hangarScene?.lightingModes.map((m) => m.id)).toEqual([
+      "twilight",
+      "daylight",
+      "dusk",
+    ]);
   });
 });

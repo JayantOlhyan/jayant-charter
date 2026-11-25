@@ -6,11 +6,13 @@ import {
   getAircraftBySlug,
   getMediaAsset,
   getPublishedAircraft,
+  getSceneById,
   getSiteSettings,
 } from "@/content/repository";
 import type { AircraftRecord, MediaAsset } from "@/content/schemas";
 import { Breadcrumbs } from "@/components/layout/Breadcrumbs";
 import { AircraftStudioViewer } from "@/features/aircraft/AircraftStudioViewer";
+import { ConfigurationCompareSlider } from "@/features/aircraft/ConfigurationCompareSlider";
 
 interface AircraftDetailPageProps {
   params: Promise<{ slug: string }>;
@@ -47,6 +49,11 @@ export default async function AircraftDetailPage({
   if (!aircraft) notFound();
 
   const settings = getSiteSettings();
+  const hangarScene = getSceneById("hangar-studio-explorer");
+  const hasRampCompare =
+    aircraft.id === "hawker-4000" &&
+    aircraft.configurations.some((c) => c.id === "parked") &&
+    aircraft.configurations.some((c) => c.id === "boarding");
   const mediaIds = new Set<string>([
     aircraft.posterId,
     ...aircraft.configurations.map((c) => c.posterId),
@@ -100,6 +107,7 @@ export default async function AircraftDetailPage({
           <AircraftStudioViewer
             aircraftList={[aircraft]}
             mediaById={mediaById}
+            lightingModes={hangarScene.lightingModes}
             initialAircraftId={aircraft.id}
             enableLive3D={settings.featureFlags.enableLive3D}
             mode="detail"
@@ -201,9 +209,18 @@ export default async function AircraftDetailPage({
         </div>
       </section>
 
-      {/* Studio Detail Renders Gallery */}
+      {/* Studio Detail Renders Gallery + Optional Ramp Comparison Slider */}
       <section className="surface-ivory border-b border-[var(--jc-line-light)] py-20 md:py-28">
         <div className="jc-container">
+          {hasRampCompare && (
+            <div className="mb-16">
+              <ConfigurationCompareSlider
+                closedMedia={mediaById["hawker-parked"]}
+                openMedia={mediaById["hawker-boarding"]}
+              />
+            </div>
+          )}
+
           <h2 className="jc-display-section text-[var(--jc-ink)]">
             Studio close-ups
           </h2>

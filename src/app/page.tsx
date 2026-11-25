@@ -7,6 +7,7 @@ import {
   getPublishedScenarios,
   getPublishedServices,
   getPublishedTestimonials,
+  getSceneById,
   getSiteSettings,
 } from "@/content/repository";
 import type { MediaAsset } from "@/content/schemas";
@@ -33,6 +34,8 @@ export default function HomePage() {
   const faqs = getFaqsByScope("home");
   const caseStudies = getPublishedCaseStudies();
   const testimonials = getPublishedTestimonials();
+  const arrivalScene = getSceneById("home-arrival-approach");
+  const hangarScene = getSceneById("hangar-studio-explorer");
 
   const requiredMediaIds = new Set<string>([
     "hero-sky-plate",
@@ -83,6 +86,8 @@ export default function HomePage() {
         settings={settings}
         services={services}
         aircraftList={aircraftList}
+        arrivalScene={arrivalScene}
+        hangarScene={hangarScene}
         scenarios={scenarios}
         faqs={faqs}
         caseStudies={caseStudies}
