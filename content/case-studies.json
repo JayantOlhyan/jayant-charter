@@ -1,0 +1,27 @@
+[
+  {
+    "id": "draft-template-example",
+    "slug": "draft-template-example",
+    "title": "Internal draft template (not published)",
+    "serviceId": "private-jets",
+    "audience": "Executive assistant",
+    "summary": "Internal unpublished draft verifying that draft case studies never appear in public navigation, pages, or sitemap.",
+    "anonymizedRoute": "Middle East to Northern India",
+    "timingGranularity": "Draft placeholder",
+    "passengerContext": "Small executive party",
+    "challenge": "Unpublished schema verification placeholder excluded from production rendering.",
+    "approach": "Replace with a real permissioned and anonymized booking story before changing status to published.",
+    "outcome": "Hidden from all public routes until status is explicitly changed to published after review.",
+    "mediaIds": [],
+    "relatedAircraftIds": ["hawker-4000"],
+    "anonymizationVerified": false,
+    "evidenceApprovalRef": "PENDING-REVIEW",
+    "seo": {
+      "title": "Draft Case Study | Jayant Charter",
+      "description": "Internal unpublished case study draft excluded from search indexing and public routes.",
+      "ogImageId": "hawker-hero-og",
+      "noIndex": true
+    },
+    "status": "draft"
+  }
+]

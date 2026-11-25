@@ -1,0 +1,134 @@
+[
+  {
+    "id": "private-jets",
+    "slug": "private-jets",
+    "inquiryServiceKey": "private-jet",
+    "title": "Private jets",
+    "headline": "Private jets arranged around your schedule, not an airline timetable.",
+    "summary": "Executive travel, family trips, and multi-stop itineraries planned through a single contact. Aircraft suitability, range, luggage space, and airports are confirmed for your exact leg.",
+    "editorialIntro": [
+      "Private jet charter starts with the trip itself: where you need to land, when your schedule actually locks, how many people are travelling, and how much luggage comes aboard. Rather than pushing a preset fleet list, Jayant takes your brief first and has the aviation team check feasible aircraft options for that specific day and route.",
+      "One-way flights, same-day executive returns, and multi-city roadshows are all supported. Operating range, runway suitability, crew duty limits, and permits are verified by the aviation team and licensed operating carrier before you receive a quote."
+    ],
+    "useCases": [
+      {
+        "title": "Fixed-date executive travel",
+        "detail": "Same-day board meetings, investor visits, and multi-city schedules where missing a window is costly."
+      },
+      {
+        "title": "Family and private leisure journeys",
+        "detail": "Direct regional and international departures paced around children, elders, and preferred departure windows."
+      },
+      {
+        "title": "Multi-stop and changing itineraries",
+        "detail": "Custom routing across several cities with coordinated ground handling and clear visibility on schedule adjustments."
+      }
+    ],
+    "inquiryChecklist": [
+      "Origin, destination, and any intermediate stops (free text or airports)",
+      "Preferred travel date or flexibility window",
+      "Approximate passenger count and notable luggage needs",
+      "Any aircraft class or model preference (optional)"
+    ],
+    "heroMediaId": "hawker-hero",
+    "relatedAircraftIds": ["hawker-4000", "falcon-2000-classic"],
+    "availabilityQualifier": "Aircraft examples displayed on this site are illustrative exterior models. Specific tail availability, non-stop route feasibility, cabin layout, and final pricing are confirmed only in your written quote from the operating party.",
+    "ctaLabel": "Ask about a private jet",
+    "faqIds": ["custom-route", "choose-aircraft", "minimum-info", "availability-confirmed"],
+    "featuredOrder": 1,
+    "seo": {
+      "title": "Private Jet Charter Inquiries | Jayant Charter",
+      "description": "Arrange one-way, return, and multi-stop private jet charters with Jayant as your single first point of contact. Custom routes checked for feasibility before quoting.",
+      "ogImageId": "hawker-hero-og"
+    },
+    "status": "published"
+  },
+  {
+    "id": "group-charter",
+    "slug": "group-charter",
+    "inquiryServiceKey": "group-charter",
+    "title": "Group charter",
+    "headline": "Move an entire group together on one coordinated timetable.",
+    "summary": "Corporate offsites, destination wedding parties, and fixed-date events where arriving together matters. Share your guest count, including 22 or more passengers on one aircraft, to start feasibility checks.",
+    "editorialIntro": [
+      "Moving a leadership team, board delegation, or wedding party across separate commercial flights creates staggered arrivals, missed transfers, and unnecessary friction. Group charter aligns departure times, baggage capacity, and terminal coordination around one schedule.",
+      "Requests such as 22 passengers on a single aircraft, or larger multi-aircraft movements, are captured as planning requirements and checked directly with suitable operators. Mid-size jets shown elsewhere on this website are illustrative executive aircraft and are not presented as 22-passenger configurations."
+    ],
+    "useCases": [
+      {
+        "title": "Destination wedding guest movements",
+        "detail": "Coordinated departures for close family and guests travelling together into cities such as Udaipur, Jaipur, Jodhpur, or Goa."
+      },
+      {
+        "title": "Corporate offsites and leadership delegations",
+        "detail": "Single-aircraft planning for 16 to 22+ travellers or larger delegations operating on a tight conference or board schedule."
+      },
+      {
+        "title": "Event production and hospitality transfers",
+        "detail": "Dedicated group movements synchronized with venue check-ins, baggage logistics, and ground transport."
+      }
+    ],
+    "inquiryChecklist": [
+      "Departure city, arrival city, and whether the trip is one-way or return",
+      "Target passenger count (including 22+ on one aircraft or multi-aircraft preferences)",
+      "Fixed event dates and preferred arrival timing",
+      "Heavy luggage or event equipment considerations"
+    ],
+    "heroMediaId": "group-charter-editorial",
+    "relatedAircraftIds": [],
+    "availabilityQualifier": "Group capacity, single-aircraft sizing (including 22+ passenger requests), baggage allowances, and airport slots depend on route and aircraft availability on your dates and are confirmed by the aviation team during feasibility review.",
+    "ctaLabel": "Plan a group charter",
+    "faqIds": ["group-capacity", "custom-route", "minimum-info", "availability-confirmed"],
+    "featuredOrder": 2,
+    "seo": {
+      "title": "Group Charter Inquiries | Jayant Charter",
+      "description": "Coordinated group charter for corporate teams, destination weddings, and event movements, including planning for 22 or more passengers on one aircraft.",
+      "ogImageId": "hawker-hero-og"
+    },
+    "status": "published"
+  },
+  {
+    "id": "helicopters",
+    "slug": "helicopters",
+    "inquiryServiceKey": "helicopter",
+    "title": "Helicopters",
+    "headline": "Helicopter transfers and wedding arrivals checked from the ground up.",
+    "summary": "Airport-to-venue hops, private regional transfers, and wedding arrivals for one, two, or more guests. State a single-engine or twin-engine preference and share the venue so landing feasibility is verified first.",
+    "editorialIntro": [
+      "Helicopter charters solve short-distance road congestion and bring quiet precision to resort arrivals and destination weddings. Whether you are planning a transfer for one or two guests or coordinating a larger party across multiple shuttles, the operator determines the right aircraft seating and crew complement.",
+      "Unlike fixed-wing airport flights, every non-airport helicopter landing requires venue inspection, local landing permissions, obstacle clearance, and weather approval. Share the city, property name, and travel window so the aviation team can verify operational feasibility before quoting."
+    ],
+    "useCases": [
+      {
+        "title": "Wedding arrivals and ceremonial entries",
+        "detail": "Private arrivals for the couple or family guests, coordinated around venue permissions, timing, and ground safety."
+      },
+      {
+        "title": "Airport-to-venue transfers",
+        "detail": "Direct transfers connecting private jet arrivals or major airports to remote estates, resorts, and coastal properties."
+      },
+      {
+        "title": "Short regional hops and site visits",
+        "detail": "Point-to-point daytime movements where road travel would consume half the working day."
+      }
+    ],
+    "inquiryChecklist": [
+      "Departure airport or city and destination venue name",
+      "Guest count (one or two guests, or larger party sizes)",
+      "Preferred travel date and approximate daytime window",
+      "Optional engine preference: no preference, single-engine, or twin-engine"
+    ],
+    "heroMediaId": "helicopter-editorial",
+    "relatedAircraftIds": [],
+    "availabilityQualifier": "Visual scenes are illustrative and do not indicate a pre-approved helipad. Engine preference is captured as a request rather than a guarantee. Venue suitability, landing clearances, daytime visibility, weather, and aircraft seating are confirmed by the licensed operator.",
+    "ctaLabel": "Ask about a helicopter",
+    "faqIds": ["helicopter-landing", "helicopter-engine", "minimum-info", "availability-confirmed"],
+    "featuredOrder": 3,
+    "seo": {
+      "title": "Helicopter Charter & Wedding Transfers | Jayant Charter",
+      "description": "Arrange private helicopter transfers and destination wedding arrivals with venue feasibility checks and optional single-engine or twin-engine preferences.",
+      "ogImageId": "hawker-hero-og"
+    },
+    "status": "published"
+  }
+]

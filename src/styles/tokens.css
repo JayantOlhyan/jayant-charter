@@ -1,0 +1,106 @@
+/* Hallmark · v2.0.0 · genre: editorial · theme: custom (jayant-charter) · hero: stage · nav: edge-aligned · footer: mast · job: inquire · signature: altitude-horizon-and-live-approach */
+/* Hallmark · pre-emit critique: P5 H5 E5 S5 R5 V5 · cut tracked-caps eyebrows, card grids, and invented proof to keep pure editorial aviation restraint */
+
+:root {
+  color-scheme: light;
+
+  /* Core brand palette (DESIGN.md) */
+  --jc-teal-deep: #0a1d1c;
+  --jc-teal: #102b2a;
+  --jc-teal-elevated: #163836;
+  --jc-teal-hover: #1b4442;
+  --jc-ivory: #f7f5ed;
+  --jc-stone: #eeece2;
+  --jc-paper: #fbf9f3;
+  --jc-ink: #182c2a;
+  --jc-muted: #4e625d;
+  --jc-ivory-soft: #c7d3ce;
+  --jc-ivory-muted: #9eb0aa;
+  --jc-gold: #e8c184;
+  --jc-gold-hover: #f0cf9a;
+  --jc-gold-muted: #b8945a;
+  --jc-danger: #9e2e1b;
+  --jc-danger-bg: #fdf1ee;
+  --jc-danger-border: #d9a094;
+  --jc-success: #1b5c47;
+  --jc-success-bg: #edf5f1;
+  --jc-success-border: #a5c9ba;
+  --jc-line-light: #d7d3c5;
+  --jc-line-strong: #b4b9b4;
+  --jc-line-dark: rgba(247, 245, 237, 0.16);
+  --jc-line-dark-strong: rgba(247, 245, 237, 0.34);
+  --jc-scrim-dark: rgba(10, 29, 28, 0.72);
+  --jc-scrim-light: rgba(247, 245, 237, 0.92);
+  --jc-shadow-aircraft-dark: drop-shadow(0 38px 46px rgba(6, 18, 17, 0.52));
+  --jc-shadow-aircraft-light: drop-shadow(0 28px 34px rgba(16, 43, 42, 0.18));
+  --jc-hover-tint-light: rgba(247, 245, 237, 0.08);
+  --jc-hover-tint-dark: rgba(16, 43, 42, 0.05);
+
+  /* shadcn/ui semantic mapping */
+  --background: var(--jc-ivory);
+  --foreground: var(--jc-ink);
+  --card: var(--jc-paper);
+  --card-foreground: var(--jc-ink);
+  --popover: var(--jc-paper);
+  --popover-foreground: var(--jc-ink);
+  --primary: var(--jc-teal);
+  --primary-foreground: var(--jc-ivory);
+  --secondary: var(--jc-stone);
+  --secondary-foreground: var(--jc-ink);
+  --muted: var(--jc-stone);
+  --muted-foreground: var(--jc-muted);
+  --accent: var(--jc-gold);
+  --accent-foreground: var(--jc-teal);
+  --destructive: var(--jc-danger);
+  --destructive-foreground: var(--jc-ivory);
+  --border: var(--jc-line-light);
+  --input: var(--jc-line-strong);
+  --ring: var(--jc-teal);
+  --radius: 3px;
+
+  /* Typography tokens (populated by next/font on <html>) */
+  --font-display: var(--font-newsreader), Georgia, "Times New Roman", serif;
+  --font-sans: var(--font-jakarta), system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Type scale */
+  --text-hero: clamp(2.75rem, 5.4vw, 5.125rem);
+  --text-section: clamp(2.125rem, 3.8vw, 3.375rem);
+  --text-title: clamp(1.375rem, 2.1vw, 1.875rem);
+  --text-lead: clamp(1.0625rem, 1.35vw, 1.25rem);
+  --text-body: 1rem;
+  --text-label: 0.875rem;
+  --text-caption: 0.8125rem;
+
+  /* Spacing scale (8px rhythm with 4px micro) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-14: 56px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+
+  /* Layout metrics */
+  --container-max: 1320px;
+  --gutter: clamp(20px, 4.5vw, 56px);
+  --header-height: 76px;
+  --z-base: 1;
+  --z-stage: 10;
+  --z-sticky: 20;
+  --z-sticky-nav: 40;
+  --z-overlay: 50;
+
+  /* Motion */
+  --ease-glide: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-settle: cubic-bezier(0.16, 1, 0.3, 1);
+  --duration-fast: 160ms;
+  --duration-base: 260ms;
+  --duration-slow: 520ms;
+}

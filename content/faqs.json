@@ -1,0 +1,50 @@
+[
+  {
+    "id": "custom-route",
+    "question": "Can you arrange a custom or multi-stop route?",
+    "answer": "Yes. Share any origin, destination, or multi-stop itinerary. Our current relationship focus centers on Dubai, Delhi NCR, Mumbai, Rajasthan, and Goa, while custom domestic and international routes are checked for feasibility before quoting.",
+    "scopes": ["home", "private-jets", "group-charter", "how-it-works"]
+  },
+  {
+    "id": "minimum-info",
+    "question": "What information do I need before requesting a callback?",
+    "answer": "Only your name, a reachable phone number with country code, and permission for Jayant to contact you. If you already have your route, travel window, passenger count, or venue, include them so feasibility checks can begin sooner.",
+    "scopes": ["home", "private-jets", "group-charter", "helicopters", "how-it-works"]
+  },
+  {
+    "id": "choose-aircraft",
+    "question": "Can I request a specific aircraft model?",
+    "answer": "You can attach an aircraft preference to your inquiry. The Hawker 4000 and Falcon 2000 Classic presented on this website are illustrative exterior examples; actual aircraft availability and tail suitability for your dates are confirmed in your quote.",
+    "scopes": ["home", "private-jets", "how-it-works"]
+  },
+  {
+    "id": "who-contacts",
+    "question": "Who follows up after I submit an inquiry?",
+    "answer": "Jayant receives your inquiry directly and makes the first contact to clarify the trip. Your details are shared onward with the aviation sourcing team or an operating party only after you confirm permission for your specific trip.",
+    "scopes": ["home", "how-it-works"]
+  },
+  {
+    "id": "availability-confirmed",
+    "question": "Does submitting this form reserve an aircraft?",
+    "answer": "No. Submitting the form records your inquiry so feasibility can be checked. Availability, aircraft selection, pricing, and the licensed operating carrier are confirmed separately in your quote and booking contract.",
+    "scopes": ["home", "private-jets", "group-charter", "helicopters", "how-it-works"]
+  },
+  {
+    "id": "group-capacity",
+    "question": "Can you check options for 22 or more passengers on one aircraft?",
+    "answer": "Yes. Enter your full guest count in the inquiry form (there is no cap at 22). The aviation team checks appropriate group aircraft availability, baggage volume, and airport slots for your exact dates.",
+    "scopes": ["group-charter"]
+  },
+  {
+    "id": "helicopter-landing",
+    "question": "Are hotel or wedding venue helipads automatically approved?",
+    "answer": "No. Every off-airport landing requires operator verification of venue dimensions, local aviation and ground permissions, daytime operating windows, and weather conditions before confirmation.",
+    "scopes": ["helicopters"]
+  },
+  {
+    "id": "helicopter-engine",
+    "question": "Can I ask for a single-engine or twin-engine helicopter?",
+    "answer": "Yes. You can select No preference, Single-engine, or Twin-engine in the inquiry form. It is recorded as a planning preference and checked against regional operator availability and mission requirements.",
+    "scopes": ["helicopters"]
+  }
+]

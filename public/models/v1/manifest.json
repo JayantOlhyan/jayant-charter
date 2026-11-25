@@ -1,0 +1,160 @@
+{
+  "generatedAt": "2026-11-25T05:33:40.935Z",
+  "media": [
+    {
+      "file": "/media/v1/hero-sky-plate.webp",
+      "width": 1376,
+      "height": 768,
+      "bytes": 9884,
+      "kb": 9.7
+    },
+    {
+      "file": "/media/v1/helicopter-arrival.webp",
+      "width": 1376,
+      "height": 768,
+      "bytes": 113666,
+      "kb": 111
+    },
+    {
+      "file": "/media/v1/group-charter-apron.webp",
+      "width": 1376,
+      "height": 768,
+      "bytes": 51878,
+      "kb": 50.7
+    },
+    {
+      "file": "/media/v1/hawker-4000-hero.webp",
+      "width": 1866,
+      "height": 749,
+      "bytes": 60574,
+      "kb": 59.2
+    },
+    {
+      "file": "/media/v1/hawker-4000-low-angle.webp",
+      "width": 1079,
+      "height": 476,
+      "bytes": 24300,
+      "kb": 23.7
+    },
+    {
+      "file": "/media/v1/hawker-4000-parked.webp",
+      "width": 1025,
+      "height": 528,
+      "bytes": 25606,
+      "kb": 25
+    },
+    {
+      "file": "/media/v1/hawker-4000-boarding.webp",
+      "width": 1025,
+      "height": 535,
+      "bytes": 29316,
+      "kb": 28.6
+    },
+    {
+      "file": "/media/v1/hawker-4000-engine-detail.webp",
+      "width": 1400,
+      "height": 900,
+      "bytes": 61634,
+      "kb": 60.2
+    },
+    {
+      "file": "/media/v1/hawker-4000-entry-detail.webp",
+      "width": 1400,
+      "height": 900,
+      "bytes": 95776,
+      "kb": 93.5
+    },
+    {
+      "file": "/media/v1/hawker-4000-gear-detail.webp",
+      "width": 1400,
+      "height": 900,
+      "bytes": 46450,
+      "kb": 45.4
+    },
+    {
+      "file": "/media/v1/falcon-2000-hero.webp",
+      "width": 1237,
+      "height": 557,
+      "bytes": 30654,
+      "kb": 29.9
+    },
+    {
+      "file": "/media/v1/falcon-2000-parked.webp",
+      "width": 1231,
+      "height": 613,
+      "bytes": 33342,
+      "kb": 32.6
+    },
+    {
+      "file": "/media/v1/falcon-2000-engine-detail.webp",
+      "width": 1400,
+      "height": 933,
+      "bytes": 55422,
+      "kb": 54.1
+    },
+    {
+      "file": "/media/v1/og-default.jpg",
+      "width": 1200,
+      "height": 630,
+      "bytes": 48211,
+      "kb": 47.1
+    }
+  ],
+  "models": [
+    {
+      "id": "hawker-flight",
+      "rawBytes": 6023548,
+      "rawMiB": 5.74,
+      "desktopFile": "/models/v1/hawker-4000-flight-desktop.glb",
+      "desktopBytes": 1033252,
+      "desktopMiB": 0.99,
+      "mobileFile": "/models/v1/hawker-4000-flight-mobile.glb",
+      "mobileBytes": 917696,
+      "mobileMiB": 0.88
+    },
+    {
+      "id": "hawker-parked",
+      "rawBytes": 8204604,
+      "rawMiB": 7.82,
+      "desktopFile": "/models/v1/hawker-4000-parked-desktop.glb",
+      "desktopBytes": 1407500,
+      "desktopMiB": 1.34,
+      "mobileFile": "/models/v1/hawker-4000-parked-mobile.glb",
+      "mobileBytes": 1254808,
+      "mobileMiB": 1.2
+    },
+    {
+      "id": "hawker-boarding",
+      "rawBytes": 8511180,
+      "rawMiB": 8.12,
+      "desktopFile": "/models/v1/hawker-4000-boarding-desktop.glb",
+      "desktopBytes": 1492136,
+      "desktopMiB": 1.42,
+      "mobileFile": "/models/v1/hawker-4000-boarding-mobile.glb",
+      "mobileBytes": 1330444,
+      "mobileMiB": 1.27
+    },
+    {
+      "id": "falcon-flight",
+      "rawBytes": 4776316,
+      "rawMiB": 4.56,
+      "desktopFile": "/models/v1/falcon-2000-flight-desktop.glb",
+      "desktopBytes": 733216,
+      "desktopMiB": 0.7,
+      "mobileFile": "/models/v1/falcon-2000-flight-mobile.glb",
+      "mobileBytes": 640872,
+      "mobileMiB": 0.61
+    },
+    {
+      "id": "falcon-parked",
+      "rawBytes": 7014396,
+      "rawMiB": 6.69,
+      "desktopFile": "/models/v1/falcon-2000-parked-desktop.glb",
+      "desktopBytes": 1195876,
+      "desktopMiB": 1.14,
+      "mobileFile": "/models/v1/falcon-2000-parked-mobile.glb",
+      "mobileBytes": 1052236,
+      "mobileMiB": 1
+    }
+  ]
+}

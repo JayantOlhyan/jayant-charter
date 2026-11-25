@@ -1,0 +1,32 @@
+{
+  "brandName": "Jayant Charter",
+  "brandMarkFirst": "Jayant",
+  "brandMarkSecond": "Charter",
+  "descriptor": "Private jets, group charter, and helicopters arranged around your itinerary.",
+  "legalEntity": "Jayant Charter (working public brand; final entity registration details to be confirmed prior to public launch)",
+  "jurisdictionNotice": "Operating entity, retention schedule, and local regulatory disclosures are finalized when live contact channels are activated.",
+  "roleDisclosure": "Jayant Charter is a founder-led private aviation inquiry service. Flights are quoted, contracted, and operated by licensed air carriers identified before any booking is confirmed. Aircraft shown on this website are illustrative examples.",
+  "corridorsNote": "Custom itineraries and multi-stop routes are welcomed worldwide. Current relationship focus includes Dubai, Delhi NCR, and Mumbai, alongside wedding and event movements in Rajasthan and Goa.",
+  "timezone": "Asia/Kolkata",
+  "responseHoursConfigured": false,
+  "responseHoursLabel": null,
+  "contactNoticeVersion": "2026-11-25-v1",
+  "channels": {
+    "email": null,
+    "phone": null,
+    "whatsappUrl": null,
+    "linkedinUrl": null,
+    "instagramUrl": null
+  },
+  "featureFlags": {
+    "enableLive3D": true,
+    "enableIntake": true,
+    "showPreviewBanner": true,
+    "enableSmoothScroll": true
+  },
+  "defaultSeo": {
+    "title": "Jayant Charter: Private charter for your itinerary",
+    "description": "Private jets, group charters, and helicopters arranged around custom itineraries. Speak directly with Jayant to begin feasibility checks and aircraft sourcing.",
+    "ogImageId": "hawker-hero-og"
+  }
+}

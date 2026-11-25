@@ -1,0 +1,38 @@
+[
+  {
+    "id": "scenario-dubai-delhi-executive",
+    "kind": "example-itinerary-scenario",
+    "badgeLabel": "Example scenario",
+    "serviceId": "private-jets",
+    "routeLabel": "Dubai to Delhi NCR",
+    "title": "Same-day executive board return",
+    "summary": "Four principals departing Dubai early morning for a fixed 11:00 meeting in Gurugram, returning the same evening around their final discussion.",
+    "planningNotes": "Illustrative brief showing how schedule flexibility and return timing are reviewed before quoting. Not a completed flight record.",
+    "inquiryServiceKey": "private-jet",
+    "status": "published"
+  },
+  {
+    "id": "scenario-mumbai-udaipur-wedding-group",
+    "kind": "example-itinerary-scenario",
+    "badgeLabel": "Example scenario",
+    "serviceId": "group-charter",
+    "routeLabel": "Mumbai to Udaipur",
+    "title": "22 guests travelling together on one aircraft",
+    "summary": "A wedding family and close guests travelling on a fixed celebration date with formal luggage, coordinated to land together ahead of evening events.",
+    "planningNotes": "Illustrative group planning requirement; specific large-cabin aircraft availability and baggage capacity are verified per itinerary.",
+    "inquiryServiceKey": "group-charter",
+    "status": "published"
+  },
+  {
+    "id": "scenario-airport-venue-helicopter",
+    "kind": "example-itinerary-scenario",
+    "badgeLabel": "Example scenario",
+    "serviceId": "helicopters",
+    "routeLabel": "Airport to palace venue",
+    "title": "Private helicopter arrival for two guests",
+    "summary": "Two guests requesting a twin-engine helicopter transfer from the regional airport directly to a wedding venue, bypassing long road transit.",
+    "planningNotes": "Illustrative helicopter request; venue landing permissions, daytime weather window, and engine availability require operator confirmation.",
+    "inquiryServiceKey": "helicopter",
+    "status": "published"
+  }
+]

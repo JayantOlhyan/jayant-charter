@@ -1,0 +1,456 @@
+[
+  {
+    "id": "hawker-4000",
+    "slug": "hawker-4000",
+    "manufacturer": "Hawker Beechcraft",
+    "model": "Hawker 4000",
+    "variant": "Super mid-size business jet (exterior study)",
+    "displayTitle": "Hawker 4000",
+    "category": "Super mid-size business jet",
+    "presentation": "illustrative-aircraft-example",
+    "summary": "A composite-fuselage super mid-size business jet distinguished by its high T-tail, swept wings, and stand-up cabin class. Shown here in three static exterior configurations built from photographic reference.",
+    "overview": [
+      "The Hawker 4000 sits in the super mid-size business jet category, frequently considered for regional and longer multi-hour legs carrying a small executive group or family party with stand-up cabin comfort.",
+      "This interactive exterior model was constructed from public photographic references in a pearl-white, Atlantic blue, and champagne livery. Switch between In Flight, Parked, and Boarding states to examine the high T-tail, rear nacelles, tricycle undercarriage, and forward airstair geometry. The Boarding configuration depicts a shallow display vestibule and is not a full cabin interior."
+    ],
+    "tripConsiderations": [
+      "Often reviewed for regional business corridors and family itineraries needing super mid-size cabin volume.",
+      "Not presented as a 22-passenger group aircraft; larger groups require a dedicated group charter evaluation.",
+      "Exact seating layout, baggage hold volume, range under actual payload, and runway suitability are verified per tail by the operating carrier."
+    ],
+    "posterId": "hawker-hero",
+    "environmentUrl": "/models/v1/studio-env.hdr",
+    "configurations": [
+      {
+        "id": "flight",
+        "label": "In flight",
+        "description": "Clean cruise silhouette with landing gear retracted and forward entry closed.",
+        "desktopUrl": "/models/v1/hawker-4000-flight-desktop.glb",
+        "mobileUrl": "/models/v1/hawker-4000-flight-mobile.glb",
+        "posterId": "hawker-hero",
+        "desktopBytes": 1033252,
+        "mobileBytes": 917696,
+        "triangles": 232876,
+        "supportedPresets": [
+          "hero",
+          "side",
+          "engine",
+          "nose"
+        ],
+        "supportedHotspots": [
+          "high-t-tail",
+          "rear-turbofans",
+          "cabin-windows"
+        ]
+      },
+      {
+        "id": "parked",
+        "label": "Parked",
+        "description": "Ramp stance with nose and main landing gear extended and entry closed.",
+        "desktopUrl": "/models/v1/hawker-4000-parked-desktop.glb",
+        "mobileUrl": "/models/v1/hawker-4000-parked-mobile.glb",
+        "posterId": "hawker-parked",
+        "desktopBytes": 1407500,
+        "mobileBytes": 1254808,
+        "triangles": 265000,
+        "supportedPresets": [
+          "hero",
+          "side",
+          "engine",
+          "gear"
+        ],
+        "supportedHotspots": [
+          "high-t-tail",
+          "rear-turbofans",
+          "landing-gear"
+        ]
+      },
+      {
+        "id": "boarding",
+        "label": "Boarding",
+        "description": "Ramp stance with deployed forward airstair and shallow display vestibule.",
+        "desktopUrl": "/models/v1/hawker-4000-boarding-desktop.glb",
+        "mobileUrl": "/models/v1/hawker-4000-boarding-mobile.glb",
+        "posterId": "hawker-boarding",
+        "desktopBytes": 1492136,
+        "mobileBytes": 1330444,
+        "triangles": 278000,
+        "supportedPresets": [
+          "hero",
+          "side",
+          "entry",
+          "gear",
+          "engine"
+        ],
+        "supportedHotspots": [
+          "forward-airstair",
+          "rear-turbofans",
+          "landing-gear"
+        ]
+      }
+    ],
+    "cameraPresets": [
+      {
+        "id": "hero",
+        "label": "Hero",
+        "orbit": "-36deg 76deg 76%",
+        "target": "auto auto auto",
+        "fieldOfView": "30deg"
+      },
+      {
+        "id": "side",
+        "label": "Profile",
+        "orbit": "-90deg 84deg 80%",
+        "target": "auto auto auto",
+        "fieldOfView": "28deg"
+      },
+      {
+        "id": "engine",
+        "label": "Engine",
+        "orbit": "-37deg 79deg 7m",
+        "target": "4.8m 3.18m 1.75m",
+        "fieldOfView": "28deg"
+      },
+      {
+        "id": "nose",
+        "label": "Forward fuselage",
+        "orbit": "-33deg 78deg 9m",
+        "target": "-7.5m 2.7m 1m",
+        "fieldOfView": "28deg"
+      },
+      {
+        "id": "gear",
+        "label": "Landing gear",
+        "orbit": "-33deg 75deg 4.5m",
+        "target": "-7.62m 0.8m 0m",
+        "fieldOfView": "28deg",
+        "requiredConfig": "parked"
+      },
+      {
+        "id": "entry",
+        "label": "Entry stairs",
+        "orbit": "-36deg 72deg 7m",
+        "target": "-6.63m 2m 0.8m",
+        "fieldOfView": "28deg",
+        "requiredConfig": "boarding"
+      }
+    ],
+    "hotspots": [
+      {
+        "id": "high-t-tail",
+        "label": "High T-tail empennage",
+        "summary": "Horizontal stabilizer mounted atop the swept vertical fin, keeping tail surfaces clear of rear-engine exhaust flow.",
+        "presetId": "side",
+        "position": "8.1m 5.4m 0.2m",
+        "normal": "0m 0.3m 1m",
+        "supportedConfigs": [
+          "flight",
+          "parked"
+        ]
+      },
+      {
+        "id": "rear-turbofans",
+        "label": "Twin rear nacelles",
+        "summary": "Aft fuselage-mounted turbofan nacelles with polished aluminum intake lips and deep fan ducts.",
+        "presetId": "engine",
+        "position": "4.8m 3.18m 1.75m",
+        "normal": "-0.4m 0.2m 1m",
+        "supportedConfigs": [
+          "flight",
+          "parked",
+          "boarding"
+        ]
+      },
+      {
+        "id": "cabin-windows",
+        "label": "Seven cabin windows per side",
+        "summary": "Rounded cabin windows along the composite fuselage; interior seating layout varies by specific operator aircraft.",
+        "presetId": "hero",
+        "position": "-1.8m 2.65m 1.1m",
+        "normal": "0m 0.1m 1m",
+        "supportedConfigs": [
+          "flight"
+        ]
+      },
+      {
+        "id": "landing-gear",
+        "label": "Twin-wheel undercarriage",
+        "summary": "Extended nose and main landing gear shown in the static parked and boarding configurations.",
+        "presetId": "gear",
+        "position": "-7.62m 0.85m 0.35m",
+        "normal": "-0.3m 0m 1m",
+        "supportedConfigs": [
+          "parked",
+          "boarding"
+        ]
+      },
+      {
+        "id": "forward-airstair",
+        "label": "Forward entry airstair",
+        "summary": "Deployed entry stairs and door hardware opening into a shallow display vestibule (not a full cabin interior model).",
+        "presetId": "entry",
+        "position": "-6.63m 1.95m 1.15m",
+        "normal": "-0.2m 0.1m 1m",
+        "supportedConfigs": [
+          "boarding"
+        ]
+      }
+    ],
+    "detailMediaIds": [
+      "hawker-engine-detail",
+      "hawker-entry-detail",
+      "hawker-gear-detail"
+    ],
+    "specifications": [
+      {
+        "label": "Exterior length (model reference)",
+        "value": "21.08",
+        "unit": "m",
+        "qualification": "General published airframe dimension used for the exterior display envelope; not a certification tolerance.",
+        "sourceLabel": "AOPA / Flugzeuginfo airframe reference",
+        "sourceUrl": "https://www.aopa.org/go-fly/aircraft-and-ownership/aircraft-fact-sheets",
+        "reviewedAt": "2026-11-22"
+      },
+      {
+        "label": "Wingspan (model reference)",
+        "value": "18.82",
+        "unit": "m",
+        "qualification": "General published wingspan reference for the Hawker 4000 exterior study.",
+        "sourceLabel": "AOPA aircraft fact sheet reference",
+        "sourceUrl": "https://www.aopa.org/go-fly/aircraft-and-ownership/aircraft-fact-sheets",
+        "reviewedAt": "2026-11-22"
+      },
+      {
+        "label": "Tail height (model reference)",
+        "value": "6.02",
+        "unit": "m",
+        "qualification": "Ground-to-fin exterior reference height; actual hangar and ramp clearance confirmed by operator.",
+        "sourceLabel": "AOPA aircraft fact sheet reference",
+        "sourceUrl": "https://www.aopa.org/go-fly/aircraft-and-ownership/aircraft-fact-sheets",
+        "reviewedAt": "2026-11-22"
+      }
+    ],
+    "disclaimer": "Illustrative aircraft model. Seating layout, operating range, luggage allowance, and availability are confirmed per itinerary by the operating carrier.",
+    "identityNote": "Built from the photo-referenced Hawker 4000 high T-tail model kit. Generic display livery with no operator registration.",
+    "licenseRefs": [
+      "Google model-viewer 4.1.0 (Apache-2.0)",
+      "ambientCG generic metal and rubber maps (CC0 1.0)",
+      "Poly Haven Studio Small 09 environment by Sergej Majboroda (CC0 1.0)"
+    ],
+    "relatedAircraftIds": [
+      "falcon-2000-classic"
+    ],
+    "featuredOrder": 1,
+    "seo": {
+      "title": "Hawker 4000 Aircraft Example | Jayant Charter",
+      "description": "Explore our illustrative 3D Hawker 4000 exterior model in flight, parked, and boarding configurations, then request a callback for your itinerary.",
+      "ogImageId": "hawker-hero-og"
+    },
+    "status": "published"
+  },
+  {
+    "id": "falcon-2000-classic",
+    "slug": "falcon-2000-classic",
+    "manufacturer": "Dassault Aviation",
+    "model": "Falcon 2000",
+    "variant": "Classic (CFE738-style nacelles, clean wing tips)",
+    "displayTitle": "Dassault Falcon 2000 Classic",
+    "category": "Large-cabin twin-engine jet",
+    "presentation": "illustrative-aircraft-example",
+    "summary": "The original Dassault Falcon 2000 Classic configuration, recognized by its wide fuselage cross-section, nine cabin windows per side, clean wing tips without winglets, and mid-fin horizontal tail.",
+    "overview": [
+      "The original Falcon 2000 Classic introduced a noticeably wide cabin footprint within a twin-engine layout, valued by travellers prioritizing shoulder room and quiet comfort across regional and continental sectors.",
+      "This exterior model strictly depicts the Falcon 2000 Classic with original CFE738-style rear nacelles and clean wing tips. It is not a winglet-equipped EX, LX, or LXS variant. Inspect both In Flight and Parked configurations to review the fuselage proportions and empennage geometry."
+    ],
+    "tripConsiderations": [
+      "Frequently considered for executive and family regional journeys where wide-cabin comfort is a priority.",
+      "Not presented as a 22-passenger group aircraft; group charters are quoted separately on larger airframes.",
+      "Actual range, payload limits, cabin seating configuration, and availability are confirmed for each route by the aviation team."
+    ],
+    "posterId": "falcon-hero",
+    "environmentUrl": "/models/v1/studio-env.hdr",
+    "configurations": [
+      {
+        "id": "flight",
+        "label": "In flight",
+        "description": "Clean original Falcon 2000 Classic exterior with gear retracted and clean wing tips.",
+        "desktopUrl": "/models/v1/falcon-2000-flight-desktop.glb",
+        "mobileUrl": "/models/v1/falcon-2000-flight-mobile.glb",
+        "posterId": "falcon-hero",
+        "desktopBytes": 733216,
+        "mobileBytes": 640872,
+        "triangles": 177970,
+        "supportedPresets": [
+          "hero",
+          "side",
+          "engine",
+          "nose"
+        ],
+        "supportedHotspots": [
+          "clean-wing-tips",
+          "cfe738-nacelles",
+          "wide-fuselage"
+        ]
+      },
+      {
+        "id": "parked",
+        "label": "Parked",
+        "description": "Ramp stance with extended tricycle undercarriage.",
+        "desktopUrl": "/models/v1/falcon-2000-parked-desktop.glb",
+        "mobileUrl": "/models/v1/falcon-2000-parked-mobile.glb",
+        "posterId": "falcon-parked",
+        "desktopBytes": 1195876,
+        "mobileBytes": 1052236,
+        "triangles": 241582,
+        "supportedPresets": [
+          "hero",
+          "side",
+          "engine",
+          "gear"
+        ],
+        "supportedHotspots": [
+          "clean-wing-tips",
+          "cfe738-nacelles",
+          "falcon-gear"
+        ]
+      }
+    ],
+    "cameraPresets": [
+      {
+        "id": "hero",
+        "label": "Hero",
+        "orbit": "-39deg 77deg 78%",
+        "target": "auto auto auto",
+        "fieldOfView": "30deg"
+      },
+      {
+        "id": "side",
+        "label": "Profile",
+        "orbit": "-90deg 84deg 82%",
+        "target": "auto auto auto",
+        "fieldOfView": "28deg"
+      },
+      {
+        "id": "engine",
+        "label": "Engine",
+        "orbit": "-37deg 78deg 7.5m",
+        "target": "4.7m 3.5m 2.2m",
+        "fieldOfView": "28deg"
+      },
+      {
+        "id": "nose",
+        "label": "Cockpit and nose",
+        "orbit": "-36deg 77deg 10m",
+        "target": "-6.4m 3.1m 1m",
+        "fieldOfView": "28deg"
+      },
+      {
+        "id": "gear",
+        "label": "Landing gear",
+        "orbit": "-34deg 76deg 4.3m",
+        "target": "-6.6m 0.85m 0m",
+        "fieldOfView": "28deg",
+        "requiredConfig": "parked"
+      }
+    ],
+    "hotspots": [
+      {
+        "id": "wide-fuselage",
+        "label": "Nine cabin windows per side",
+        "summary": "Characteristic Dassault Falcon wide fuselage profile with nine compact oval cabin windows along each side.",
+        "presetId": "hero",
+        "position": "-1.2m 2.9m 1.3m",
+        "normal": "0m 0.15m 1m",
+        "supportedConfigs": [
+          "flight"
+        ]
+      },
+      {
+        "id": "cfe738-nacelles",
+        "label": "CFE738-style rear engines",
+        "summary": "Twin rear-mounted nacelles paired with the mid-fin horizontal tail typical of the original Falcon 2000 Classic.",
+        "presetId": "engine",
+        "position": "4.7m 3.5m 2.2m",
+        "normal": "-0.3m 0.2m 1m",
+        "supportedConfigs": [
+          "flight",
+          "parked"
+        ]
+      },
+      {
+        "id": "clean-wing-tips",
+        "label": "Clean Classic wing tips",
+        "summary": "Original clean swept wing tips without blended winglets, distinguishing the Classic variant from later LX and LXS airframes.",
+        "presetId": "side",
+        "position": "2.4m 1.7m 8.8m",
+        "normal": "0m 0.5m 1m",
+        "supportedConfigs": [
+          "flight",
+          "parked"
+        ]
+      },
+      {
+        "id": "falcon-gear",
+        "label": "Extended undercarriage",
+        "summary": "Tricycle landing gear shown in the static parked configuration; no animated retraction mechanism is claimed.",
+        "presetId": "gear",
+        "position": "-6.6m 0.85m 0.35m",
+        "normal": "-0.3m 0m 1m",
+        "supportedConfigs": [
+          "parked"
+        ]
+      }
+    ],
+    "detailMediaIds": [
+      "falcon-engine-detail",
+      "falcon-parked",
+      "falcon-hero"
+    ],
+    "specifications": [
+      {
+        "label": "Exterior length (EASA envelope)",
+        "value": "20.23",
+        "unit": "m",
+        "qualification": "Overall dimensional target following EASA.A.008 reference envelope; local model surfaces remain approximate.",
+        "sourceLabel": "EASA Type Certificate Data Sheet A.008",
+        "sourceUrl": "https://www.easa.europa.eu/en/document-library/type-certificates",
+        "reviewedAt": "2026-11-22"
+      },
+      {
+        "label": "Wingspan (EASA envelope)",
+        "value": "19.24",
+        "unit": "m",
+        "qualification": "Original Falcon 2000 Classic clean-wing span reference without winglets.",
+        "sourceLabel": "EASA Type Certificate Data Sheet A.008",
+        "sourceUrl": "https://www.easa.europa.eu/en/document-library/type-certificates",
+        "reviewedAt": "2026-11-22"
+      },
+      {
+        "label": "Tail height (EASA envelope)",
+        "value": "7.06",
+        "unit": "m",
+        "qualification": "Ground-to-fin height reference in parked attitude.",
+        "sourceLabel": "EASA Type Certificate Data Sheet A.008",
+        "sourceUrl": "https://www.easa.europa.eu/en/document-library/type-certificates",
+        "reviewedAt": "2026-11-22"
+      }
+    ],
+    "disclaimer": "Illustrative Falcon 2000 Classic display model. Seating, range, payload, and availability are confirmed for each trip by the operating carrier.",
+    "identityNote": "Original Dassault Falcon 2000 Classic (CFE738-style nacelles, clean wing tips). Not labeled or specified as EX, LX, or LXS.",
+    "licenseRefs": [
+      "Google model-viewer 4.1.0 (Apache-2.0)",
+      "ambientCG generic metal and rubber maps (CC0 1.0)",
+      "Poly Haven Studio Small 09 environment by Sergej Majboroda (CC0 1.0)"
+    ],
+    "relatedAircraftIds": [
+      "hawker-4000"
+    ],
+    "featuredOrder": 2,
+    "seo": {
+      "title": "Dassault Falcon 2000 Classic Aircraft Example | Jayant Charter",
+      "description": "Inspect our illustrative 3D Dassault Falcon 2000 Classic exterior model in flight and parked configurations, then request a callback for your trip.",
+      "ogImageId": "hawker-hero-og"
+    },
+    "status": "published"
+  }
+]

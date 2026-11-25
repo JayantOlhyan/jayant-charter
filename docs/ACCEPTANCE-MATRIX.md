@@ -1,0 +1,33 @@
+# Acceptance Tests & Release Gate Record (PRD Section 26)
+
+**Verification Date:** 25 November 2026  
+**Environment:** Node v25.2.1 · Next.js 15.5.29 production build (`npm run build`) · Google Chrome headless + SwiftShader WebGL (`scripts/live-verify.mjs`) · Vitest 3.2.7 (`npm test`) · Hallmark `sloplint.mjs`
+
+| ID | Acceptance Test | Status | Verification Evidence |
+|---|---|---|---|
+| AC01 | First visit with 3D blocked | **PASS** | All headlines, services, navigation, aircraft posters, specs, and inquiry forms are server-rendered HTML; 3D runtime is lazy-loaded only after poster render. |
+| AC02 | Mobile homepage | **PASS** | Verified at 320, 360, 390, 768, 1024, 1440, 1920 px (`scrollWidth === clientWidth`, zero horizontal overflow); mobile hero (`390×844`) visually verified with headline, CTA, and aircraft above fold. |
+| AC03 | Aircraft identity | **PASS** | `tests/content-and-privacy.test.ts` + visual audit confirm Hawker 4000 uses `hawker-4000-realistic` (flight/parked/boarding) and Falcon 2000 is strictly labeled Classic (CFE738, clean wing tips). |
+| AC04 | Aircraft context CTA | **PASS** | Contextual links (`/inquire?service=private-jet&aircraft=...`) and inline Hangar button attach an editable, removable aircraft preference badge. |
+| AC05 | Model load failure / context loss | **PASS** | Verified in live browser fallback state: poster stays visible, accessible alert explains status, and Retry / Keep studio render actions remain available without affecting form/navigation. |
+| AC06 | Configuration rapid switching | **PASS** | Monotonic request token in `AircraftStudioViewer` ignores stale load/error completions; verified live switch from In Flight → Boarding → Falcon 2000 Classic. |
+| AC07 | Reduced motion | **PASS** | Verified with `reducedMotion: "reduce"` browser context: Lenis & GSAP scrubbed motion disabled, CSS transitions collapsed, static visual story preserved, manual 3D exploration still available. |
+| AC08 | Keyboard & assistive tech | **PASS** | Skip link, semantic landmarks, instant `:focus-visible` outlines on dark & light surfaces, accessible Base UI Accordion/Sheet/Checkbox, HTML hotspots mirroring 3D presets, aria-live viewer & form status regions. |
+| AC09 | Touch interaction | **PASS** | `touch-action="pan-y"` + explicit mobile **Explore in 3D** and **Rotate 3D / Done rotating** lock toggle prevent vertical scroll trapping on phones. |
+| AC10 | Short valid callback | **PASS** | Automated Vitest + live E2E Playwright submit (`JC-...` persisted to SQLite with name, phone, and explicit consent only). |
+| AC11 | Invalid phone / date / count | **PASS** | Verified via `libphonenumber-js` & Zod: rejects invalid phone, missing consent, and return < outbound; accepts 22+ / 48+ passengers with no artificial cap; preserves user inputs. |
+| AC12 | Network retry (idempotency) | **PASS** | `tests/inquiry-backend.test.ts` confirms identical `submissionKey` + payload returns `200` with original `inquiryId` and zero duplicate rows; mutated payload returns `409`. |
+| AC13 | Database failure | **PASS** | `POST /api/inquiries` catches storage exceptions, logs redacted error code, returns `503` without false success, and keeps entered fields on screen. |
+| AC14 | Notification failure | **PASS** | Verified in Vitest: failed delivery records `retry_scheduled` with exponential `nextAttemptAt` while keeping the persisted inquiry intact and returning saved reference ID. |
+| AC15 | Routing & privacy | **PASS** | Inquiries remain owned by Jayant (`ownerId: "jayant"`); `transitionInquiryStage` blocks `sent_to_partner` unless explicit `onwardConsentRecordedAt` is recorded. |
+| AC16 | Source tracking | **PASS** | `AttributionTracker` preserves `landingPath`, sanitized `ref` token, and allowlisted UTMs across navigation and attaches them to saved inquiries. |
+| AC17 | No case studies | **PASS** | `/case-studies`, `/case-studies/draft-template-example`, and `/insights` return `404`; empty sections hidden from homepage, nav, and `sitemap.xml`. |
+| AC18 | Add approved case | **PASS** | `ConditionalProofSection`, `/case-studies`, `/case-studies/[slug]`, header/footer nav, and `sitemap.ts` all derive dynamically from `getPublishedCaseStudies()`. |
+| AC19 | Add third aircraft | **PASS** | All aircraft pages, hangar switcher, and inquiry preference badges iterate dynamically over `content/aircraft.json`. |
+| AC20 | Draft & private content | **PASS** | `scripts/validate-content.mjs`, `scripts/verify-bundle.mjs`, and Vitest verify drafts excluded, zero source `.blend`/`.zip` files in `public/`, zero client source maps, and zero internal partner names in bundles. |
+| AC21 | Metadata & crawlability | **PASS** | Unique titles, descriptions, canonicals, static `og-default.jpg` (47 KB), JSON-LD (`Organization`, `BreadcrumbList`, `FAQPage`), `/sitemap.xml`, `/robots.txt`, and custom `404` verified. |
+| AC22 | Performance | **PASS (Lab)** | Above-fold hero media: 68.9 KB total WebP; desktop GLBs: 0.70–1.39 MiB (≤ 6 MB target); mobile GLBs: 0.61–1.24 MiB (≤ 3 MB target); `studio-env.hdr`: 319 KB gzip (≤ 1 MB); shared JS: 103 kB gzip. Real-device field CWV pending live deployment. |
+| AC23 | Contact settings absent | **PASS** | Preview banner clearly states local recording & paused channels; email/WhatsApp links stay hidden until configured in `content/site-settings.json`. |
+| AC24 | Claim review | **PASS** | Zero "Our fleet" labels, zero invented stats/logos/testimonials/portraits, zero unverified recovery timing claims. |
+| AC25 | Build & deployment | **PASS** | `npm run typecheck`, `npm run lint` (0 errors, 0 warnings), `npm test` (12/12), `npm run build` (22/22 routes + bundle scan), and Hallmark `sloplint` (`0 FAIL, 0 REFLEX, 0 WARN`) all pass. |
+| AC26 | Operational reconciliation | **PASS** | Verified in Vitest: synthetic inquiry ID reconciles cleanly through `received` → `jayant_review` → permissioned `sent_to_partner` with timestamped `inquiry_events`. |

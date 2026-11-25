@@ -1,0 +1,29 @@
+[
+  {
+    "id": "claim-services-scope",
+    "claimText": "Jayant Charter arranges inquiries for private jets, group charters, and helicopters around custom itineraries.",
+    "source": "PRD v1.1 Section 1.2 Governing Requirement",
+    "scope": "Homepage, Service Pages, About",
+    "approver": "Jayant",
+    "reviewedAt": "2026-11-25",
+    "publicApproval": true
+  },
+  {
+    "id": "claim-illustrative-models",
+    "claimText": "Hawker 4000 and Dassault Falcon 2000 Classic 3D assets are illustrative exterior models; availability and operating carrier are confirmed per trip.",
+    "source": "PRD v1.1 Section 1.3 and Section 8.2",
+    "scope": "Homepage, Aircraft Collection, Aircraft Details",
+    "approver": "Jayant",
+    "reviewedAt": "2026-11-25",
+    "publicApproval": true
+  },
+  {
+    "id": "claim-falcon-classic-identity",
+    "claimText": "Falcon model depicts the original Dassault Falcon 2000 Classic with CFE738-style nacelles and clean wing tips.",
+    "source": "models/falcon-2000/README.md and DESIGN.md",
+    "scope": "Falcon 2000 Classic Detail Page",
+    "approver": "Jayant",
+    "reviewedAt": "2026-11-25",
+    "publicApproval": true
+  }
+]
