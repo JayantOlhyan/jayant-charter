@@ -1,6 +1,6 @@
 # Jayant Charter — Canonical Design Record (`DESIGN.md`)
 
-**Status:** Active production design system (v1.2 — Reference-audited V2 scroll & 3D studio release)  
+**Status:** Active production design system (v1.3 — Full-bleed Jesko × Digital Jets cinema & showroom release)  
 **Updated:** 25 November 2026  
 **Public working brand:** Jayant Charter  
 **Primary references:** Jesko Jets (`jeskojets.com`) for continuous scroll-led visual narrative, multi-stop atmospheric transitions, monumental display typography, and synced editorial splits; Digital Jets (`digital-jets.com/products`) for studio-lit aircraft imagery, daylight/twilight/evening atmosphere modes, interactive Before/After ramp comparisons, and close-up engineering detail. Full live inspection notes live in [docs/REFERENCE-AUDIT.md](./docs/REFERENCE-AUDIT.md) and [docs/VISUAL-BOARD.md](./docs/VISUAL-BOARD.md).
@@ -72,7 +72,8 @@ Upgraded from the baseline Georgia proposal per PRD §14.1 & §15.5, self-hosted
 
 ## 5. Motion, Scroll Choreography & 3D Rules
 
-- **Signature Move (*Altitude Horizon & Live Approach*):** Pinned desktop two-beat stage (`205svh`, synced to exact `--chrome-height`) that paints an immediate optimized hero poster (`1280×800` above-the-fold safe), upgrades seamlessly to the live Meshopt 3D Hawker 4000 (`-36°` three-quarter, `shadow-intensity="0"` in flight, hidden default progress bar), and scrubs bidirectionally to a true broadside profile (`0°`) while illuminating Approach manifesto lines via DOM refs with zero per-frame React re-renders. Unmounts its WebGL context via `IntersectionObserver` before Chapter 4 so only one `<model-viewer>` context is ever active.
+- **Signature Move (*Altitude Horizon, Cloud Approach & Overhead Planform*):** Full-bleed `300svh` pinned desktop 3-beat stage floating directly under whisper-thin transparent navigation. Paints an immediate optimized hero poster (`1280×800` above-the-fold safe), upgrades seamlessly to the live Meshopt 3D Hawker 4000 (`-36°` three-quarter, `shadow-intensity="0"` in sky), scrubs bidirectionally through a `0°` broadside Cloud-Deck profile (with upper-sky optical-focus pillars clear of the aircraft) and rises into a luminous Warm Stone architectural overhead vertical planform (`90° / 14° / 94%`, soft studio shadow `0.56`) framed by monumental split typography and hairline airframe metrics. Unmounts its WebGL context via `IntersectionObserver` before Chapter 4 so only one `<model-viewer>` context is ever active.
+- **Persistent Navigation & Inquiry Pill:** Centered wordmark top strip floats transparently over `/` at `y = 0` and adopts `--jc-nav-scrolled` blur on scroll; persistent bottom-center `FloatingCallbackPill` stays effortlessly reachable while auto-hiding over `#inspect-aircraft`, `#inquire`, and `footer`.
 - **Smooth Scroll:** Lenis active on desktop fine-pointer environments only; automatically disabled under `prefers-reduced-motion: reduce` and on touch devices so native mobile scrolling is never altered.
 - **Composited Properties Only:** Animate `transform`, `opacity`, and `clip-path` only. Never `transition: all`; never animate `width`, `height`, `top`, or `left`. Synced editorial imagery (`TrustEditorialSplit`) uses a zero-runtime CSS opacity stack.
 - **Reduced Motion:** `prefers-reduced-motion: reduce` disables Lenis, ambient cloud drift, and scrubbed camera transitions while preserving the complete 8-chapter visual story, high-res aircraft stills, and optional explicit manual 3D inspection.

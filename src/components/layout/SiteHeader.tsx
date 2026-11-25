@@ -44,6 +44,7 @@ export function SiteHeader({
   showInsights,
 }: SiteHeaderProps) {
   const pathname = usePathname();
+  const isHome = pathname === "/";
   const [servicesOpen, setServicesOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -63,10 +64,10 @@ export function SiteHeader({
     const ro = new ResizeObserver(syncChromeHeight);
     ro.observe(el);
     return () => ro.disconnect();
-  }, [settings.featureFlags.showPreviewBanner]);
+  }, []);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => setScrolled(window.scrollY > 48);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -102,31 +103,19 @@ export function SiteHeader({
       ref={headerRef}
       data-surface="dark"
       className={cn(
-        "sticky top-0 z-[var(--z-sticky-nav)] w-full border-b transition-[background-color,border-color] duration-200",
-        scrolled
-          ? "border-[var(--jc-line-dark)] bg-[color-mix(in_srgb,var(--jc-teal)_95%,transparent)] backdrop-blur-md"
-          : "border-transparent bg-[var(--jc-teal)]"
+        "z-[var(--z-sticky-nav)] w-full border-b transition-[background-color,border-color] duration-300",
+        isHome ? "fixed inset-x-0 top-0" : "sticky top-0",
+        isHome && !scrolled
+          ? "border-transparent bg-transparent"
+          : "border-[var(--jc-line-dark)] bg-[var(--jc-nav-scrolled)] backdrop-blur-md"
       )}
     >
-      {settings.featureFlags.showPreviewBanner && (
-        <div
-          role="status"
-          className="border-b border-[var(--jc-banner-line)] bg-[var(--jc-gold)] px-[var(--gutter)] py-2 text-center text-[13px] font-medium text-[var(--jc-teal)]"
+      <div className="mx-auto grid h-[var(--header-height)] w-full max-w-[1600px] grid-cols-[1fr_auto_1fr] items-center gap-4 px-[var(--gutter)]">
+        {/* Left: Compact whisper navigation (Jesko architectural balance) */}
+        <nav
+          aria-label="Primary navigation"
+          className="hidden items-center gap-7 lg:flex"
         >
-          Preview environment: inquiries are recorded locally while live email and WhatsApp channels remain paused.
-        </div>
-      )}
-
-      <div className="jc-container flex h-[var(--header-height)] items-center justify-between gap-6">
-        <Link
-          href="/"
-          className="font-serif text-[23px] leading-none tracking-[-0.015em] text-[var(--jc-ivory)] whitespace-nowrap"
-        >
-          {settings.brandMarkFirst}{" "}
-          <span className="text-[var(--jc-gold)]">{settings.brandMarkSecond}</span>
-        </Link>
-
-        <nav aria-label="Primary navigation" className="hidden items-center gap-8 lg:flex">
           <div className="relative" ref={menuRef}>
             <button
               type="button"
@@ -134,7 +123,7 @@ export function SiteHeader({
               aria-controls="services-desktop-menu"
               onClick={() => setServicesOpen((prev) => !prev)}
               className={cn(
-                "inline-flex min-h-11 items-center gap-1.5 text-[15px] font-normal whitespace-nowrap transition-colors duration-150 cursor-pointer",
+                "inline-flex min-h-11 items-center gap-1.5 text-[14px] font-medium whitespace-nowrap transition-colors duration-150 cursor-pointer",
                 isServiceActive || servicesOpen
                   ? "text-[var(--jc-ivory)]"
                   : "text-[var(--jc-ivory-soft)] hover:text-[var(--jc-ivory)]"
@@ -144,7 +133,7 @@ export function SiteHeader({
               <ChevronDown
                 aria-hidden="true"
                 className={cn(
-                  "size-4 transition-transform duration-150",
+                  "size-3.5 transition-transform duration-150",
                   servicesOpen && "rotate-180"
                 )}
               />
@@ -153,7 +142,7 @@ export function SiteHeader({
             {servicesOpen && (
               <div
                 id="services-desktop-menu"
-                className="absolute left-0 top-full mt-2 w-[340px] rounded-[4px] border border-[var(--jc-line-dark-strong)] bg-[var(--jc-teal-deep)] p-2"
+                className="absolute left-0 top-full mt-2 w-[330px] rounded-[4px] border border-[var(--jc-line-dark-strong)] bg-[var(--jc-teal-deep)] p-2"
               >
                 <ul className="m-0 list-none p-0">
                   {SERVICE_LINKS.map((item) => (
@@ -167,7 +156,9 @@ export function SiteHeader({
                             : "text-[var(--jc-ivory)] hover:bg-[var(--jc-teal)]"
                         )}
                       >
-                        <span className="block text-[15px] font-medium">{item.label}</span>
+                        <span className="block text-[14px] font-medium">
+                          {item.label}
+                        </span>
                         <span className="mt-0.5 block text-[13px] text-[var(--jc-ivory-soft)]">
                           {item.detail}
                         </span>
@@ -182,7 +173,7 @@ export function SiteHeader({
           <Link
             href="/aircraft"
             className={cn(
-              "inline-flex min-h-11 items-center text-[15px] whitespace-nowrap transition-colors duration-150",
+              "inline-flex min-h-11 items-center text-[14px] font-medium whitespace-nowrap transition-colors duration-150",
               pathname.startsWith("/aircraft")
                 ? "text-[var(--jc-ivory)]"
                 : "text-[var(--jc-ivory-soft)] hover:text-[var(--jc-ivory)]"
@@ -194,7 +185,7 @@ export function SiteHeader({
           <Link
             href="/how-it-works"
             className={cn(
-              "inline-flex min-h-11 items-center text-[15px] whitespace-nowrap transition-colors duration-150",
+              "inline-flex min-h-11 items-center text-[14px] font-medium whitespace-nowrap transition-colors duration-150",
               pathname === "/how-it-works"
                 ? "text-[var(--jc-ivory)]"
                 : "text-[var(--jc-ivory-soft)] hover:text-[var(--jc-ivory)]"
@@ -206,7 +197,7 @@ export function SiteHeader({
           <Link
             href="/about"
             className={cn(
-              "inline-flex min-h-11 items-center text-[15px] whitespace-nowrap transition-colors duration-150",
+              "inline-flex min-h-11 items-center text-[14px] font-medium whitespace-nowrap transition-colors duration-150",
               pathname === "/about"
                 ? "text-[var(--jc-ivory)]"
                 : "text-[var(--jc-ivory-soft)] hover:text-[var(--jc-ivory)]"
@@ -219,7 +210,7 @@ export function SiteHeader({
             <Link
               href="/case-studies"
               className={cn(
-                "inline-flex min-h-11 items-center text-[15px] whitespace-nowrap transition-colors duration-150",
+                "inline-flex min-h-11 items-center text-[14px] font-medium whitespace-nowrap transition-colors duration-150",
                 pathname.startsWith("/case-studies")
                   ? "text-[var(--jc-ivory)]"
                   : "text-[var(--jc-ivory-soft)] hover:text-[var(--jc-ivory)]"
@@ -233,7 +224,7 @@ export function SiteHeader({
             <Link
               href="/insights"
               className={cn(
-                "inline-flex min-h-11 items-center text-[15px] whitespace-nowrap transition-colors duration-150",
+                "inline-flex min-h-11 items-center text-[14px] font-medium whitespace-nowrap transition-colors duration-150",
                 pathname.startsWith("/insights")
                   ? "text-[var(--jc-ivory)]"
                   : "text-[var(--jc-ivory-soft)] hover:text-[var(--jc-ivory)]"
@@ -244,10 +235,23 @@ export function SiteHeader({
           )}
         </nav>
 
-        <div className="flex items-center gap-3">
+        {/* Mobile left spacer for centered wordmark */}
+        <div className="lg:hidden" />
+
+        {/* Center: Poised editorial wordmark */}
+        <Link
+          href="/"
+          className="justify-self-center font-serif text-[22px] leading-none tracking-[-0.015em] text-[var(--jc-ivory)] whitespace-nowrap sm:text-[24px]"
+        >
+          {settings.brandMarkFirst}{" "}
+          <span className="text-[var(--jc-gold)]">{settings.brandMarkSecond}</span>
+        </Link>
+
+        {/* Right: Quiet direct inquiry link (no bulky box) + mobile drawer trigger */}
+        <div className="flex items-center justify-end gap-4">
           <Link
-            href="/inquire"
-            className="jc-btn-gold !min-h-[44px] !px-4 !text-[14px] sm:!px-5"
+            href={isHome ? "#inquire" : "/inquire"}
+            className="hidden min-h-11 items-center text-[14px] font-medium text-[var(--jc-ivory)] underline decoration-[var(--jc-gold)] decoration-1 underline-offset-8 transition-colors hover:text-[var(--jc-gold)] whitespace-nowrap lg:inline-flex"
           >
             Request a callback
           </Link>
@@ -255,9 +259,9 @@ export function SiteHeader({
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger
               aria-label="Open navigation menu"
-              className="inline-flex size-11 items-center justify-center rounded-[3px] border border-[var(--jc-line-dark-strong)] text-[var(--jc-ivory)] transition-colors hover:border-[var(--jc-ivory)] lg:hidden cursor-pointer"
+              className="inline-flex size-11 items-center justify-center rounded-full border border-[var(--jc-line-dark-strong)] text-[var(--jc-ivory)] transition-colors hover:border-[var(--jc-ivory)] lg:hidden cursor-pointer"
             >
-              <Menu aria-hidden="true" className="size-5" />
+              <Menu aria-hidden="true" className="size-4" />
             </SheetTrigger>
             <SheetContent
               side="right"
@@ -267,12 +271,19 @@ export function SiteHeader({
               <SheetHeader className="border-b border-[var(--jc-line-dark)] px-6 py-5 text-left">
                 <SheetTitle className="font-serif text-[22px] font-normal text-[var(--jc-ivory)]">
                   {settings.brandMarkFirst}{" "}
-                  <span className="text-[var(--jc-gold)]">{settings.brandMarkSecond}</span>
+                  <span className="text-[var(--jc-gold)]">
+                    {settings.brandMarkSecond}
+                  </span>
                 </SheetTitle>
               </SheetHeader>
 
-              <nav aria-label="Mobile navigation" className="flex flex-1 flex-col gap-1 px-4 py-5">
-                <p className="px-3 pb-1 text-[13px] text-[var(--jc-ivory-muted)]">Services</p>
+              <nav
+                aria-label="Mobile navigation"
+                className="flex flex-1 flex-col gap-1 px-4 py-5"
+              >
+                <p className="px-3 pb-1 text-[13px] text-[var(--jc-ivory-muted)]">
+                  Services
+                </p>
                 {SERVICE_LINKS.map((item) => (
                   <Link
                     key={item.href}
@@ -280,7 +291,9 @@ export function SiteHeader({
                     className="flex min-h-12 flex-col justify-center rounded-[3px] px-3 py-2 text-[var(--jc-ivory)] transition-colors hover:bg-[var(--jc-teal)]"
                   >
                     <span className="text-[16px] font-medium">{item.label}</span>
-                    <span className="text-[13px] text-[var(--jc-ivory-soft)]">{item.detail}</span>
+                    <span className="text-[13px] text-[var(--jc-ivory-soft)]">
+                      {item.detail}
+                    </span>
                   </Link>
                 ))}
 

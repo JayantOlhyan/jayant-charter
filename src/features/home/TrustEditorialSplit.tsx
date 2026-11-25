@@ -114,8 +114,8 @@ export function TrustEditorialSplit({ mediaById }: TrustEditorialSplitProps) {
         })}
       </div>
 
-      {/* Right: Synchronized large editorial frame (pure GPU CSS opacity stack, zero extra JS runtime) */}
-      <div className="overflow-hidden rounded-[4px] border border-[var(--jc-line-light)] bg-[var(--jc-stone)]">
+      {/* Right: Flush Jesko-style architectural visual frame (pure GPU CSS opacity stack) */}
+      <div className="overflow-hidden bg-[var(--jc-stone)]">
         <div className="relative aspect-[4/3] w-full overflow-hidden bg-[var(--jc-stone)]">
           {EXPERIENCE_ROWS.map((row) => {
             const media = mediaById[row.mediaId];
@@ -148,8 +148,10 @@ export function TrustEditorialSplit({ mediaById }: TrustEditorialSplitProps) {
           })}
         </div>
 
-        <div className="flex items-center justify-between gap-4 border-t border-[var(--jc-line-light)] bg-[var(--jc-paper)] px-6 py-4 text-[14px] text-[var(--jc-muted)]">
-          <span className="font-medium text-[var(--jc-ink)]">{activeRow.number}</span>
+        <div className="flex items-center justify-between gap-4 border-t border-[var(--jc-line-light)] bg-[var(--jc-ivory)] py-4 text-[14px] text-[var(--jc-muted)]">
+          <span className="font-serif text-[17px] text-[var(--jc-ink)] tabular-nums">
+            {activeRow.number}
+          </span>
           <span className="flex-1">{activeRow.mediaNote}</span>
         </div>
       </div>

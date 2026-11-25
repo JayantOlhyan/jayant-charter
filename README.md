@@ -23,10 +23,11 @@ Built to **Portfolio Website PRD v1.1** (`25 November 2026`) and the canonical [
   - `POST /api/inquiries` with Zod + `libphonenumber-js` international validation, sliding-window rate limiter, honeypot check, idempotency key + payload hash (`201`/`200`/`409`), internal duplicate flagging, atomic Drizzle/SQLite persistence (`inquiries`, `inquiry_events`, `delivery_jobs`), exponential retry outbox, PII redaction, and explicit onward-handoff consent guard
 - [x] **Milestone E — Signature Scroll Choreography, Visual/A11y Audit & Release Gate**
   - Live desktop (`1440px`) and mobile (`390px`) reference audit of Jesko Jets and Digital Jets documented in [docs/REFERENCE-AUDIT.md](./docs/REFERENCE-AUDIT.md) and [docs/VISUAL-BOARD.md](./docs/VISUAL-BOARD.md)
-  - Reusable 3D scene specification (`content/scenes.json`) driving the pinned desktop **Arrival → Approach** live 3D scroll transition (`-36°` three-quarter → `0°` broadside profile, bidirectional scrub, zero per-frame React re-renders, single-active-WebGL handoff to Chapter 4)
-  - Digital Jets-inspired studio lighting atmosphere modes (*Twilight hangar*, *Daylight apron*, *Evening silhouette*) in `AircraftStudioViewer` and pixel-matched Before/After **Hawker 4000 ramp comparison slider** (`Parked` vs. `Boarding` airstair)
-  - Jesko-inspired synced two-column **Trust & Experience** editorial split using a zero-JS-overhead CSS opacity stack (`259 kB` homepage First Load JS)
-  - Automated Vitest contract/privacy/scene suite (`13/13` passing), real-browser desktop/mobile/reduced-motion live verification (`scripts/live-verify.mjs`), and repo-wide Hallmark `sloplint` (`0 FAIL` across 44 files)
+  - Whisper-thin floating transparent homepage navigation paired with a persistent bottom-center `Request a callback` pill CTA (auto-hiding cleanly over the 3D Showroom, Inquiry form, and Footer)
+  - Reusable 3D scene specification (`content/scenes.json`) driving the full-bleed `300svh` 3-beat desktop cinema (**Arrival** `-36°` three-quarter → **Cloud-Deck Profile** `0°` broadside → **Warm Stone Architectural Overhead Planform** `90° / 14°`) on a single continuous live 3D Hawker 4000 with zero per-frame React re-renders and automatic single-WebGL-context handoff
+  - Borderless full-width Digital Jets-inspired 3D Showroom (`AircraftStudioViewer` hangar mode with *Twilight hangar*, *Daylight apron*, *Evening silhouette* atmospheres), full-width Before/After **Hawker 4000 ramp comparison slider** (`Parked` vs. `Boarding` airstair), and flush 4-panel macro CGI strip
+  - Flush synced two-column **Trust & Experience** editorial split (`TrustEditorialSplit`), dark focus-markets **Corridors Momentum** wheel (`CorridorsMomentum`), and monumental ghost-wordmark closing horizon (`262 kB` homepage First Load JS)
+  - Automated Vitest contract/privacy/scene suite (`13/13` passing), real-browser desktop/mobile/reduced-motion live verification (`scripts/live-verify.mjs`), and repo-wide Hallmark `sloplint` (`0 FAIL` across 46 files)
 
 ---
 

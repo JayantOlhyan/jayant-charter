@@ -275,6 +275,7 @@ export const SceneSchema = z.object({
   keyframes: z.object({
     arrival: SceneKeyframeSchema,
     approach: SceneKeyframeSchema,
+    planform: SceneKeyframeSchema.optional(),
   }),
   lightingModes: z.array(LightingModeSchema).min(1),
   qualityPolicy: z.object({

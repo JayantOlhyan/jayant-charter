@@ -445,6 +445,472 @@ export function AircraftStudioViewer({
       ? activeConfig.mobileBytes
       : activeConfig.desktopBytes) / 1_048_576
   ).toFixed(2);
+  const isLightStage = activeLighting.surface === "light";
+
+  // =========================================================================
+  // HOMEPAGE FULL-BLEED DIGITAL JETS SHOWROOM MODE (90% pure aircraft canvas)
+  // =========================================================================
+  if (mode === "hangar") {
+    return (
+      <div
+        ref={stageRef}
+        data-surface={activeLighting.surface}
+        className={cn(
+          "relative flex min-h-[82svh] w-full flex-col justify-between transition-colors duration-300",
+          activeLighting.id === "daylight"
+            ? "jc-stage-daylight text-[var(--jc-ink)]"
+            : activeLighting.id === "dusk"
+              ? "jc-stage-dusk text-[var(--jc-ivory)]"
+              : "jc-stage-twilight text-[var(--jc-ivory)]"
+        )}
+      >
+        {/* Top whisper showroom header: Aircraft tabs left | Studio lighting modes right */}
+        <div
+          className={cn(
+            "relative z-10 border-b transition-colors duration-300",
+            isLightStage ? "border-[var(--jc-line-light)]" : "border-[var(--jc-line-dark)]"
+          )}
+        >
+          <div className="mx-auto flex w-full max-w-[1520px] flex-wrap items-center justify-between gap-4 px-[var(--gutter)] py-5">
+            <div className="flex flex-wrap items-baseline gap-7">
+              {aircraftList.length > 1 && (
+                <div
+                  role="tablist"
+                  aria-label="Choose aircraft example"
+                  className="flex items-center gap-6"
+                >
+                  {aircraftList.map((item) => {
+                    const active = item.id === aircraft.id;
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        role="tab"
+                        aria-selected={active}
+                        onClick={() => handleSelectAircraft(item.id)}
+                        className={cn(
+                          "min-h-11 border-b-2 pb-1 font-serif text-[26px] leading-none whitespace-nowrap transition-colors duration-150 cursor-pointer sm:text-[32px]",
+                          active
+                            ? isLightStage
+                              ? "border-[var(--jc-teal)] text-[var(--jc-ink)]"
+                              : "border-[var(--jc-gold)] text-[var(--jc-ivory)]"
+                            : isLightStage
+                              ? "border-transparent text-[var(--jc-muted)] hover:text-[var(--jc-ink)]"
+                              : "border-transparent text-[var(--jc-ivory-muted)] hover:text-[var(--jc-ivory)]"
+                        )}
+                      >
+                        {item.model}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+
+              <p
+                className={cn(
+                  "m-0 hidden text-[14px] xl:block",
+                  isLightStage ? "text-[var(--jc-muted)]" : "text-[var(--jc-ivory-soft)]"
+                )}
+              >
+                {aircraft.variant}
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <div
+                className="flex items-center gap-1"
+                role="group"
+                aria-label="Studio lighting atmosphere"
+              >
+                {lightingModes.map((lMode) => {
+                  const active = lMode.id === activeLighting.id;
+                  const Icon =
+                    lMode.id === "daylight"
+                      ? Sun
+                      : lMode.id === "dusk"
+                        ? Sunset
+                        : Moon;
+                  return (
+                    <button
+                      key={lMode.id}
+                      type="button"
+                      aria-pressed={active}
+                      onClick={() => setLightingId(lMode.id)}
+                      title={lMode.label}
+                      className={cn(
+                        "inline-flex min-h-10 items-center gap-1.5 rounded-full border px-3.5 text-[12px] font-medium whitespace-nowrap transition-colors cursor-pointer",
+                        active
+                          ? isLightStage
+                            ? "border-[var(--jc-teal)] bg-[var(--jc-teal)] text-[var(--jc-ivory)]"
+                            : "border-[var(--jc-ivory)] bg-[var(--jc-ivory)] text-[var(--jc-teal)]"
+                          : isLightStage
+                            ? "border-[var(--jc-line-strong)] text-[var(--jc-muted)] hover:border-[var(--jc-teal)] hover:text-[var(--jc-ink)]"
+                            : "border-[var(--jc-line-dark-strong)] text-[var(--jc-ivory-soft)] hover:border-[var(--jc-ivory)] hover:text-[var(--jc-ivory)]"
+                      )}
+                    >
+                      <Icon aria-hidden="true" className="size-3.5" />
+                      <span className="hidden sm:inline">{lMode.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {viewerActivated &&
+                status === "ready" &&
+                !capability?.prefersReducedMotion && (
+                  <button
+                    type="button"
+                    onClick={() => setAutoRotateEnabled((v) => !v)}
+                    aria-pressed={autoRotateEnabled}
+                    aria-label={
+                      autoRotateEnabled
+                        ? "Pause turntable rotation"
+                        : "Play gentle turntable rotation"
+                    }
+                    className={cn(
+                      "inline-flex min-h-10 items-center gap-1.5 rounded-full border px-3.5 text-[12px] font-medium whitespace-nowrap cursor-pointer",
+                      isLightStage
+                        ? "border-[var(--jc-line-strong)] text-[var(--jc-ink)] hover:border-[var(--jc-teal)]"
+                        : "border-[var(--jc-line-dark-strong)] text-[var(--jc-ivory-soft)] hover:border-[var(--jc-ivory)] hover:text-[var(--jc-ivory)]"
+                    )}
+                  >
+                    {autoRotateEnabled ? (
+                      <>
+                        <Pause aria-hidden="true" className="size-3.5" />
+                        <span>Pause</span>
+                      </>
+                    ) : (
+                      <>
+                        <Play aria-hidden="true" className="size-3.5" />
+                        <span>Turntable</span>
+                      </>
+                    )}
+                  </button>
+                )}
+
+              {viewerActivated &&
+                status === "ready" &&
+                capability?.isMobileOrConstrained && (
+                  <button
+                    type="button"
+                    onClick={() => setMobileTouchLocked((v) => !v)}
+                    aria-pressed={mobileTouchLocked}
+                    className={cn(
+                      "inline-flex min-h-10 items-center gap-1.5 rounded-full border px-3.5 text-[12px] font-medium cursor-pointer",
+                      mobileTouchLocked
+                        ? "border-[var(--jc-gold)] bg-[var(--jc-gold)] text-[var(--jc-teal)]"
+                        : isLightStage
+                          ? "border-[var(--jc-line-strong)] text-[var(--jc-ink)]"
+                          : "border-[var(--jc-line-dark-strong)] text-[var(--jc-ivory)]"
+                    )}
+                  >
+                    {mobileTouchLocked ? (
+                      <>
+                        <Unlock aria-hidden="true" className="size-3.5" />
+                        <span>Done rotating</span>
+                      </>
+                    ) : (
+                      <>
+                        <Lock aria-hidden="true" className="size-3.5" />
+                        <span>Rotate 3D</span>
+                      </>
+                    )}
+                  </button>
+                )}
+
+              <Link
+                href={`/aircraft/${aircraft.slug}`}
+                className={cn(
+                  "ml-1 hidden min-h-10 items-center text-[13px] font-medium underline underline-offset-4 lg:inline-flex",
+                  isLightStage
+                    ? "text-[var(--jc-teal)] hover:text-[var(--jc-ink)]"
+                    : "text-[var(--jc-gold)] hover:text-[var(--jc-gold-hover)]"
+                )}
+              >
+                Full specifications
+              </Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Center: Unobstructed full-bleed aircraft cinema stage */}
+        <div className="relative flex flex-1 items-center justify-center px-[var(--gutter)] py-6">
+          {(!viewerActivated || status === "error" || status === "timeout") && (
+            <div className="relative flex w-full max-w-[1100px] flex-col items-center justify-center py-6">
+              <img
+                src={activePoster.path}
+                alt={activePoster.alt}
+                width={activePoster.width}
+                height={activePoster.height}
+                className={cn(
+                  "max-h-[460px] w-full max-w-[920px] object-contain",
+                  isLightStage ? "jc-aircraft-shadow-light" : "jc-aircraft-shadow"
+                )}
+              />
+
+              {enableLive3D && status === "poster" && (
+                <div className="mt-7 flex flex-wrap items-center justify-center gap-3">
+                  <button
+                    type="button"
+                    onClick={() => startModelLoad("explicit")}
+                    className="jc-btn-gold !rounded-full !px-6 !text-[14px]"
+                  >
+                    <Box aria-hidden="true" className="size-4" />
+                    <span>Explore in 3D ({sizeLabelMb} MB)</span>
+                  </button>
+                </div>
+              )}
+
+              {(status === "error" || status === "timeout") && (
+                <div
+                  role="alert"
+                  className="mt-5 flex max-w-md flex-col items-center gap-3 rounded-[4px] border border-[var(--jc-line-dark-strong)] bg-[var(--jc-panel-dark-strong)] px-5 py-4 text-center text-[var(--jc-ivory)]"
+                >
+                  <div className="flex items-center gap-2 text-[14px] font-medium text-[var(--jc-gold)]">
+                    <AlertCircle aria-hidden="true" className="size-4 shrink-0" />
+                    <span>
+                      {status === "timeout"
+                        ? "3D load timed out"
+                        : "3D view unavailable on this session"}
+                    </span>
+                  </div>
+                  <p className="m-0 text-[13px] text-[var(--jc-ivory-soft)]">
+                    {statusAnnouncement}
+                  </p>
+                  <div className="flex flex-wrap justify-center gap-2">
+                    <button
+                      type="button"
+                      onClick={() => startModelLoad("explicit")}
+                      className="jc-btn-gold !min-h-[40px] !px-4 !text-[13px]"
+                    >
+                      Retry 3D view
+                    </button>
+                    <button
+                      type="button"
+                      onClick={handleContinueStatic}
+                      className="jc-btn-outline-light !min-h-[40px] !px-4 !text-[13px]"
+                    >
+                      Keep studio render
+                    </button>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {viewerActivated && status !== "error" && status !== "timeout" && (
+            <div className="relative h-[360px] w-full max-w-[1320px] sm:h-[480px] lg:h-[min(62svh,580px)]">
+              <model-viewer
+                ref={mvRef}
+                src={modelSrc}
+                poster={activePoster.path}
+                alt={`Interactive 3D exterior model of ${aircraft.displayTitle} in ${activeConfig.label} configuration`}
+                camera-controls={allowCameraControls ? "" : undefined}
+                touch-action="pan-y"
+                disable-pan=""
+                camera-orbit={aircraft.cameraPresets[0]?.orbit || "-36deg 76deg 76%"}
+                camera-target={aircraft.cameraPresets[0]?.target || "auto auto auto"}
+                min-camera-orbit="auto 25deg 3m"
+                max-camera-orbit="auto 98deg 140%"
+                field-of-view="30deg"
+                min-field-of-view="18deg"
+                max-field-of-view="42deg"
+                environment-image={aircraft.environmentUrl}
+                exposure={activeLighting.exposure}
+                shadow-intensity={activeLighting.shadowIntensity}
+                shadow-softness={activeLighting.shadowSoftness}
+                interaction-prompt="none"
+                interpolation-decay={capability?.prefersReducedMotion ? "0" : "120"}
+                auto-rotate={autoRotateEnabled && inView ? "" : undefined}
+                loading="eager"
+                reveal="auto"
+              >
+                <img
+                  slot="poster"
+                  src={activePoster.path}
+                  alt={activePoster.alt}
+                  className={cn(
+                    "h-full w-full object-contain",
+                    isLightStage ? "jc-aircraft-shadow-light" : "jc-aircraft-shadow"
+                  )}
+                />
+                <div slot="progress-bar" aria-hidden="true" hidden />
+              </model-viewer>
+
+              {status === "loading" && (
+                <div className="pointer-events-none absolute inset-x-0 bottom-3 flex justify-center">
+                  <span className="rounded-full border border-[var(--jc-line-dark-strong)] bg-[var(--jc-panel-dark-strong)] px-4 py-1.5 text-[13px] text-[var(--jc-ivory)]">
+                    Preparing {activeConfig.label.toLowerCase()} 3D model ({sizeLabelMb} MB)…
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Bottom architectural control rail: Configurations | Angles | Inspection notes */}
+        <div
+          className={cn(
+            "relative z-10 border-t transition-colors duration-300",
+            isLightStage
+              ? "border-[var(--jc-line-light)] bg-[var(--jc-dock-light)]"
+              : "border-[var(--jc-line-dark)] bg-[var(--jc-dock-dark)]"
+          )}
+        >
+          <div className="mx-auto w-full max-w-[1520px] px-[var(--gutter)] py-4">
+            <div className="flex flex-wrap items-center justify-between gap-4">
+              {/* Configuration toggles */}
+              <div
+                className="flex flex-wrap items-center gap-1.5"
+                role="group"
+                aria-label="Aircraft configuration"
+              >
+                {aircraft.configurations.map((cfg) => {
+                  const selected = cfg.id === activeConfig.id;
+                  return (
+                    <button
+                      key={cfg.id}
+                      type="button"
+                      aria-pressed={selected}
+                      onClick={() => handleSelectConfig(cfg.id)}
+                      className={cn(
+                        "min-h-10 rounded-full border px-4 text-[13px] font-medium whitespace-nowrap transition-colors duration-150 cursor-pointer",
+                        selected
+                          ? isLightStage
+                            ? "border-[var(--jc-teal)] bg-[var(--jc-teal)] text-[var(--jc-ivory)]"
+                            : "border-[var(--jc-gold)] bg-[var(--jc-gold)] text-[var(--jc-teal)]"
+                          : isLightStage
+                            ? "border-[var(--jc-line-strong)] bg-transparent text-[var(--jc-ink)] hover:border-[var(--jc-teal)]"
+                            : "border-[var(--jc-line-dark-strong)] bg-transparent text-[var(--jc-ivory-soft)] hover:border-[var(--jc-ivory)] hover:text-[var(--jc-ivory)]"
+                      )}
+                    >
+                      {cfg.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Camera angles + Reset */}
+              <div
+                className="flex flex-wrap items-center gap-1.5"
+                role="group"
+                aria-label="Camera angles"
+              >
+                {aircraft.cameraPresets.map((preset) => {
+                  const isSelected = activePresetId === preset.id;
+                  return (
+                    <button
+                      key={preset.id}
+                      type="button"
+                      aria-pressed={isSelected}
+                      onClick={() => applyPreset(preset.id)}
+                      className={cn(
+                        "min-h-9 rounded-full border px-3 text-[12px] whitespace-nowrap transition-colors duration-150 cursor-pointer",
+                        isSelected
+                          ? isLightStage
+                            ? "border-[var(--jc-teal)] bg-[var(--jc-teal)] text-[var(--jc-ivory)]"
+                            : "border-[var(--jc-ivory)] bg-[var(--jc-teal-elevated)] text-[var(--jc-ivory)]"
+                          : isLightStage
+                            ? "border-[var(--jc-line-light)] bg-transparent text-[var(--jc-muted)] hover:border-[var(--jc-teal)] hover:text-[var(--jc-ink)]"
+                            : "border-[var(--jc-line-dark)] bg-transparent text-[var(--jc-ivory-soft)] hover:border-[var(--jc-line-dark-strong)] hover:text-[var(--jc-ivory)]"
+                      )}
+                    >
+                      {preset.label}
+                    </button>
+                  );
+                })}
+
+                <button
+                  type="button"
+                  onClick={handleResetView}
+                  className={cn(
+                    "inline-flex min-h-9 items-center gap-1.5 rounded-full border px-3 text-[12px] transition-colors cursor-pointer",
+                    isLightStage
+                      ? "border-[var(--jc-line-light)] text-[var(--jc-muted)] hover:border-[var(--jc-teal)] hover:text-[var(--jc-ink)]"
+                      : "border-[var(--jc-line-dark)] text-[var(--jc-ivory-soft)] hover:border-[var(--jc-ivory)] hover:text-[var(--jc-ivory)]"
+                  )}
+                >
+                  <RotateCcw aria-hidden="true" className="size-3" />
+                  <span>Reset</span>
+                </button>
+              </div>
+
+              {/* Contextual inquiry attachment */}
+              <div className="flex items-center gap-4">
+                {onSelectAircraftPreference ? (
+                  <a
+                    href="#inquire"
+                    onClick={() => onSelectAircraftPreference(aircraft.id)}
+                    className={cn(
+                      "text-[13px] font-semibold underline underline-offset-4 whitespace-nowrap",
+                      isLightStage
+                        ? "text-[var(--jc-teal)] hover:text-[var(--jc-ink)]"
+                        : "text-[var(--jc-gold)] hover:text-[var(--jc-gold-hover)]"
+                    )}
+                  >
+                    Inquire about {aircraft.model}
+                  </a>
+                ) : null}
+              </div>
+            </div>
+
+            {/* Quiet second line: Exterior hotspots + live accessibility status + disclaimer */}
+            <div
+              className={cn(
+                "mt-3 flex flex-wrap items-center justify-between gap-3 border-t pt-3 text-[12px]",
+                isLightStage
+                  ? "border-[var(--jc-line-light)] text-[var(--jc-muted)]"
+                  : "border-[var(--jc-line-dark)] text-[var(--jc-ivory-muted)]"
+              )}
+            >
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-1 font-medium">
+                  <Compass aria-hidden="true" className="size-3.5 text-[var(--jc-gold-muted)]" />
+                  <span>Inspect:</span>
+                </span>
+                {visibleHotspots.map((hotspot) => {
+                  const isOpen = activeHotspotId === hotspot.id;
+                  return (
+                    <button
+                      key={hotspot.id}
+                      type="button"
+                      aria-pressed={isOpen}
+                      onClick={() => handleSelectHotspot(hotspot.id, hotspot.presetId)}
+                      className={cn(
+                        "underline underline-offset-4 transition-colors cursor-pointer",
+                        isOpen
+                          ? isLightStage
+                            ? "font-semibold text-[var(--jc-ink)]"
+                            : "font-semibold text-[var(--jc-gold)]"
+                          : isLightStage
+                            ? "hover:text-[var(--jc-ink)]"
+                            : "hover:text-[var(--jc-ivory)]"
+                      )}
+                    >
+                      {hotspot.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <p role="status" aria-live="polite" className="m-0 flex items-center gap-1.5">
+                <Hand aria-hidden="true" className="size-3.5 shrink-0" />
+                <span>
+                  {activeHotspot
+                    ? `${activeHotspot.label}: ${activeHotspot.summary}`
+                    : viewerActivated && status === "ready"
+                      ? capability?.isMobileOrConstrained && !mobileTouchLocked
+                        ? "Swipe page normally, or tap Rotate 3D to orbit."
+                        : `Drag to orbit, scroll to zoom. ${aircraft.disclaimer}`
+                      : statusAnnouncement}
+                </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -886,15 +1352,6 @@ export function AircraftStudioViewer({
                 className="jc-btn-gold flex-1"
               >
                 Request a callback
-              </Link>
-            )}
-
-            {mode === "hangar" && (
-              <Link
-                href={`/aircraft/${aircraft.slug}`}
-                className="jc-btn-outline-light"
-              >
-                Full profile
               </Link>
             )}
           </div>

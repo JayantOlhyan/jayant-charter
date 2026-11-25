@@ -69,6 +69,8 @@ describe("Content integrity, aircraft identity, and privacy rules (AC03, AC17, A
     expect(arrivalScene?.aircraftId).toBe("hawker-4000");
     expect(arrivalScene?.keyframes.arrival.thetaDeg).toBe(-36);
     expect(arrivalScene?.keyframes.approach.thetaDeg).toBe(0);
+    expect(arrivalScene?.keyframes.planform?.thetaDeg).toBe(90);
+    expect(arrivalScene?.keyframes.planform?.phiDeg).toBe(14);
     expect(arrivalScene?.qualityPolicy.mobileExplicitOnly).toBe(true);
     expect(arrivalScene?.qualityPolicy.reducedMotionStatic).toBe(true);
 

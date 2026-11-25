@@ -9,6 +9,7 @@ import {
 } from "@/content/repository";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
+import { FloatingCallbackPill } from "@/components/layout/FloatingCallbackPill";
 import { SmoothScrollProvider } from "@/features/scroll/SmoothScrollProvider";
 import { AttributionTracker } from "@/features/inquiry/attribution";
 
@@ -115,6 +116,7 @@ export default function RootLayout({
             showCaseStudies={navVisibility.showCaseStudies}
             showInsights={navVisibility.showInsights}
           />
+          <FloatingCallbackPill />
         </SmoothScrollProvider>
       </body>
     </html>

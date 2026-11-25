@@ -11,7 +11,7 @@ interface ConfigurationCompareSliderProps {
 }
 
 /**
- * Digital Jets-inspired interactive Before/After wipe comparing our camera-matched
+ * Digital Jets-inspired borderless full-width Before/After wipe comparing our camera-matched
  * Hawker 4000 Parked (closed ramp) and Boarding (deployed airstair) studio renders.
  * Uses GPU-composited clip-path + native accessible range slider for full touch & keyboard support.
  */
@@ -22,18 +22,22 @@ export function ConfigurationCompareSlider({
   const [splitPercent, setSplitPercent] = useState<number>(52);
 
   return (
-    <div className="overflow-hidden rounded-[4px] border border-[var(--jc-line-light)] bg-[var(--jc-paper)]">
-      <div className="flex flex-wrap items-center justify-between gap-4 border-b border-[var(--jc-line-light)] px-6 py-4">
+    <div className="border-y border-[var(--jc-line-light)] bg-[var(--jc-ivory)]">
+      <div className="mx-auto flex w-full max-w-[1440px] flex-wrap items-end justify-between gap-4 px-[var(--gutter)] py-6">
         <div>
-          <h3 className="font-serif text-[24px] leading-snug text-[var(--jc-ink)]">
+          <h3 className="m-0 font-serif text-[28px] leading-tight text-[var(--jc-ink)] sm:text-[32px]">
             Hawker 4000 ramp comparison
           </h3>
-          <p className="mt-1 m-0 text-[14px] text-[var(--jc-muted)]">
-            Drag or use arrow keys to compare closed parked ramp stance against deployed forward airstair geometry.
+          <p className="mt-1.5 m-0 text-[15px] text-[var(--jc-muted)]">
+            Drag or use arrow keys to compare closed ramp stance against the deployed forward airstair.
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2" role="group" aria-label="Comparison presets">
+        <div
+          className="flex flex-wrap items-center gap-2"
+          role="group"
+          aria-label="Comparison presets"
+        >
           {[
             { label: "Parked closed", val: 0 },
             { label: "Split view", val: 52 },
@@ -44,10 +48,10 @@ export function ConfigurationCompareSlider({
               type="button"
               onClick={() => setSplitPercent(preset.val)}
               className={cn(
-                "min-h-10 rounded-[3px] border px-3 text-[13px] font-medium transition-colors cursor-pointer",
+                "min-h-10 rounded-full border px-4 text-[13px] font-medium transition-colors cursor-pointer",
                 Math.abs(splitPercent - preset.val) < 4
                   ? "border-[var(--jc-teal)] bg-[var(--jc-teal)] text-[var(--jc-ivory)]"
-                  : "border-[var(--jc-line-strong)] bg-[var(--jc-ivory)] text-[var(--jc-ink)] hover:border-[var(--jc-teal)]"
+                  : "border-[var(--jc-line-strong)] bg-transparent text-[var(--jc-ink)] hover:border-[var(--jc-teal)]"
               )}
             >
               {preset.label}
@@ -56,9 +60,9 @@ export function ConfigurationCompareSlider({
         </div>
       </div>
 
-      {/* Interactive split viewport (exact 1025/535 ratio matching Blender parked/boarding camera) */}
-      <div className="relative mx-auto w-full select-none overflow-hidden bg-[var(--jc-ivory)]">
-        <div className="relative mx-auto aspect-[1025/535] max-h-[450px] w-full max-w-[920px] px-4 py-3 sm:px-8 sm:py-5">
+      {/* Full-width interactive wipe canvas (exact 1025/535 ratio matching Blender camera) */}
+      <div className="relative mx-auto w-full select-none overflow-hidden border-t border-[var(--jc-line-light)] bg-[var(--jc-paper)]">
+        <div className="relative mx-auto aspect-[1025/535] max-h-[500px] w-full max-w-[1120px] px-4 py-4 sm:px-10 sm:py-6">
           {/* Base layer: Parked closed configuration */}
           <img
             src={closedMedia.path}
@@ -66,7 +70,7 @@ export function ConfigurationCompareSlider({
             width={closedMedia.width}
             height={closedMedia.height}
             loading="lazy"
-            className="jc-aircraft-shadow-light pointer-events-none absolute inset-x-4 inset-y-3 h-[calc(100%-1.5rem)] w-[calc(100%-2rem)] object-contain object-top sm:inset-x-8 sm:inset-y-5 sm:h-[calc(100%-2.5rem)] sm:w-[calc(100%-4rem)]"
+            className="jc-aircraft-shadow-light pointer-events-none absolute inset-x-4 inset-y-4 h-[calc(100%-2rem)] w-[calc(100%-2rem)] object-contain object-top sm:inset-x-10 sm:inset-y-6 sm:h-[calc(100%-3rem)] sm:w-[calc(100%-5rem)]"
           />
 
           {/* Overlay layer: Boarding deployed airstair clipped via GPU clip-path */}
@@ -81,7 +85,7 @@ export function ConfigurationCompareSlider({
               width={openMedia.width}
               height={openMedia.height}
               loading="lazy"
-              className="jc-aircraft-shadow-light absolute inset-x-4 inset-y-3 h-[calc(100%-1.5rem)] w-[calc(100%-2rem)] object-contain object-top sm:inset-x-8 sm:inset-y-5 sm:h-[calc(100%-2.5rem)] sm:w-[calc(100%-4rem)]"
+              className="jc-aircraft-shadow-light absolute inset-x-4 inset-y-4 h-[calc(100%-2rem)] w-[calc(100%-2rem)] object-contain object-top sm:inset-x-10 sm:inset-y-6 sm:h-[calc(100%-3rem)] sm:w-[calc(100%-5rem)]"
             />
           </div>
 
@@ -91,16 +95,16 @@ export function ConfigurationCompareSlider({
             className="pointer-events-none absolute inset-y-0 z-10 w-[2px] bg-[var(--jc-teal)]"
             style={{ left: `${splitPercent}%` }}
           >
-            <div className="absolute left-1/2 top-1/2 flex size-11 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-[var(--jc-gold)] bg-[var(--jc-teal)] text-[var(--jc-ivory)] shadow-md">
+            <div className="absolute left-1/2 top-1/2 flex size-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-[var(--jc-gold)] bg-[var(--jc-teal)] text-[var(--jc-ivory)]">
               <MoveHorizontal className="size-4" />
             </div>
           </div>
 
-          {/* Labels */}
-          <span className="pointer-events-none absolute left-4 top-4 rounded-[2px] bg-[var(--jc-teal)] px-3 py-1 text-[12px] font-medium text-[var(--jc-ivory)] sm:left-6 sm:top-6">
+          {/* Minimal architectural corner labels */}
+          <span className="pointer-events-none absolute left-4 top-4 rounded-full bg-[var(--jc-teal)] px-3.5 py-1 text-[12px] font-medium text-[var(--jc-ivory)] sm:left-6 sm:top-6">
             Boarding (open airstair)
           </span>
-          <span className="pointer-events-none absolute right-4 top-4 rounded-[2px] border border-[var(--jc-line-strong)] bg-[var(--jc-paper)] px-3 py-1 text-[12px] font-medium text-[var(--jc-ink)] sm:right-6 sm:top-6">
+          <span className="pointer-events-none absolute right-4 top-4 rounded-full border border-[var(--jc-line-strong)] bg-[var(--jc-ivory)] px-3.5 py-1 text-[12px] font-medium text-[var(--jc-ink)] sm:right-6 sm:top-6">
             Parked (entry closed)
           </span>
 
@@ -117,9 +121,11 @@ export function ConfigurationCompareSlider({
         </div>
       </div>
 
-      <p className="m-0 border-t border-[var(--jc-line-light)] px-6 py-3.5 text-[13px] text-[var(--jc-muted)]">
-        Static exterior display variants rendered from our Hawker 4000 kit. The boarding entry depicts a shallow display vestibule, not a full cabin interior tour.
-      </p>
+      <div className="mx-auto w-full max-w-[1440px] px-[var(--gutter)] py-3.5">
+        <p className="m-0 text-[13px] text-[var(--jc-muted)]">
+          Static exterior display variants rendered from our Hawker 4000 kit. The boarding entry depicts a shallow display vestibule, not a full cabin interior tour.
+        </p>
+      </div>
     </div>
   );
 }

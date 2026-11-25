@@ -11,13 +11,19 @@
       "arrival": {
         "thetaDeg": -36,
         "phiDeg": 76,
-        "radiusPct": 82,
+        "radiusPct": 84,
         "fieldOfViewDeg": 30
       },
       "approach": {
         "thetaDeg": 0,
         "phiDeg": 83,
-        "radiusPct": 88,
+        "radiusPct": 86,
+        "fieldOfViewDeg": 29
+      },
+      "planform": {
+        "thetaDeg": 90,
+        "phiDeg": 14,
+        "radiusPct": 94,
         "fieldOfViewDeg": 29
       }
     },

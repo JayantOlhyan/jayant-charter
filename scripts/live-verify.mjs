@@ -101,8 +101,8 @@ async function main() {
     await page.waitForTimeout(500);
     await page.screenshot({ path: path.join(OUT_DIR, "01-arrival-live3d-1440.png") });
 
-    // Scroll into Approach beat (~900px down inside the 205svh track)
-    await page.evaluate(() => window.scrollTo(0, 900));
+    // Scroll into Beat 2: Cloud Profile (~840px down inside the 300svh track)
+    await page.evaluate(() => window.scrollTo(0, 840));
     await page.waitForTimeout(750);
     const approachOrbit = await page.evaluate(() => {
       const mv = document.querySelector("[data-chapter='arrival'] model-viewer");
@@ -111,8 +111,20 @@ async function main() {
     results.approachOrbitValue = approachOrbit;
     const approachTheta = Number.parseFloat(approachOrbit.split(" ")[0] || "NaN");
     results.approachOrbitRotated =
-      Number.isFinite(approachTheta) && approachTheta > -18 && approachTheta <= 5;
-    await page.screenshot({ path: path.join(OUT_DIR, "02-approach-scrubbed-1440.png") });
+      Number.isFinite(approachTheta) && approachTheta > -18 && approachTheta <= 10;
+    await page.screenshot({ path: path.join(OUT_DIR, "02-approach-clouds-1440.png") });
+
+    // Scroll into Beat 3: Architectural Overhead Planform (~1740px down inside 300svh track)
+    await page.evaluate(() => window.scrollTo(0, 1740));
+    await page.waitForTimeout(850);
+    const planformOrbit = await page.evaluate(() => {
+      const mv = document.querySelector("[data-chapter='arrival'] model-viewer");
+      return mv ? String(mv.cameraOrbit || "") : "";
+    });
+    results.planformOrbitValue = planformOrbit;
+    const planformTheta = Number.parseFloat(planformOrbit.split(" ")[0] || "NaN");
+    results.planformOrbitReached = Number.isFinite(planformTheta) && planformTheta > 55;
+    await page.screenshot({ path: path.join(OUT_DIR, "02b-planform-overhead-1440.png") });
 
     // Scroll BACK UP to 0 to verify clean bidirectional rewind
     await page.evaluate(() => window.scrollTo(0, 0));
@@ -143,10 +155,16 @@ async function main() {
       heroMetrics.h1Bottom < 800 && heroMetrics.ctaBottom < 800 && heroMetrics.jetVisibleHeight > 180;
     await page.screenshot({ path: path.join(OUT_DIR, "03-hero-1280x800.png") });
 
-    // Back to 1440x900 and inspect Chapter 4 Hangar (including Daylight lighting mode + Boarding + Falcon)
+    // Back to 1440x900 and inspect Chapter 4 Full-Bleed Showroom
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.locator("#inspect-aircraft").scrollIntoViewIfNeeded();
-    await page.waitForTimeout(500);
+    await page.evaluate(() => {
+      const stage = document.querySelector("#inspect-aircraft [data-surface]");
+      if (stage) {
+        const y = stage.getBoundingClientRect().top + window.scrollY - 68;
+        window.scrollTo(0, y);
+      }
+    });
+    await page.waitForTimeout(550);
     try {
       await page.waitForFunction(
         () => {
@@ -223,6 +241,15 @@ async function main() {
     await page.getByRole("button", { name: /Feasibility checked before quoting/i }).click();
     await page.waitForTimeout(450);
     await page.screenshot({ path: path.join(OUT_DIR, "06-trust-split-1440.png") });
+
+    // Corridors Momentum & Closing Horizon captures
+    await page.getByText("Custom itineraries", { exact: true }).scrollIntoViewIfNeeded();
+    await page.waitForTimeout(350);
+    await page.screenshot({ path: path.join(OUT_DIR, "06b-corridors-1440.png") });
+
+    await page.getByRole("heading", { name: /Ready when your dates lock/i }).scrollIntoViewIfNeeded();
+    await page.waitForTimeout(350);
+    await page.screenshot({ path: path.join(OUT_DIR, "06c-closing-1440.png") });
 
     // Check overflow across all required PRD breakpoints (320, 360, 390, 768, 1024, 1440, 1920)
     await page.evaluate(() => window.scrollTo(0, 0));

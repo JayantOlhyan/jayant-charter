@@ -174,8 +174,13 @@ export function SiteFooter({
                 )}
               </ul>
             ) : (
-              <p className="mt-5 text-[13px] text-[var(--jc-ivory-muted)]">
-                Direct email and WhatsApp channels will appear here once public routing is activated.
+              <p
+                role="status"
+                className="mt-5 rounded-[3px] border border-[var(--jc-line-dark)] bg-[var(--jc-panel-dark)] px-3.5 py-2.5 text-[13px] leading-relaxed text-[var(--jc-ivory-soft)]"
+              >
+                {settings.featureFlags.showPreviewBanner
+                  ? "Preview environment: inquiries are recorded locally while direct email and WhatsApp channels remain paused."
+                  : "Direct email and WhatsApp channels will appear here once public routing is activated."}
               </p>
             )}
           </div>

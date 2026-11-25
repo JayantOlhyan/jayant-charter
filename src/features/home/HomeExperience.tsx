@@ -1,9 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type {
   AircraftRecord,
   CaseStudyRecord,
@@ -19,11 +17,10 @@ import { ArrivalApproachStage } from "@/features/scroll/ArrivalApproachStage";
 import { AircraftStudioViewer } from "@/features/aircraft/AircraftStudioViewer";
 import { ConfigurationCompareSlider } from "@/features/aircraft/ConfigurationCompareSlider";
 import { TrustEditorialSplit } from "@/features/home/TrustEditorialSplit";
+import { CorridorsMomentum } from "@/features/home/CorridorsMomentum";
 import { ProgressiveInquiryForm } from "@/features/inquiry/ProgressiveInquiryForm";
 import { FaqBlock } from "@/components/blocks/FaqBlock";
 import { ConditionalProofSection } from "@/components/blocks/ConditionalProofSection";
-
-gsap.registerPlugin(ScrollTrigger);
 
 interface HomeExperienceProps {
   settings: SiteSettings;
@@ -50,7 +47,6 @@ export function HomeExperience({
   testimonials,
   mediaById,
 }: HomeExperienceProps) {
-  const rootRef = useRef<HTMLDivElement>(null);
   const [selectedService, setSelectedService] = useState<
     "private-jet" | "group-charter" | "helicopter" | "decide"
   >("decide");
@@ -72,35 +68,6 @@ export function HomeExperience({
   const arrivalAircraft =
     aircraftList.find((a) => a.id === arrivalScene.aircraftId) || aircraftList[0];
 
-  // Subtle composited depth parallax for macro plate below fold (desktop non-reduced-motion only)
-  useEffect(() => {
-    const root = rootRef.current;
-    if (!root) return;
-
-    const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
-    if (prefersReduced || !isDesktop) return;
-
-    const ctx = gsap.context(() => {
-      gsap.fromTo(
-        "[data-plane='macro-lead']",
-        { y: 26 },
-        {
-          y: -22,
-          ease: "none",
-          scrollTrigger: {
-            trigger: "[data-chapter='detail']",
-            start: "top bottom",
-            end: "bottom top",
-            scrub: true,
-          },
-        }
-      );
-    }, root);
-
-    return () => ctx.revert();
-  }, []);
-
   const prefillService = (svc: "private-jet" | "group-charter" | "helicopter") => {
     setSelectedService(svc);
   };
@@ -114,10 +81,30 @@ export function HomeExperience({
   const groupSvc = services.find((s) => s.slug === "group-charter");
   const heliSvc = services.find((s) => s.slug === "helicopters");
 
+  const macroPlates = [
+    {
+      label: "Hawker 4000 rear nacelle",
+      media: engineDetail,
+    },
+    {
+      label: "Forward airstair & vestibule",
+      media: entryDetail,
+    },
+    {
+      label: "Twin-wheel undercarriage",
+      media: gearDetail,
+    },
+    {
+      label: "Falcon 2000 Classic CFE738",
+      media: falconEngine,
+    },
+  ];
+
   return (
-    <div ref={rootRef}>
+    <div>
       {/* =====================================================================
-          CHAPTERS 1 & 2: CONTINUOUS ARRIVAL -> APPROACH 3D AIRCRAFT STAGE
+          ACTS I - III: CONTINUOUS 3-BEAT 3D CINEMA
+          (Full-Bleed Arrival -> Cloud Profile -> Warm Stone Overhead Planform)
       ===================================================================== */}
       <ArrivalApproachStage
         scene={arrivalScene}
@@ -128,19 +115,16 @@ export function HomeExperience({
         enableLive3D={settings.featureFlags.enableLive3D}
       />
 
-      {/* Multi-stop eased atmospheric tonal bridge (Deep Teal horizon -> Warm Ivory) */}
-      <div aria-hidden="true" className="jc-tonal-bridge w-full" />
-
       {/* =====================================================================
-          CHAPTER 3: CHOOSE THE JOURNEY — Distinct editorial compositions
+          CHAPTER 3: CHOOSE THE JOURNEY — Expansive Architectural Spreads
       ===================================================================== */}
-      <section id="services" className="surface-ivory py-20 md:py-28">
+      <section id="services" className="surface-ivory py-24 md:py-32">
         <div className="jc-container">
-          <div className="grid grid-cols-1 gap-6 pb-14 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
-            <h2 className="jc-display-section text-[var(--jc-ink)]">
+          <div className="grid grid-cols-1 gap-6 pb-16 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-end">
+            <h2 className="jc-display-section m-0 text-[var(--jc-ink)]">
               Three ways to fly, one conversation.
             </h2>
-            <p className="m-0 max-w-[52ch] text-[17px] leading-relaxed text-[var(--jc-muted)] lg:justify-self-end">
+            <p className="m-0 max-w-[48ch] text-[17px] leading-relaxed text-[var(--jc-muted)] lg:justify-self-end">
               Every service begins with feasibility checks rather than fixed templates. Select the path closest to your trip, or let Jayant advise on the call.
             </p>
           </div>
@@ -148,8 +132,8 @@ export function HomeExperience({
           <div className="divide-y divide-[var(--jc-line-light)] border-y border-[var(--jc-line-light)]">
             {/* 01 Private jets */}
             {privateJetsSvc && (
-              <article className="grid grid-cols-1 items-center gap-10 py-14 lg:grid-cols-[minmax(0,1.08fr)_minmax(0,0.96fr)] lg:gap-16 lg:py-20">
-                <div className="rounded-[4px] border border-[var(--jc-line-light)] bg-[var(--jc-stone)] p-6 sm:p-10">
+              <article className="grid grid-cols-1 items-center gap-12 py-16 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-16 lg:py-24">
+                <div className="bg-[var(--jc-stone)] px-6 py-10 sm:px-12 sm:py-14">
                   <img
                     src={falconHero.path}
                     alt={falconHero.alt}
@@ -158,19 +142,19 @@ export function HomeExperience({
                     loading="lazy"
                     className="jc-aircraft-shadow-light w-full object-contain"
                   />
-                  <p className="mt-4 mb-0 text-[13px] text-[var(--jc-muted)]">
+                  <p className="mt-6 mb-0 text-[13px] text-[var(--jc-muted)]">
                     Dassault Falcon 2000 Classic illustrative exterior model.
                   </p>
                 </div>
 
                 <div>
-                  <span className="font-serif text-[20px] text-[var(--jc-muted)] tabular-nums">
+                  <span className="font-serif text-[20px] text-[var(--jc-gold-muted)] tabular-nums">
                     01
                   </span>
-                  <h3 className="mt-2 font-serif text-[34px] leading-tight text-[var(--jc-ink)]">
+                  <h3 className="mt-2 font-serif text-[36px] leading-[1.08] text-[var(--jc-ink)] sm:text-[44px]">
                     {privateJetsSvc.title}
                   </h3>
-                  <p className="mt-4 max-w-[48ch] text-[16px] leading-relaxed text-[var(--jc-muted)]">
+                  <p className="mt-5 max-w-[46ch] text-[16px] leading-relaxed text-[var(--jc-muted)]">
                     {privateJetsSvc.summary}
                   </p>
                   <ul className="mt-6 space-y-2.5 border-t border-[var(--jc-line-light)] pt-5 text-[15px] text-[var(--jc-ink)]">
@@ -178,7 +162,7 @@ export function HomeExperience({
                     <li>Aircraft class matched to party size, luggage, and runways</li>
                     <li>Operating range and feasibility verified before quoting</li>
                   </ul>
-                  <div className="mt-8 flex flex-wrap items-center gap-4">
+                  <div className="mt-8 flex flex-wrap items-center gap-6">
                     <a
                       href="#inquire"
                       onClick={() => prefillService("private-jet")}
@@ -188,7 +172,7 @@ export function HomeExperience({
                     </a>
                     <Link
                       href={`/services/${privateJetsSvc.slug}`}
-                      className="inline-flex min-h-12 items-center text-[15px] font-medium text-[var(--jc-teal)] underline underline-offset-4 hover:text-[var(--jc-ink)]"
+                      className="inline-flex min-h-12 items-center text-[15px] font-medium text-[var(--jc-teal)] underline decoration-[var(--jc-gold-muted)] underline-offset-8 hover:text-[var(--jc-ink)]"
                     >
                       Private jets guide
                     </Link>
@@ -199,15 +183,15 @@ export function HomeExperience({
 
             {/* 02 Group charter */}
             {groupSvc && (
-              <article className="grid grid-cols-1 items-center gap-10 py-14 lg:grid-cols-[minmax(0,0.96fr)_minmax(0,1.1fr)] lg:gap-16 lg:py-20">
+              <article className="grid grid-cols-1 items-center gap-12 py-16 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-16 lg:py-24">
                 <div className="order-2 lg:order-1">
-                  <span className="font-serif text-[20px] text-[var(--jc-muted)] tabular-nums">
+                  <span className="font-serif text-[20px] text-[var(--jc-gold-muted)] tabular-nums">
                     02
                   </span>
-                  <h3 className="mt-2 font-serif text-[34px] leading-tight text-[var(--jc-ink)]">
+                  <h3 className="mt-2 font-serif text-[36px] leading-[1.08] text-[var(--jc-ink)] sm:text-[44px]">
                     {groupSvc.title}
                   </h3>
-                  <p className="mt-4 max-w-[48ch] text-[16px] leading-relaxed text-[var(--jc-muted)]">
+                  <p className="mt-5 max-w-[46ch] text-[16px] leading-relaxed text-[var(--jc-muted)]">
                     {groupSvc.summary}
                   </p>
                   <ul className="mt-6 space-y-2.5 border-t border-[var(--jc-line-light)] pt-5 text-[15px] text-[var(--jc-ink)]">
@@ -215,7 +199,7 @@ export function HomeExperience({
                     <li>Corporate offsites, leadership delegations, and wedding parties</li>
                     <li>Coordinated terminal timing and group baggage checks</li>
                   </ul>
-                  <div className="mt-8 flex flex-wrap items-center gap-4">
+                  <div className="mt-8 flex flex-wrap items-center gap-6">
                     <a
                       href="#inquire"
                       onClick={() => prefillService("group-charter")}
@@ -225,14 +209,14 @@ export function HomeExperience({
                     </a>
                     <Link
                       href={`/services/${groupSvc.slug}`}
-                      className="inline-flex min-h-12 items-center text-[15px] font-medium text-[var(--jc-teal)] underline underline-offset-4 hover:text-[var(--jc-ink)]"
+                      className="inline-flex min-h-12 items-center text-[15px] font-medium text-[var(--jc-teal)] underline decoration-[var(--jc-gold-muted)] underline-offset-8 hover:text-[var(--jc-ink)]"
                     >
                       Group charter guide
                     </Link>
                   </div>
                 </div>
 
-                <figure className="order-1 m-0 overflow-hidden rounded-[4px] border border-[var(--jc-line-light)] bg-[var(--jc-teal-deep)] lg:order-2">
+                <figure className="order-1 m-0 overflow-hidden bg-[var(--jc-teal-deep)] lg:order-2">
                   <img
                     src={groupImg.path}
                     alt={groupImg.alt}
@@ -250,8 +234,8 @@ export function HomeExperience({
 
             {/* 03 Helicopters */}
             {heliSvc && (
-              <article className="grid grid-cols-1 items-center gap-10 py-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.96fr)] lg:gap-16 lg:py-20">
-                <figure className="m-0 overflow-hidden rounded-[4px] border border-[var(--jc-line-light)] bg-[var(--jc-teal-deep)]">
+              <article className="grid grid-cols-1 items-center gap-12 py-16 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-16 lg:py-24">
+                <figure className="m-0 overflow-hidden bg-[var(--jc-teal-deep)]">
                   <img
                     src={heliImg.path}
                     alt={heliImg.alt}
@@ -266,13 +250,13 @@ export function HomeExperience({
                 </figure>
 
                 <div>
-                  <span className="font-serif text-[20px] text-[var(--jc-muted)] tabular-nums">
+                  <span className="font-serif text-[20px] text-[var(--jc-gold-muted)] tabular-nums">
                     03
                   </span>
-                  <h3 className="mt-2 font-serif text-[34px] leading-tight text-[var(--jc-ink)]">
+                  <h3 className="mt-2 font-serif text-[36px] leading-[1.08] text-[var(--jc-ink)] sm:text-[44px]">
                     {heliSvc.title}
                   </h3>
-                  <p className="mt-4 max-w-[48ch] text-[16px] leading-relaxed text-[var(--jc-muted)]">
+                  <p className="mt-5 max-w-[46ch] text-[16px] leading-relaxed text-[var(--jc-muted)]">
                     {heliSvc.summary}
                   </p>
                   <ul className="mt-6 space-y-2.5 border-t border-[var(--jc-line-light)] pt-5 text-[15px] text-[var(--jc-ink)]">
@@ -280,7 +264,7 @@ export function HomeExperience({
                     <li>Optional single-engine or twin-engine preference</li>
                     <li>Venue permissions and daytime landing clearance checked first</li>
                   </ul>
-                  <div className="mt-8 flex flex-wrap items-center gap-4">
+                  <div className="mt-8 flex flex-wrap items-center gap-6">
                     <a
                       href="#inquire"
                       onClick={() => prefillService("helicopter")}
@@ -290,7 +274,7 @@ export function HomeExperience({
                     </a>
                     <Link
                       href={`/services/${heliSvc.slug}`}
-                      className="inline-flex min-h-12 items-center text-[15px] font-medium text-[var(--jc-teal)] underline underline-offset-4 hover:text-[var(--jc-ink)]"
+                      className="inline-flex min-h-12 items-center text-[15px] font-medium text-[var(--jc-teal)] underline decoration-[var(--jc-gold-muted)] underline-offset-8 hover:text-[var(--jc-ink)]"
                     >
                       Helicopters guide
                     </Link>
@@ -303,152 +287,95 @@ export function HomeExperience({
       </section>
 
       {/* =====================================================================
-          CHAPTER 4: AIRCRAFT EXPLORATION (Engineered Peak — Digital Jets 3D Hangar)
+          CHAPTER 4: FULL-BLEED DIGITAL JETS 3D SHOWROOM
       ===================================================================== */}
       <section
         id="inspect-aircraft"
         data-chapter="hangar"
         data-surface="dark"
-        className="surface-dark py-24 md:py-32"
+        className="bg-[var(--jc-teal-deep)] text-[var(--jc-ivory)]"
       >
-        <div className="jc-container">
-          <div className="grid grid-cols-1 gap-6 pb-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
-            <div>
-              <h2 className="jc-display-section text-[var(--jc-ivory)]">
-                Explore aircraft examples in 3D.
-              </h2>
-            </div>
-            <div className="lg:justify-self-end">
-              <p className="m-0 max-w-[50ch] text-[17px] leading-relaxed text-[var(--jc-ivory-soft)]">
-                Orbit the Hawker 4000 and original Dassault Falcon 2000 Classic at generous scale. Switch exterior configurations, compare twilight and daylight studio lighting, and attach a preference directly to your callback request.
-              </p>
-            </div>
+        <div className="jc-container py-16 md:py-20">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
+            <h2 className="jc-display-section m-0 text-[var(--jc-ivory)]">
+              Inspect aircraft in real-time 3D.
+            </h2>
+            <p className="m-0 max-w-[50ch] text-[16px] leading-relaxed text-[var(--jc-ivory-soft)] lg:justify-self-end">
+              Orbit the Hawker 4000 and original Dassault Falcon 2000 Classic across full-width studio lighting atmospheres. Compare configurations and attach a preference directly to your inquiry.
+            </p>
           </div>
-
-          <AircraftStudioViewer
-            aircraftList={aircraftList}
-            mediaById={mediaById}
-            lightingModes={hangarScene.lightingModes}
-            initialAircraftId={aircraftList[0]?.id}
-            enableLive3D={settings.featureFlags.enableLive3D}
-            mode="hangar"
-            onSelectAircraftPreference={prefillAircraft}
-          />
         </div>
+
+        {/* Full viewport width borderless 3D showroom */}
+        <AircraftStudioViewer
+          aircraftList={aircraftList}
+          mediaById={mediaById}
+          lightingModes={hangarScene.lightingModes}
+          initialAircraftId={aircraftList[0]?.id}
+          enableLive3D={settings.featureFlags.enableLive3D}
+          mode="hangar"
+          onSelectAircraftPreference={prefillAircraft}
+        />
       </section>
 
       {/* =====================================================================
-          CHAPTER 5: DETAIL & ATMOSPHERE — Comparison Wipe + Digital Jets Macro Plates
+          CHAPTER 5: DIGITAL JETS EDGE-TO-EDGE COMPARISON + FLUSH MACRO STRIP
       ===================================================================== */}
-      <section
-        data-chapter="detail"
-        className="surface-stone border-b border-[var(--jc-line-light)] py-20 md:py-24"
-      >
-        <div className="jc-container space-y-10">
+      <section data-chapter="detail" className="surface-ivory pt-20 md:pt-28">
+        <div className="jc-container pb-12">
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
-            <h2 className="jc-display-section text-[var(--jc-ink)]">
+            <h2 className="jc-display-section m-0 text-[var(--jc-ink)]">
               Detail examined before you fly.
             </h2>
             <p className="m-0 max-w-[50ch] text-[17px] leading-relaxed text-[var(--jc-muted)] lg:justify-self-end">
-              Compare ramp configurations side by side and inspect high-resolution exterior views of nacelles, airstair hardware, and undercarriage assemblies.
+              Compare parked and boarding ramp stances pixel-for-pixel, then inspect high-resolution exterior studies of engine nacelles, entry hardware, and landing gear.
             </p>
           </div>
+        </div>
 
-          {/* Digital Jets-inspired Interactive Before/After Configuration Wipe */}
-          <ConfigurationCompareSlider
-            closedMedia={hawkerParked}
-            openMedia={hawkerBoarding}
-          />
+        {/* Edge-to-edge full-width Hawker 4000 Parked <-> Boarding wipe */}
+        <ConfigurationCompareSlider
+          closedMedia={hawkerParked}
+          openMedia={hawkerBoarding}
+        />
 
-          {/* Full-width macro craftsmanship spread */}
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]">
+        {/* Digital Jets-inspired flush edge-to-edge 4-panel macro CGI strip */}
+        <div className="grid grid-cols-1 gap-px border-b border-[var(--jc-line-light)] bg-[var(--jc-line-light)] sm:grid-cols-2 lg:grid-cols-4">
+          {macroPlates.map((plate) => (
             <figure
-              data-plane="macro-lead"
-              className="m-0 flex flex-col overflow-hidden rounded-[4px] border border-[var(--jc-line-light)] bg-[var(--jc-paper)] will-change-transform"
+              key={plate.label}
+              className="m-0 flex flex-col justify-between bg-[var(--jc-stone)]"
             >
-              <div className="flex flex-1 items-center justify-center bg-[var(--jc-ivory)] p-6 sm:p-10">
+              <div className="flex aspect-[4/3] items-center justify-center bg-[var(--jc-paper)] p-6">
                 <img
-                  src={engineDetail.path}
-                  alt={engineDetail.alt}
-                  width={engineDetail.width}
-                  height={engineDetail.height}
+                  src={plate.media.path}
+                  alt={plate.media.alt}
+                  width={plate.media.width}
+                  height={plate.media.height}
                   loading="lazy"
-                  className="max-h-[420px] w-full object-contain"
+                  className="max-h-full w-full object-contain"
                 />
               </div>
-              <figcaption className="border-t border-[var(--jc-line-light)] px-6 py-4 text-[14px] text-[var(--jc-muted)]">
-                <strong className="font-medium text-[var(--jc-ink)]">
-                  Hawker 4000.
-                </strong>{" "}
-                {engineDetail.caption}
+              <figcaption className="border-t border-[var(--jc-line-light)] bg-[var(--jc-ivory)] px-5 py-4">
+                <span className="block text-[14px] font-medium text-[var(--jc-ink)]">
+                  {plate.label}
+                </span>
+                <span className="mt-1 block text-[13px] leading-snug text-[var(--jc-muted)]">
+                  {plate.media.caption}
+                </span>
               </figcaption>
             </figure>
-
-            <div className="grid grid-cols-1 gap-6">
-              <figure className="m-0 overflow-hidden rounded-[4px] border border-[var(--jc-line-light)] bg-[var(--jc-paper)]">
-                <div className="flex items-center justify-center bg-[var(--jc-ivory)] p-6">
-                  <img
-                    src={entryDetail.path}
-                    alt={entryDetail.alt}
-                    width={entryDetail.width}
-                    height={entryDetail.height}
-                    loading="lazy"
-                    className="max-h-[210px] w-full object-contain"
-                  />
-                </div>
-                <figcaption className="border-t border-[var(--jc-line-light)] px-5 py-3.5 text-[14px] text-[var(--jc-muted)]">
-                  <strong className="font-medium text-[var(--jc-ink)]">
-                    Boarding configuration.
-                  </strong>{" "}
-                  {entryDetail.caption}
-                </figcaption>
-              </figure>
-
-              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
-                <figure className="m-0 overflow-hidden rounded-[4px] border border-[var(--jc-line-light)] bg-[var(--jc-paper)]">
-                  <div className="flex items-center justify-center bg-[var(--jc-ivory)] p-5">
-                    <img
-                      src={gearDetail.path}
-                      alt={gearDetail.alt}
-                      width={gearDetail.width}
-                      height={gearDetail.height}
-                      loading="lazy"
-                      className="max-h-[160px] w-full object-contain"
-                    />
-                  </div>
-                  <figcaption className="border-t border-[var(--jc-line-light)] px-4 py-3 text-[13px] text-[var(--jc-muted)]">
-                    {gearDetail.caption}
-                  </figcaption>
-                </figure>
-
-                <figure className="m-0 overflow-hidden rounded-[4px] border border-[var(--jc-line-light)] bg-[var(--jc-paper)]">
-                  <div className="flex items-center justify-center bg-[var(--jc-ivory)] p-5">
-                    <img
-                      src={falconEngine.path}
-                      alt={falconEngine.alt}
-                      width={falconEngine.width}
-                      height={falconEngine.height}
-                      loading="lazy"
-                      className="max-h-[160px] w-full object-contain"
-                    />
-                  </div>
-                  <figcaption className="border-t border-[var(--jc-line-light)] px-4 py-3 text-[13px] text-[var(--jc-muted)]">
-                    {falconEngine.caption}
-                  </figcaption>
-                </figure>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
       {/* =====================================================================
-          CHAPTER 6: TRUST & EXPERIENCE — Jesko-inspired synced 2-column split
+          CHAPTER 6: TRUST & EXPERIENCE — Jesko Flush Synced Editorial Split
       ===================================================================== */}
-      <section className="surface-ivory py-20 md:py-24">
+      <section className="surface-ivory py-24 md:py-32">
         <div className="jc-container">
-          <div className="grid grid-cols-1 gap-6 pb-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
-            <h2 className="jc-display-section text-[var(--jc-ink)]">
+          <div className="grid grid-cols-1 gap-6 pb-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
+            <h2 className="jc-display-section m-0 text-[var(--jc-ink)]">
               A calmer way to arrange a charter.
             </h2>
             <p className="m-0 max-w-[50ch] text-[17px] leading-relaxed text-[var(--jc-muted)] lg:justify-self-end">
@@ -466,29 +393,35 @@ export function HomeExperience({
         testimonials={testimonials}
       />
 
-      {/* Example Trip Scenarios (explicitly distinct from completed case studies) */}
-      <section data-surface="dark" className="surface-dark py-24 md:py-28">
+      {/* Jesko-inspired Dark Focus Corridors Momentum Band */}
+      <CorridorsMomentum />
+
+      {/* Example Trip Scenarios — Crisp Hairline Architectural Band */}
+      <section
+        data-surface="dark"
+        className="border-t border-[var(--jc-line-dark)] bg-[var(--jc-teal)] py-20 text-[var(--jc-ivory)] md:py-24"
+      >
         <div className="jc-container">
           <div className="grid grid-cols-1 gap-6 pb-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
-            <h2 className="jc-display-section text-[var(--jc-ivory)]">
-              Example trip scenarios.
+            <h2 className="jc-display-section m-0 text-[var(--jc-ivory)]">
+              Example trip briefs.
             </h2>
             <p className="m-0 max-w-[50ch] text-[16px] leading-relaxed text-[var(--jc-ivory-soft)] lg:justify-self-end">
-              Illustrative itinerary briefs showing the kind of detail to share with Jayant. These are planning examples, not completed client flights.
+              Illustrative itinerary patterns showing the detail helpful to share on a call. Planning examples only, not completed client flights.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 gap-px overflow-hidden rounded-[4px] border border-[var(--jc-line-dark)] bg-[var(--jc-line-dark)] lg:grid-cols-3">
+          <div className="grid grid-cols-1 divide-y divide-[var(--jc-line-dark)] border-y border-[var(--jc-line-dark)] lg:grid-cols-3 lg:divide-x lg:divide-y-0">
             {scenarios.map((scenario) => (
               <article
                 key={scenario.id}
-                className="flex flex-col justify-between bg-[var(--jc-teal)] p-8"
+                className="flex flex-col justify-between py-8 lg:px-8 lg:first:pl-0 lg:last:pr-0"
               >
                 <div>
-                  <span className="inline-block rounded-[2px] border border-[var(--jc-gold)] px-2.5 py-1 text-[12px] text-[var(--jc-gold)]">
+                  <span className="text-[12px] font-medium text-[var(--jc-gold)]">
                     {scenario.badgeLabel}
                   </span>
-                  <p className="mt-5 m-0 font-serif text-[20px] text-[var(--jc-ivory)]">
+                  <p className="mt-3 m-0 font-serif text-[20px] text-[var(--jc-ivory)]">
                     {scenario.routeLabel}
                   </p>
                   <h3 className="mt-2 font-serif text-[26px] leading-snug text-[var(--jc-ivory)]">
@@ -506,7 +439,7 @@ export function HomeExperience({
                   <a
                     href="#inquire"
                     onClick={() => prefillService(scenario.inquiryServiceKey)}
-                    className="mt-4 inline-flex min-h-10 items-center text-[14px] font-medium text-[var(--jc-gold)] underline underline-offset-4 hover:text-[var(--jc-gold-hover)]"
+                    className="mt-4 inline-flex min-h-10 items-center text-[14px] font-medium text-[var(--jc-gold)] underline underline-offset-8 hover:text-[var(--jc-gold-hover)]"
                   >
                     Use this service type
                   </a>
@@ -518,24 +451,33 @@ export function HomeExperience({
       </section>
 
       {/* =====================================================================
-          CHAPTER 7: FAQ & INQUIRY (Calm Zero-Motion Task Surface)
+          CHAPTER 7: FAQ & CALM INQUIRY STUDIO
       ===================================================================== */}
-      <section className="surface-ivory border-b border-[var(--jc-line-light)] py-24 md:py-28">
+      <section className="surface-ivory border-b border-[var(--jc-line-light)] py-20 md:py-24">
         <div className="jc-container">
           <FaqBlock items={faqs} />
         </div>
       </section>
 
-      <section id="inquire" className="surface-stone py-24 md:py-32">
+      <section id="inquire" className="surface-stone py-24 md:py-28">
         <div className="jc-container">
           <div className="grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,0.82fr)_minmax(0,1.25fr)] lg:gap-16">
             <div>
-              <h2 className="jc-display-section text-[var(--jc-ink)]">
+              <h2 className="jc-display-section m-0 text-[var(--jc-ink)]">
                 Tell us about your trip.
               </h2>
               <p className="mt-4 max-w-[44ch] text-[17px] leading-relaxed text-[var(--jc-muted)]">
-                Only three details are required to start: your name, a reachable phone number, and permission for Jayant to call you. Everything else is optional and can be refined together on the phone.
+                Only three details are required to start: your name, a reachable phone number, and permission for Jayant to call you. Everything else can be refined together on the phone.
               </p>
+
+              {settings.featureFlags.showPreviewBanner && (
+                <p
+                  role="status"
+                  className="mt-6 rounded-[3px] border border-[var(--jc-line-strong)] bg-[var(--jc-paper)] px-4 py-3 text-[13px] leading-relaxed text-[var(--jc-ink)]"
+                >
+                  Preview environment: inquiries are recorded locally while direct email and WhatsApp channels remain paused.
+                </p>
+              )}
 
               <ol className="mt-8 list-decimal space-y-4 border-t border-[var(--jc-line-light)] pt-7 pl-5 text-[15px] leading-relaxed text-[var(--jc-muted)]">
                 <li>Your request is recorded with a unique reference ID.</li>
@@ -543,7 +485,7 @@ export function HomeExperience({
                 <li>Suitable aircraft options and a written quote follow through the operating party.</li>
               </ol>
 
-              <div className="mt-8 rounded-[4px] border border-[var(--jc-line-light)] bg-[var(--jc-paper)] p-5 text-[14px] text-[var(--jc-muted)]">
+              <div className="mt-8 text-[14px] text-[var(--jc-muted)]">
                 Prefer a dedicated full-screen form?{" "}
                 <Link
                   href="/inquire"
@@ -567,21 +509,29 @@ export function HomeExperience({
       </section>
 
       {/* =====================================================================
-          CHAPTER 8: CLOSING HORIZON COMPOSITION (Resolves cleanly into footer)
+          CHAPTER 8: MONUMENTAL CLOSING HORIZON (Jesko step_28 Spirit)
       ===================================================================== */}
       <section
         data-surface="dark"
-        className="relative overflow-hidden bg-[var(--jc-teal)] py-20 text-[var(--jc-ivory)] md:py-24"
+        className="relative overflow-hidden bg-[var(--jc-teal-deep)] py-24 text-[var(--jc-ivory)] md:py-32"
       >
-        <div className="jc-container grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
+        {/* Monumental whisper background brand silhouette */}
+        <p
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-1/2 -translate-y-1/2 select-none text-center font-serif text-[clamp(4.5rem,14vw,14rem)] leading-none tracking-[-0.04em] text-[var(--jc-ghost-wordmark)] whitespace-nowrap"
+        >
+          Jayant Charter
+        </p>
+
+        <div className="jc-container relative z-10 grid grid-cols-1 items-center gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.15fr)]">
           <div>
-            <h2 className="jc-display-section text-[var(--jc-ivory)]">
+            <h2 className="jc-display-section m-0 text-[var(--jc-ivory)]">
               Ready when your dates lock.
             </h2>
             <p className="mt-4 max-w-[44ch] text-[17px] leading-relaxed text-[var(--jc-ivory-soft)]">
               Start an inquiry whenever a trip is on your desk, or inspect our aircraft examples in full detail.
             </p>
-            <div className="mt-7 flex flex-wrap gap-3.5">
+            <div className="mt-8 flex flex-wrap gap-4">
               <Link href="/inquire" className="jc-btn-gold">
                 Request a callback
               </Link>
@@ -598,7 +548,7 @@ export function HomeExperience({
               width={falconHero.width}
               height={falconHero.height}
               loading="lazy"
-              className="jc-aircraft-shadow w-full max-w-[560px] object-contain opacity-95"
+              className="jc-aircraft-shadow w-full max-w-[640px] object-contain"
             />
           </div>
         </div>
