@@ -306,9 +306,9 @@ export function JeskoGlobalGlobe() {
       <div
         onMouseEnter={() => setWheelPaused(true)}
         onMouseLeave={() => setWheelPaused(false)}
-        className="jc-container flex min-h-[76svh] flex-col justify-center py-24 md:py-32"
+        className="jc-container flex min-h-[68svh] flex-col justify-center py-20 md:min-h-[76svh] md:py-32"
       >
-        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:gap-12">
+        <div className="grid grid-cols-1 items-center gap-6 text-center lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:gap-12 lg:text-left">
           <div className="lg:text-right">
             <h2 className="jc-display-section m-0 text-[var(--jc-ivory)]">
               Custom routes
@@ -316,21 +316,24 @@ export function JeskoGlobalGlobe() {
             <p className="mt-2 m-0 text-[14px] text-[var(--jc-ivory-muted)]">
               Select a corridor to orient the globe below
             </p>
-            <p className="mt-3 m-0 text-[12px] font-medium text-[var(--jc-gold)] tabular-nums">
+            <p className="mt-2.5 m-0 text-[12px] font-medium text-[var(--jc-gold)] tabular-nums">
               {activeCity.name} / {formatCoord(activeCity.lat, activeCity.lng)}
             </p>
           </div>
 
-          <div aria-hidden="true" className="hidden items-center gap-4 lg:flex">
-            <span className="h-px w-16 bg-[var(--jc-line-dark-strong)]" />
+          <div
+            aria-hidden="true"
+            className="mx-auto flex flex-col items-center gap-2 lg:flex-row lg:gap-4"
+          >
+            <span className="h-5 w-px bg-[var(--jc-line-dark-strong)] lg:h-px lg:w-16" />
             <span ref={planeIconRef} className="inline-flex will-change-transform">
               <Plane className="size-4 text-[var(--jc-ivory)]" />
             </span>
-            <span className="h-px w-16 bg-[var(--jc-line-dark-strong)]" />
+            <span className="h-5 w-px bg-[var(--jc-line-dark-strong)] lg:h-px lg:w-16" />
           </div>
 
           <div
-            className="jc-city-mask flex flex-col gap-1.5 py-6"
+            className="jc-city-mask mx-auto flex flex-col items-center gap-1 py-4 lg:mx-0 lg:items-start lg:gap-1.5 lg:py-6"
             role="tablist"
             aria-label="Active charter focus corridors"
           >
@@ -345,12 +348,12 @@ export function JeskoGlobalGlobe() {
                   aria-selected={isCenter}
                   onClick={() => handleSelectCity(item.idx)}
                   className={cn(
-                    "jc-wordmark w-fit text-left leading-[1.14] transition-[opacity,color] duration-300 cursor-pointer",
+                    "jc-wordmark w-fit text-center leading-[1.14] transition-[opacity,color] duration-300 cursor-pointer lg:text-left",
                     isCenter
-                      ? "text-[34px] text-[var(--jc-ivory)] opacity-100 sm:text-[44px]"
+                      ? "text-[32px] text-[var(--jc-ivory)] opacity-100 sm:text-[42px]"
                       : abs === 1
-                        ? "text-[26px] text-[var(--jc-ivory-soft)] opacity-55 hover:opacity-85 sm:text-[32px]"
-                        : "text-[22px] text-[var(--jc-ivory-muted)] opacity-25 hover:opacity-65 sm:text-[26px]"
+                        ? "text-[23px] text-[var(--jc-ivory-soft)] opacity-55 hover:opacity-85 sm:text-[30px]"
+                        : "text-[19px] text-[var(--jc-ivory-muted)] opacity-25 hover:opacity-65 sm:text-[24px]"
                   )}
                 >
                   {item.name}
@@ -368,12 +371,12 @@ export function JeskoGlobalGlobe() {
       {/* =====================================================================
           LOWER BAND: Jesko step_28 Giant "Global" Wordmark + Live 3D Globe.gl
       ===================================================================== */}
-      <div className="relative flex min-h-[92svh] flex-col justify-end pb-16 pt-12 md:pb-24">
+      <div className="relative flex min-h-[84svh] flex-col justify-end pb-16 pt-10 md:min-h-[92svh] md:pb-24 md:pt-12">
         {/* Giant background display title rising behind the globe */}
         <p
           ref={titleRef}
           aria-hidden="true"
-          className="jc-wordmark pointer-events-none absolute inset-x-0 top-6 z-0 select-none text-center text-[clamp(5.2rem,20vw,20rem)] leading-[0.86] tracking-[-0.06em] text-[var(--jc-ghost-wordmark)] whitespace-nowrap"
+          className="jc-wordmark pointer-events-none absolute inset-x-0 top-6 z-0 select-none text-center text-[clamp(4.8rem,23vw,20rem)] leading-[0.86] tracking-[-0.06em] text-[var(--jc-ghost-wordmark)] whitespace-nowrap"
         >
           Global
         </p>
@@ -381,7 +384,7 @@ export function JeskoGlobalGlobe() {
         {/* Centered Live 3D WebGL Globe with cursor-following radial spotlight */}
         <div
           ref={globeMaskRef}
-          className="jc-globe-spotlight relative z-10 mx-auto flex w-full max-w-[620px] items-center justify-center px-4"
+          className="jc-globe-spotlight relative z-10 mx-auto flex w-full max-w-[360px] items-center justify-center px-4 sm:max-w-[460px] lg:max-w-[620px]"
         >
           <div className="relative flex aspect-square w-full max-w-[580px] items-center justify-center">
             {/* Dedicated child-free WebGL host div so Globe.gl DOM mutations never collide with React */}

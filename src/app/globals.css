@@ -235,10 +235,40 @@
   background: var(--jc-mobile-hero-scrim);
 }
 
-/* Exact object-cover coordinate wrapper for the 1376:768 photographic cabin window + pleated blind */
+/* Universal multi-aspect-ratio coordinate wrapper for the 1376:768 photographic cabin window + blind.
+   Extends the exact sampled #17120d espresso suede cabin wall infinitely outward via box-shadow so
+   every phone (360x640, 390x844), tablet (768x1024), laptop (1280x720), and ultrawide (2560x1080)
+   frames 100% of the sculpted oval bezel without cropping or sky leakage. */
 .jc-window-cover-stage {
-  width: max(100%, calc(100svh * 1376 / 768));
-  height: max(100%, calc(100vw * 768 / 1376));
+  --jc-stage-h: min(88svh, calc(100vw * 1.42));
+  height: var(--jc-stage-h);
+  width: calc(var(--jc-stage-h) * 1376 / 768);
+  box-shadow: 0 0 0 150vmax var(--jc-cabin-wall);
+}
+
+@media (min-width: 640px) {
+  .jc-window-cover-stage {
+    --jc-stage-h: min(86svh, calc(100vw * 1.15));
+  }
+}
+
+@media (min-width: 1024px) {
+  .jc-window-cover-stage {
+    --jc-stage-h: min(96svh, calc(100vw * 0.68));
+  }
+}
+
+.jc-cabin-edge-blend {
+  box-shadow: var(--jc-cabin-edge-blend);
+}
+
+.jc-hscroll-strip {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.jc-hscroll-strip::-webkit-scrollbar {
+  display: none;
 }
 
 .jc-glass-sheen {

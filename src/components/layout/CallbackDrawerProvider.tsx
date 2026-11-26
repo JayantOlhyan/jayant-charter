@@ -137,6 +137,8 @@ export function CallbackDrawerProvider({
     const targets = [
       document.getElementById("inspect-aircraft"),
       document.getElementById("inquire"),
+      document.getElementById("global"),
+      document.querySelector("footer"),
     ].filter((el): el is HTMLElement => Boolean(el));
 
     if (targets.length === 0) {
@@ -377,26 +379,26 @@ export function CallbackDrawerProvider({
           <div
             ref={drawerPanelRef}
             data-surface="light"
-            className="jc-drawer-sheet relative z-10 max-h-[88svh] w-full max-w-[820px] overflow-y-auto rounded-t-[28px] border border-[var(--jc-line-light)] bg-[var(--jc-ivory)] px-6 pb-9 pt-5 text-[var(--jc-ink)] sm:rounded-[24px] sm:px-10 sm:pb-10 sm:pt-9"
+            className="jc-drawer-sheet relative z-10 max-h-[90svh] w-full max-w-[820px] overflow-y-auto rounded-t-[26px] border border-[var(--jc-line-light)] bg-[var(--jc-ivory)] px-5 pb-8 pt-4 text-[var(--jc-ink)] sm:rounded-[24px] sm:px-10 sm:pb-10 sm:pt-9"
           >
             {/* Subtle mobile grab handle */}
             <div
               aria-hidden="true"
-              className="mx-auto mb-5 h-1 w-10 rounded-full bg-[var(--jc-line-strong)] sm:hidden"
+              className="mx-auto mb-3.5 h-1 w-10 rounded-full bg-[var(--jc-line-strong)] sm:hidden"
             />
 
-            <div className="mb-7 flex items-start justify-between gap-6 border-b border-[var(--jc-line-light)] pb-6">
+            <div className="mb-5 flex items-start justify-between gap-4 border-b border-[var(--jc-line-light)] pb-4 sm:mb-7 sm:gap-6 sm:pb-6">
               <div>
-                <p className="jc-brand-mark m-0 text-[12px] text-[var(--jc-gold-muted)]">
+                <p className="jc-brand-mark m-0 text-[11px] text-[var(--jc-gold-muted)] sm:text-[12px]">
                   {settings.brandName}
                 </p>
                 <h2
                   id="callback-drawer-title"
-                  className="jc-display-title mt-1.5 m-0 text-[var(--jc-ink)]"
+                  className="jc-display-title mt-1 m-0 text-[var(--jc-ink)] sm:mt-1.5"
                 >
                   Request a callback
                 </h2>
-                <p className="mt-2 m-0 max-w-[54ch] text-[14px] leading-relaxed text-[var(--jc-muted)]">
+                <p className="mt-1.5 m-0 max-w-[54ch] text-[13px] leading-relaxed text-[var(--jc-muted)] sm:mt-2 sm:text-[14px]">
                   Start with your name, phone number, and contact permission. Jayant responds directly before onward feasibility checks begin.
                 </p>
               </div>
@@ -413,7 +415,7 @@ export function CallbackDrawerProvider({
             {settings.featureFlags.showPreviewBanner && (
               <p
                 role="status"
-                className="mb-7 border-l-2 border-[var(--jc-gold-muted)] bg-[var(--jc-stone)] px-4 py-2.5 text-[13px] leading-relaxed text-[var(--jc-muted)]"
+                className="mb-5 border-l-2 border-[var(--jc-gold-muted)] bg-[var(--jc-stone)] px-3.5 py-2 text-[12.5px] leading-relaxed text-[var(--jc-muted)] sm:mb-7 sm:px-4 sm:py-2.5 sm:text-[13px]"
               >
                 Preview environment: inquiries are recorded locally while direct email and WhatsApp channels remain paused.
               </p>

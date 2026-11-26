@@ -140,13 +140,39 @@ export function TrustEditorialSplit({ mediaById }: TrustEditorialSplitProps) {
                 </button>
 
                 {isOpen && (
-                  <div className="pb-7 pl-9 sm:pl-10">
-                    <p className="m-0 max-w-[50ch] text-[16px] leading-relaxed text-[var(--jc-ink)]">
+                  <div className="pb-7 pl-8 sm:pl-10">
+                    <p className="m-0 max-w-[50ch] text-[15px] leading-relaxed text-[var(--jc-ink)] sm:text-[16px]">
                       {row.summary}
                     </p>
-                    <p className="mt-3 mb-0 max-w-[50ch] text-[15px] leading-relaxed text-[var(--jc-muted)]">
+                    <p className="mt-3 mb-0 max-w-[50ch] text-[14px] leading-relaxed text-[var(--jc-muted)] sm:text-[15px]">
                       {row.detail}
                     </p>
+
+                    {/* Jesko mobile/tablet parity: show the synced editorial image inline inside the expanded item */}
+                    <div className="mt-5 overflow-hidden bg-[var(--jc-stone)] lg:hidden">
+                      <div
+                        className={cn(
+                          "flex aspect-[4/3] w-full items-center justify-center overflow-hidden",
+                          isRender ? "bg-[var(--jc-stone)] p-6" : "bg-[var(--jc-teal-deep)]"
+                        )}
+                      >
+                        <img
+                          src={activeMedia.path}
+                          alt={activeMedia.alt}
+                          width={activeMedia.width}
+                          height={activeMedia.height}
+                          loading="lazy"
+                          className={cn(
+                            isRender
+                              ? "jc-aircraft-shadow-light max-h-full w-full object-contain"
+                              : "h-full w-full object-cover"
+                          )}
+                        />
+                      </div>
+                      <p className="m-0 border-t border-[var(--jc-line-light)] bg-[var(--jc-ivory)] py-3 text-[12px] text-[var(--jc-muted)]">
+                        {row.mediaNote}
+                      </p>
+                    </div>
                   </div>
                 )}
               </div>
@@ -154,8 +180,8 @@ export function TrustEditorialSplit({ mediaById }: TrustEditorialSplitProps) {
           })}
         </div>
 
-        {/* Right: Flush Jesko counter-parallax editorial visual frame */}
-        <div className="overflow-hidden bg-[var(--jc-stone)]">
+        {/* Right: Desktop flush Jesko counter-parallax editorial visual frame */}
+        <div className="hidden overflow-hidden bg-[var(--jc-stone)] lg:block">
           <div className="relative aspect-[4/3] w-full overflow-hidden bg-[var(--jc-stone)]">
             <div
               ref={frameWrapRef}
@@ -191,9 +217,9 @@ export function TrustEditorialSplit({ mediaById }: TrustEditorialSplitProps) {
         </div>
       </div>
 
-      {/* Jesko step_22 honest 3-column lower architectural strip with visitor local time */}
-      <div className="mt-20 grid grid-cols-1 gap-6 border-t border-[var(--jc-line-light)] pt-7 sm:grid-cols-3">
-        <div>
+      {/* Jesko step_22 honest lower architectural strip (2-col mobile split -> 3-col desktop) */}
+      <div className="mt-16 grid grid-cols-2 gap-6 border-t border-[var(--jc-line-light)] pt-7 sm:grid-cols-3 lg:mt-20">
+        <div className="col-span-2 sm:col-span-1">
           <p className="m-0 text-[12px] font-medium text-[var(--jc-muted)]">
             Inquiry desk
           </p>
@@ -206,12 +232,12 @@ export function TrustEditorialSplit({ mediaById }: TrustEditorialSplitProps) {
           <p className="m-0 text-[12px] font-medium text-[var(--jc-muted)]">
             Active focus markets
           </p>
-          <p className="mt-1 m-0 text-[15px] font-semibold text-[var(--jc-ink)]">
+          <p className="mt-1 m-0 text-[14px] font-semibold text-[var(--jc-ink)] sm:text-[15px]">
             Delhi NCR, Mumbai, Rajasthan, Goa &amp; international
           </p>
         </div>
 
-        <div className="sm:text-right">
+        <div className="text-right">
           <p className="m-0 text-[12px] font-medium text-[var(--jc-muted)]">
             Local time ({localClock.zoneLabel})
           </p>

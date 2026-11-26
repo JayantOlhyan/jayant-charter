@@ -5,6 +5,8 @@
   color-scheme: light;
 
   /* Jesko-inspired Core Palette tuned for Jayant Charter */
+  --jc-cabin-wall: #17120d;
+  --jc-cabin-edge-blend: inset 0 0 38px 20px #17120d;
   --jc-teal-deep: #141010;
   --jc-teal: #312726;
   --jc-teal-elevated: #3d3230;
@@ -229,12 +231,12 @@
   --font-display: var(--font-archivo), system-ui, -apple-system, "Segoe UI", sans-serif;
   --font-sans: var(--font-jakarta), system-ui, -apple-system, "Segoe UI", sans-serif;
 
-  /* Jesko-proportioned Type Scale */
-  --text-monumental: clamp(2.85rem, 6.8vw, 6.2rem);
-  --text-wing: clamp(2.6rem, 6.4vw, 5.8rem);
-  --text-hero: clamp(2.5rem, 5.2vw, 4.75rem);
-  --text-section: clamp(1.95rem, 3.8vw, 3.25rem);
-  --text-title: clamp(1.375rem, 2vw, 1.85rem);
+  /* Jesko-proportioned Type Scale tuned across 360px phones through 2560px ultrawides */
+  --text-monumental: clamp(2.15rem, 6.8vw, 6.2rem);
+  --text-wing: clamp(2.1rem, 6.2vw, 5.8rem);
+  --text-hero: clamp(2.05rem, 5.1vw, 4.75rem);
+  --text-section: clamp(1.58rem, 3.8vw, 3.25rem);
+  --text-title: clamp(1.25rem, 2vw, 1.85rem);
   --text-lead: clamp(1.0625rem, 1.35vw, 1.25rem);
   --text-body: 1rem;
   --text-label: 0.875rem;

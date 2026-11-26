@@ -206,10 +206,14 @@ export function JeskoCloudPhilosophy({
 
           <div
             ref={pillarsWrapRef}
-            className="grid grid-cols-1 gap-x-12 gap-y-12 sm:grid-cols-2"
+            className="jc-hscroll-strip -mx-[var(--gutter)] flex snap-x snap-mandatory gap-6 overflow-x-auto px-[var(--gutter)] pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-x-12 sm:gap-y-12 sm:overflow-visible sm:px-0 sm:pb-0"
           >
             {PILLARS.map((pillar) => (
-              <div key={pillar.title} data-pillar="1">
+              <div
+                key={pillar.title}
+                data-pillar="1"
+                className="w-[78vw] shrink-0 snap-start sm:w-auto sm:shrink"
+              >
                 <h2 className="jc-display-title jc-sky-legible m-0 text-[var(--jc-ivory)]">
                   {pillar.title}
                 </h2>

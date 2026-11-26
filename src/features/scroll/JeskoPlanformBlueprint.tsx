@@ -445,93 +445,117 @@ export function JeskoPlanformBlueprint({
   }
 
   // =========================================================================
-  // MOBILE & REDUCED-MOTION FALLBACK: Clean non-overlapping architectural spread
+  // MOBILE & TABLET & REDUCED-MOTION: Jesko-style vertical nose-up architectural spread
   // =========================================================================
+  const showMobileExterior = manualView === "exterior";
+
   return (
     <section
       id="flight"
       data-chapter="planform"
       data-nav-theme="light"
       data-surface="light"
-      className="jc-light-stone border-b border-[var(--jc-line-light)] py-20 text-[var(--jc-ink)]"
+      className="jc-light-stone border-b border-[var(--jc-line-light)] pb-28 pt-20 text-[var(--jc-ink)] md:py-24"
     >
       <div className="jc-container">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
             <p className="m-0 text-[13px] font-medium text-[var(--jc-muted)]">
-              Illustrative exterior study
+              Hawker Beechcraft / Super mid-size jet
             </p>
-            <h2 className="jc-display-section mt-2 m-0 text-[var(--jc-ink)]">
-              Hawker 4000
+            <h2 className="jc-display-wing mt-2 m-0 text-[var(--jc-ink)]">
+              Fly on Your Terms
             </h2>
           </div>
 
-          <div className="inline-flex rounded-full border border-[var(--jc-line-strong)] bg-[var(--jc-paper)] p-1">
-            <button
-              type="button"
-              onClick={() => setManualView("exterior")}
-              className={cn(
-                "min-h-9 rounded-full px-3.5 text-[12px] font-medium cursor-pointer",
-                manualView !== "blueprint"
-                  ? "bg-[var(--jc-teal)] text-[var(--jc-ivory)]"
-                  : "text-[var(--jc-muted)]"
-              )}
-            >
-              Exterior
-            </button>
+          <div
+            className="inline-flex rounded-full border border-[var(--jc-line-strong)] bg-[var(--jc-paper)] p-1"
+            role="group"
+            aria-label="Inspect planform view mode"
+          >
             <button
               type="button"
               onClick={() => setManualView("blueprint")}
               className={cn(
-                "min-h-9 rounded-full px-3.5 text-[12px] font-medium cursor-pointer",
-                manualView === "blueprint"
+                "min-h-9 rounded-full px-4 text-[12px] font-medium transition-colors cursor-pointer",
+                !showMobileExterior
                   ? "bg-[var(--jc-teal)] text-[var(--jc-ivory)]"
-                  : "text-[var(--jc-muted)]"
+                  : "text-[var(--jc-muted)] hover:text-[var(--jc-ink)]"
               )}
             >
               Blueprint
             </button>
+            <button
+              type="button"
+              onClick={() => setManualView("exterior")}
+              className={cn(
+                "min-h-9 rounded-full px-4 text-[12px] font-medium transition-colors cursor-pointer",
+                showMobileExterior
+                  ? "bg-[var(--jc-teal)] text-[var(--jc-ivory)]"
+                  : "text-[var(--jc-muted)] hover:text-[var(--jc-ink)]"
+              )}
+            >
+              Exterior
+            </button>
           </div>
         </div>
 
-        <div className="mt-8 flex min-h-[300px] items-center justify-center py-4">
-          {manualView === "blueprint" ? (
-            <img
-              src={blueprintMedia.path}
-              alt={blueprintMedia.alt}
-              width={blueprintMedia.width}
-              height={blueprintMedia.height}
-              loading="lazy"
-              className="max-h-[420px] w-full object-contain mix-blend-multiply"
-            />
-          ) : (
+        {/* Dramatic Jesko-proportioned vertical nose-up showcase (with exterior toggle) */}
+        <div className="mt-8 flex min-h-[380px] items-center justify-center py-4 sm:min-h-[460px]">
+          {showMobileExterior ? (
             <img
               src={heroPoster.path}
               alt={heroPoster.alt}
               width={heroPoster.width}
               height={heroPoster.height}
               loading="lazy"
-              className="jc-aircraft-shadow-light max-h-[320px] w-full object-contain"
+              className="jc-aircraft-shadow-light max-h-[340px] w-full object-contain sm:max-h-[400px]"
+            />
+          ) : (
+            <img
+              src={blueprintMedia.path}
+              alt={blueprintMedia.alt}
+              width={blueprintMedia.width}
+              height={blueprintMedia.height}
+              loading="lazy"
+              className="max-h-[440px] w-full max-w-[360px] object-contain sm:max-h-[540px] sm:max-w-[440px]"
             />
           )}
         </div>
 
-        <dl className="mt-6 grid grid-cols-2 gap-4 border-t border-[var(--jc-line-light)] pt-6 text-[13px] sm:grid-cols-3">
+        <div className="mt-6 flex flex-wrap items-baseline justify-between gap-2 border-t border-[var(--jc-line-light)] pt-5">
+          <p className="jc-display-title m-0 text-[var(--jc-ink)]">
+            Hawker 4000
+          </p>
+          <p className="m-0 text-[13px] text-[var(--jc-muted)]">
+            Illustrative exterior &amp; schematic study
+          </p>
+        </div>
+
+        <dl className="mt-5 grid grid-cols-2 gap-x-6 gap-y-5 border-t border-[var(--jc-line-light)] pt-5 text-[13px] sm:grid-cols-4">
           {aircraft.specifications.map((spec) => (
             <div key={spec.label}>
-              <dt className="text-[var(--jc-muted)]">
+              <dt className="text-[11px] font-medium text-[var(--jc-muted)]">
                 {spec.label.replace(" (model reference)", "")}
               </dt>
-              <dd className="mt-1 m-0 font-semibold text-[var(--jc-ink)] tabular-nums">
+              <dd className="mt-1 m-0 text-[16px] font-semibold text-[var(--jc-ink)] tabular-nums">
                 {spec.value} {spec.unit}
               </dd>
             </div>
           ))}
+          <div>
+            <dt className="text-[11px] font-medium text-[var(--jc-muted)]">
+              3D Configurations
+            </dt>
+            <dd className="mt-1 m-0 text-[15px] font-semibold text-[var(--jc-ink)]">
+              Flight, Parked, Boarding
+            </dd>
+          </div>
         </dl>
 
         <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-[var(--jc-line-light)] pt-5">
-          <p className="m-0 max-w-[44ch] text-[12px] text-[var(--jc-muted)]">
-            Illustrative exterior envelope and schematic study. Availability and exact tail configuration are confirmed per itinerary.
+          <p className="m-0 max-w-[48ch] text-[12px] leading-relaxed text-[var(--jc-muted)]">
+            Seating layout, operating range under load, and availability are confirmed per itinerary by the licensed operating carrier.
           </p>
           <Link
             href="/aircraft"
