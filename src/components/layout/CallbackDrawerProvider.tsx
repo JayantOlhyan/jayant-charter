@@ -55,7 +55,8 @@ export function CallbackDrawerProvider({
   children,
 }: CallbackDrawerProviderProps) {
   const pathname = usePathname();
-  const isInquirePage = pathname === "/inquire";
+  const isPillSuppressedRoute =
+    pathname === "/inquire" || pathname.startsWith("/aircraft");
 
   const [isOpen, setIsOpen] = useState(false);
   const [defaultService, setDefaultService] = useState<ServicePref>("decide");
@@ -127,9 +128,14 @@ export function CallbackDrawerProvider({
     };
   }, [isOpen]);
 
-  // Auto-hide pill over #inspect-aircraft or #inquire so it never blocks interactive controls
+  // Auto-hide pill over #inspect-aircraft, #inquire, #global, footer, or any [data-hide-floating-cta="true"] page (e.g. 404)
   useEffect(() => {
-    if (isInquirePage) {
+    if (isPillSuppressedRoute) {
+      setHiddenBySection(true);
+      return;
+    }
+
+    if (document.querySelector('[data-hide-floating-cta="true"]')) {
       setHiddenBySection(true);
       return;
     }
@@ -155,12 +161,12 @@ export function CallbackDrawerProvider({
         }
         setHiddenBySection(visibleSet.size > 0);
       },
-      { threshold: 0.12 }
+      { threshold: 0.08 }
     );
 
     for (const el of targets) observer.observe(el);
     return () => observer.disconnect();
-  }, [isInquirePage, pathname]);
+  }, [isPillSuppressedRoute, pathname]);
 
   // Jesko-style magnetic pointer pull on desktop fine pointers
   useEffect(() => {
@@ -263,17 +269,19 @@ export function CallbackDrawerProvider({
   };
 
   const pillLabel = "Request a callback";
-  const showPill = !isInquirePage && !hiddenBySection && !isOpen;
+  const showPill = !isPillSuppressedRoute && !hiddenBySection && !isOpen;
 
   return (
     <CallbackDrawerContext.Provider value={{ openDrawer, closeDrawer, isOpen }}>
       {children}
 
-      {/* Persistent Jesko-style Magnetic Floating Pill CTA */}
-      {!isInquirePage && (
+      {/* Persistent Jesko-style Magnetic Floating Pill CTA (z-30 so Header z-45, Mobile Sheet z-50, and Drawer z-55 always sit cleanly above) */}
+      {!isPillSuppressedRoute && (
         <div
+          data-floating-pill="true"
+          data-pill-visible={showPill ? "true" : "false"}
           className={cn(
-            "pointer-events-none fixed inset-x-0 bottom-6 z-[var(--z-overlay)] flex justify-center px-4 transition-[opacity,transform] duration-300",
+            "jc-floating-pill-wrap pointer-events-none fixed inset-x-0 bottom-6 z-[var(--z-sticky)] flex justify-center px-4 transition-[opacity,transform] duration-300",
             showPill
               ? "translate-y-0 opacity-100"
               : "translate-y-6 opacity-0"
@@ -290,7 +298,7 @@ export function CallbackDrawerProvider({
             aria-hidden={!showPill}
             tabIndex={showPill ? 0 : -1}
             className={cn(
-              "jc-pill-shadow pointer-events-auto inline-flex min-h-[52px] items-center gap-2 rounded-full border border-[var(--jc-line-light)] bg-[var(--jc-ivory)] py-1.5 pl-6 pr-1.5 text-[14px] font-semibold text-[var(--jc-teal)] whitespace-nowrap cursor-pointer",
+              "jc-floating-pill-btn jc-pill-shadow pointer-events-auto inline-flex min-h-[52px] items-center gap-2 rounded-full border border-[var(--jc-line-light)] bg-[var(--jc-ivory)] py-1.5 pl-6 pr-1.5 text-[14px] font-semibold text-[var(--jc-teal)] whitespace-nowrap cursor-pointer",
               !showPill && "pointer-events-none"
             )}
           >
@@ -299,7 +307,7 @@ export function CallbackDrawerProvider({
                 <span className="pr-2">Close inquiry</span>
                 <span
                   aria-hidden="true"
-                  className="inline-flex size-10 items-center justify-center rounded-full bg-[var(--jc-teal)] text-[var(--jc-ivory)]"
+                  className="jc-floating-pill-icon inline-flex size-10 items-center justify-center rounded-full bg-[var(--jc-teal)] text-[var(--jc-ivory)]"
                 >
                   <X className="size-4" />
                 </span>
@@ -338,7 +346,7 @@ export function CallbackDrawerProvider({
 
                 <span
                   aria-hidden="true"
-                  className="relative inline-flex size-10 items-center justify-center overflow-hidden rounded-full bg-[var(--jc-teal)] text-[var(--jc-ivory)]"
+                  className="jc-floating-pill-icon relative inline-flex size-10 items-center justify-center overflow-hidden rounded-full bg-[var(--jc-teal)] text-[var(--jc-ivory)]"
                 >
                   <span
                     ref={plane1Ref}
@@ -379,15 +387,15 @@ export function CallbackDrawerProvider({
           <div
             ref={drawerPanelRef}
             data-surface="light"
-            className="jc-drawer-sheet relative z-10 max-h-[90svh] w-full max-w-[820px] overflow-y-auto rounded-t-[26px] border border-[var(--jc-line-light)] bg-[var(--jc-ivory)] px-5 pb-8 pt-4 text-[var(--jc-ink)] sm:rounded-[24px] sm:px-10 sm:pb-10 sm:pt-9"
+            className="jc-drawer-sheet relative z-10 max-h-[92svh] w-full max-w-[820px] overflow-y-auto rounded-t-[26px] border border-[var(--jc-line-light)] bg-[var(--jc-ivory)] px-5 pb-7 pt-4 text-[var(--jc-ink)] sm:rounded-[24px] sm:px-9 sm:pb-8 sm:pt-7"
           >
             {/* Subtle mobile grab handle */}
             <div
               aria-hidden="true"
-              className="mx-auto mb-3.5 h-1 w-10 rounded-full bg-[var(--jc-line-strong)] sm:hidden"
+              className="mx-auto mb-3 h-1 w-10 rounded-full bg-[var(--jc-line-strong)] sm:hidden"
             />
 
-            <div className="mb-5 flex items-start justify-between gap-4 border-b border-[var(--jc-line-light)] pb-4 sm:mb-7 sm:gap-6 sm:pb-6">
+            <div className="jc-drawer-header mb-4 flex items-start justify-between gap-4 border-b border-[var(--jc-line-light)] pb-3.5 sm:mb-5 sm:gap-6 sm:pb-4">
               <div>
                 <p className="jc-brand-mark m-0 text-[11px] text-[var(--jc-gold-muted)] sm:text-[12px]">
                   {settings.brandName}
@@ -398,7 +406,7 @@ export function CallbackDrawerProvider({
                 >
                   Request a callback
                 </h2>
-                <p className="mt-1.5 m-0 max-w-[54ch] text-[13px] leading-relaxed text-[var(--jc-muted)] sm:mt-2 sm:text-[14px]">
+                <p className="mt-1 m-0 max-w-[54ch] text-[13px] leading-relaxed text-[var(--jc-muted)] sm:mt-1.5 sm:text-[13.5px]">
                   Start with your name, phone number, and contact permission. Jayant responds directly before onward feasibility checks begin.
                 </p>
               </div>
@@ -415,7 +423,7 @@ export function CallbackDrawerProvider({
             {settings.featureFlags.showPreviewBanner && (
               <p
                 role="status"
-                className="mb-5 border-l-2 border-[var(--jc-gold-muted)] bg-[var(--jc-stone)] px-3.5 py-2 text-[12.5px] leading-relaxed text-[var(--jc-muted)] sm:mb-7 sm:px-4 sm:py-2.5 sm:text-[13px]"
+                className="jc-drawer-banner mb-4 border-l-2 border-[var(--jc-gold-muted)] bg-[var(--jc-stone)] px-3.5 py-2 text-[12.5px] leading-relaxed text-[var(--jc-muted)] sm:mb-5 sm:px-4 sm:py-2 sm:text-[13px]"
               >
                 Preview environment: inquiries are recorded locally while direct email and WhatsApp channels remain paused.
               </p>
