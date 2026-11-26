@@ -551,23 +551,23 @@ export function JeskoOpeningHero({
           className="hidden lg:block absolute left-1/2 top-[22%] z-30 h-14 w-36 -translate-x-1/2 cursor-grab rounded-full active:cursor-grabbing focus-visible:outline-2 focus-visible:outline-[var(--jc-gold)]"
         />
 
-        {/* Window-centered sculpted Jayant Charter crest (cleanly centered inside the oval glass on all viewports) */}
+        {/* Window-centered sculpted Jayant Charter crest (fluidly scaled to both viewport width & height so it stays inside the oval glass on every ratio including 844x390 landscape) */}
         <div
           ref={centerWordmarkRef}
           aria-hidden="true"
           className="pointer-events-none absolute inset-x-0 top-[52%] z-20 flex -translate-y-1/2 items-center justify-center sm:top-[53%] will-change-transform"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 sm:gap-3 sm:px-4">
-            <span className="h-[1.5px] w-3 bg-[var(--jc-gold-muted)] sm:w-5" />
-            <span className="jc-window-brand text-[13px] leading-none whitespace-nowrap sm:text-[18px] lg:text-[21px] xl:text-[23px]">
+          <div className="inline-flex items-center gap-1.5 px-2 py-1 sm:gap-2.5 sm:px-3">
+            <span className="h-[1.5px] w-2 bg-[var(--jc-gold-muted)] sm:w-4" />
+            <span className="jc-window-brand jc-window-brand-fluid leading-none whitespace-nowrap">
               {brandName}
             </span>
-            <span className="h-[1.5px] w-3 bg-[var(--jc-gold-muted)] sm:w-5" />
+            <span className="h-[1.5px] w-2 bg-[var(--jc-gold-muted)] sm:w-4" />
           </div>
         </div>
 
         {/* LAYER 2: Jesko Monumental Split-Corner Editorial Typography tuned for every aspect ratio */}
-        <div className="relative z-20 mx-auto flex h-full w-full max-w-[1600px] flex-1 flex-col justify-between px-[var(--gutter)] pb-[88px] pt-[74px] sm:pb-[96px] sm:pt-[96px] lg:pb-12 lg:pt-[110px]">
+        <div className="jc-hero-shell relative z-20 mx-auto flex h-full w-full max-w-[1600px] flex-1 flex-col justify-between px-[var(--gutter)]">
           {/* Upper-left primary display half */}
           <div
             ref={leftCopyRef}
@@ -581,10 +581,10 @@ export function JeskoOpeningHero({
             </h1>
           </div>
 
-          {/* Lower-right on phones (completely clear of centered window crest!) -> middle-right on sm+ tablet/desktop */}
+          {/* Lower-right on portrait phones/tablets/square (clear of oval bezel!) -> middle-right on landscape & desktop */}
           <div
             ref={rightCopyRef}
-            className="mb-3 ml-auto mt-auto max-w-[600px] text-right sm:my-0 will-change-transform"
+            className="jc-hero-right-copy ml-auto max-w-[600px] text-right will-change-transform"
           >
             <p
               aria-hidden="true"
@@ -597,15 +597,15 @@ export function JeskoOpeningHero({
           </div>
 
           {/* Bottom split architectural strip (clean & uncluttered on phones, full descriptor on lg+) */}
-          <div className="grid grid-cols-1 items-end gap-4 lg:grid-cols-[minmax(0,360px)_1fr_minmax(0,380px)] lg:gap-8">
+          <div className="grid grid-cols-1 items-end gap-4 lg:grid-cols-[minmax(0,300px)_1fr_minmax(0,340px)] xl:grid-cols-[minmax(0,360px)_1fr_minmax(0,380px)] lg:gap-8">
             <div ref={bottomLeftRef} className="will-change-transform">
-              <p className="jc-display-title jc-hero-outline m-0 text-[18px] text-[var(--jc-ivory)] sm:text-[22px] lg:text-[clamp(1.25rem,1.8vw,1.65rem)]">
+              <p className="jc-display-title jc-hero-outline m-0 text-[16px] text-[var(--jc-ivory)] sm:text-[20px] lg:text-[clamp(1.2rem,1.65vw,1.6rem)]">
                 Your trip arranged
                 <br />
                 around your time
               </p>
-              <div className="my-4 hidden h-px w-8 bg-[var(--jc-line-dark-strong)] lg:block" />
-              <p className="m-0 hidden max-w-[36ch] text-[14px] leading-relaxed text-[var(--jc-ivory-soft)] lg:block">
+              <div className="my-3.5 hidden h-px w-8 bg-[var(--jc-line-dark-strong)] lg:block" />
+              <p className="m-0 hidden max-w-[30ch] text-[13.5px] leading-relaxed text-[var(--jc-ivory-soft)] lg:block xl:max-w-[36ch] xl:text-[14px]">
                 Private jets, group charters, and helicopters coordinated around your schedule, with Jayant as your first point of contact.
               </p>
             </div>
