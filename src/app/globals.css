@@ -66,7 +66,7 @@
     font-size: 16px;
     line-height: 1.55;
     overflow-x: clip;
-    scroll-padding-top: calc(var(--header-height) + var(--space-4));
+    scroll-padding-top: var(--header-height);
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     scrollbar-color: var(--jc-muted) var(--jc-stone);
@@ -237,24 +237,153 @@
 
 /* Universal multi-aspect-ratio coordinate wrapper for the 1376:768 photographic cabin window + blind.
    Extends the exact sampled #17120d espresso suede cabin wall infinitely outward via box-shadow so
-   every phone (360x640, 390x844), tablet (768x1024), laptop (1280x720), and ultrawide (2560x1080)
-   frames 100% of the sculpted oval bezel without cropping or sky leakage. */
+   every phone (360x640, 390x844, 844x390 landscape), foldable (712x712), tablet (768x1024, 1024x768),
+   laptop (1280x720, 1440x900), and ultrawide (2560x1080) frames 100% of the sculpted oval bezel cleanly. */
 .jc-window-cover-stage {
-  --jc-stage-h: min(88svh, calc(100vw * 1.42));
+  --jc-stage-h: min(74svh, calc(100vw * 1.24));
   height: var(--jc-stage-h);
   width: calc(var(--jc-stage-h) * 1376 / 768);
   box-shadow: 0 0 0 150vmax var(--jc-cabin-wall);
 }
 
+@media (max-width: 639px) and (min-height: 760px) {
+  .jc-window-cover-stage {
+    --jc-stage-h: min(80svh, calc(100vw * 1.32));
+  }
+}
+
 @media (min-width: 640px) {
   .jc-window-cover-stage {
-    --jc-stage-h: min(86svh, calc(100vw * 1.15));
+    --jc-stage-h: min(78svh, calc(100vw * 0.94));
   }
 }
 
 @media (min-width: 1024px) {
   .jc-window-cover-stage {
-    --jc-stage-h: min(96svh, calc(100vw * 0.68));
+    --jc-stage-h: min(84svh, calc(100vw * 0.58));
+  }
+}
+
+@media (min-width: 1280px) {
+  .jc-window-cover-stage {
+    --jc-stage-h: min(94svh, calc(100vw * 0.66));
+  }
+}
+
+/* Short-height landscape phones (e.g., 844x390) */
+@media (max-height: 500px) {
+  :root {
+    --header-height: 52px;
+    --chrome-height: 52px;
+  }
+
+  .jc-window-cover-stage {
+    --jc-stage-h: min(82svh, calc(100vw * 0.52));
+  }
+}
+
+/* Fluid cabin-window brand crest scaled against BOTH width and height so it never touches the oval rim */
+.jc-window-brand-fluid {
+  font-size: clamp(9.5px, min(3.15vw, 2.35svh), 23px);
+}
+
+/* Hero split layout tuning for portrait phones, square/portrait tablets, landscape phones, and desktop */
+.jc-hero-shell {
+  padding-top: 72px;
+  padding-bottom: 84px;
+}
+
+.jc-hero-right-copy {
+  margin-top: auto;
+  margin-bottom: var(--space-3);
+}
+
+@media (min-width: 640px) {
+  .jc-hero-shell {
+    padding-top: 88px;
+    padding-bottom: 92px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .jc-hero-shell {
+    padding-top: 108px;
+    padding-bottom: var(--space-12);
+  }
+
+  .jc-hero-right-copy {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+/* Landscape phones (wide but ultra-short, e.g., 844x390): open wing room left & right */
+@media (max-height: 500px) and (min-width: 640px) {
+  .jc-hero-shell {
+    padding-top: var(--space-14);
+    padding-bottom: var(--space-14);
+  }
+
+  .jc-hero-right-copy {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .jc-hero-shell .jc-display-monumental {
+    font-size: clamp(1.8rem, 4.4vw, 2.75rem);
+  }
+}
+
+/* Landscape compact planform height tuning */
+@media (max-height: 500px) {
+  .jc-planform-mobile-section {
+    padding-top: var(--space-16);
+    padding-bottom: var(--space-14);
+  }
+
+  .jc-planform-mobile-stage {
+    min-height: 220px;
+    margin-top: var(--space-3);
+  }
+
+  .jc-planform-mobile-stage img {
+    max-height: 230px;
+  }
+
+  .jc-floating-pill-wrap {
+    bottom: var(--space-3);
+    justify-content: flex-end;
+    padding-right: var(--space-4);
+  }
+
+  .jc-floating-pill-btn {
+    min-height: 40px;
+    padding-left: var(--space-4);
+    font-size: 12.5px;
+  }
+
+  .jc-floating-pill-icon {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+/* Compact Callback Drawer vertical rhythm on 720p laptops & iPad landscape so submit CTA stays in fold */
+@media (max-height: 780px) {
+  .jc-drawer-sheet {
+    padding-top: var(--space-5);
+    padding-bottom: var(--space-5);
+  }
+
+  .jc-drawer-header {
+    margin-bottom: var(--space-3);
+    padding-bottom: var(--space-3);
+  }
+
+  .jc-drawer-banner {
+    margin-bottom: var(--space-3);
+    padding-top: var(--space-2);
+    padding-bottom: var(--space-2);
   }
 }
 
