@@ -12,6 +12,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { useCallbackDrawer } from "@/components/layout/CallbackDrawerProvider";
+import { useLocalClock } from "@/lib/use-local-clock";
 import { cn } from "@/lib/utils";
 import type { SiteSettings } from "@/content/schemas";
 
@@ -81,7 +82,7 @@ function RollLink({
 
 /**
  * Jesko-inspired floating edge-to-edge navigation with dynamic dark/light section
- * theme switching, live Dubai clock, dual-layer roll-up links, and direct callback drawer trigger.
+ * theme switching, IP-aware visitor local time clock, dual-layer roll-up links, and direct callback drawer trigger.
  */
 export function SiteHeader({
   settings,
@@ -91,34 +92,14 @@ export function SiteHeader({
   const pathname = usePathname();
   const isHome = pathname === "/";
   const { openDrawer } = useCallbackDrawer();
+  const localClock = useLocalClock();
 
   const [servicesOpen, setServicesOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [lightTheme, setLightTheme] = useState(false);
-  const [dubaiTime, setDubaiTime] = useState<string>("");
   const headerRef = useRef<HTMLElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
-
-  // Sync live Dubai (GST) time every second (Jesko initCurrentTime parity)
-  useEffect(() => {
-    const updateClock = () => {
-      try {
-        const formatted = new Intl.DateTimeFormat("en-GB", {
-          timeZone: "Asia/Dubai",
-          hour: "2-digit",
-          minute: "2-digit",
-          hour12: false,
-        }).format(new Date());
-        setDubaiTime(formatted);
-      } catch {
-        setDubaiTime("");
-      }
-    };
-    updateClock();
-    const id = window.setInterval(updateClock, 15_000);
-    return () => window.clearInterval(id);
-  }, []);
 
   // Track scroll & active light/dark section beneath the header midpoint (Jesko initThemeChange parity)
   useEffect(() => {
@@ -312,9 +293,9 @@ export function SiteHeader({
           {settings.brandMarkFirst} {settings.brandMarkSecond}
         </Link>
 
-        {/* Right: Dubai clock + Direct callback trigger + mobile menu */}
+        {/* Right: Visitor local clock + Direct callback trigger + mobile menu */}
         <div className="flex items-center justify-end gap-6">
-          {dubaiTime && (
+          {localClock.ready && localClock.headerText && (
             <span
               className={cn(
                 "hidden text-[13px] tabular-nums whitespace-nowrap transition-colors duration-300 lg:inline-block",
@@ -323,7 +304,7 @@ export function SiteHeader({
                   : "text-[var(--jc-ivory-soft)]"
               )}
             >
-              Dubai {dubaiTime}
+              {localClock.headerText}
             </span>
           )}
 

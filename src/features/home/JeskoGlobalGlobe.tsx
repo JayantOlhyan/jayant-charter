@@ -14,7 +14,6 @@ import { cn } from "@/lib/utils";
 gsap.registerPlugin(ScrollTrigger);
 
 const CORRIDOR_CITIES = [
-  { name: "Dubai", lat: 25.2048, lng: 55.2708 },
   { name: "Delhi NCR", lat: 28.6139, lng: 77.209 },
   { name: "Mumbai", lat: 19.076, lng: 72.8777 },
   { name: "Rajasthan", lat: 24.5854, lng: 73.7125 },
@@ -23,25 +22,26 @@ const CORRIDOR_CITIES = [
   { name: "Geneva", lat: 46.2044, lng: 6.1432 },
   { name: "Singapore", lat: 1.3521, lng: 103.8198 },
   { name: "Zurich", lat: 47.3769, lng: 8.5417 },
-  { name: "Riyadh", lat: 24.7136, lng: 46.6753 },
+  { name: "New York", lat: 40.7128, lng: -74.006 },
+  { name: "Tokyo", lat: 35.6762, lng: 139.6503 },
 ];
 
 const FLIGHT_ARCS = [
-  { startLat: 25.2048, startLng: 55.2708, endLat: 28.6139, endLng: 77.209 },
-  { startLat: 25.2048, startLng: 55.2708, endLat: 19.076, endLng: 72.8777 },
+  { startLat: 28.6139, startLng: 77.209, endLat: 19.076, endLng: 72.8777 },
   { startLat: 28.6139, startLng: 77.209, endLat: 24.5854, endLng: 73.7125 },
   { startLat: 19.076, startLng: 72.8777, endLat: 15.2993, endLng: 74.124 },
-  { startLat: 25.2048, startLng: 55.2708, endLat: 51.5072, endLng: -0.1276 },
-  { startLat: 25.2048, startLng: 55.2708, endLat: 46.2044, endLng: 6.1432 },
-  { startLat: 19.076, startLng: 72.8777, endLat: 1.3521, endLng: 103.8198 },
   { startLat: 28.6139, startLng: 77.209, endLat: 51.5072, endLng: -0.1276 },
-  { startLat: 24.7136, startLng: 46.6753, endLat: 47.3769, endLng: 8.5417 },
-  { startLat: 46.2044, startLng: 6.1432, endLat: 1.3521, endLng: 103.8198 },
+  { startLat: 19.076, startLng: 72.8777, endLat: 46.2044, endLng: 6.1432 },
+  { startLat: 19.076, startLng: 72.8777, endLat: 1.3521, endLng: 103.8198 },
+  { startLat: 28.6139, startLng: 77.209, endLat: 1.3521, endLng: 103.8198 },
+  { startLat: 51.5072, startLng: -0.1276, endLat: 40.7128, endLng: -74.006 },
+  { startLat: 46.2044, startLng: 6.1432, endLat: 47.3769, endLng: 8.5417 },
+  { startLat: 1.3521, startLng: 103.8198, endLat: 35.6762, endLng: 139.6503 },
 ];
 
 /**
  * Jesko step_22 -> step_28 Global finale rebuilt 100% originally for Jayant Charter:
- * - Top band: Feathered vertical looping city wheel ("Custom routes" --- plane --- Dubai / Delhi NCR / Mumbai...)
+ * - Top band: Feathered vertical looping city wheel ("Custom routes" --- plane --- Delhi NCR / Mumbai / London...)
  * - Bottom band: Giant rising "Global" display wordmark behind a live rotating 3D WebGL Globe.gl Earth
  *   rendered with self-hosted Natural Earth country polygons + animated flight arcs + cursor-following spotlight mask.
  */
@@ -191,8 +191,8 @@ export function JeskoGlobalGlobe() {
           mat.needsUpdate = true;
         }
 
-        // Center initial camera over Dubai / India / Europe corridor & retain handle for city fly-to
-        globe.pointOfView({ lat: 24, lng: 62, altitude: 2.15 }, 0);
+        // Center initial camera over India / Eurasia / International corridors & retain handle for city fly-to
+        globe.pointOfView({ lat: 24, lng: 76, altitude: 2.15 }, 0);
         globeInstanceRef.current = globe;
 
         const controls = globe.controls() as {
@@ -361,7 +361,7 @@ export function JeskoGlobalGlobe() {
         </div>
 
         <p className="mt-8 mb-0 text-center text-[13px] text-[var(--jc-ivory-muted)]">
-          Custom charters worldwide, with active focus across India, the UAE, Europe, and Asia. Not a fixed scheduled route network.
+          Custom charters worldwide, tailored around every departure window. Not a fixed scheduled route network.
         </p>
       </div>
 

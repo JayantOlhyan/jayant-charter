@@ -48,7 +48,7 @@ interface HomeExperienceProps {
  * 2. Cloud Philosophy & Character-Scrub Highlight (JeskoCloudPhilosophy)
  * 3. Overhead 3D Hawker 4000 Planform & X-Ray Blueprint Wipe (JeskoPlanformBlueprint)
  * 4. Three Charter Services — Architectural Warm Cream Spreads (linking to multi-page guides)
- * 5. A Calmer Way to Fly — Flush Synced Accordion + Live Dubai Clock Strip (TrustEditorialSplit)
+ * 5. A Calmer Way to Fly — Flush Synced Accordion + Visitor Local Time Strip (TrustEditorialSplit)
  * 6. Compact FAQ
  * 7. Custom Routes Looping City Wheel & Live 3D Globe.gl Finale (JeskoGlobalGlobe)
  */

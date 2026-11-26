@@ -2,7 +2,7 @@
   {
     "id": "custom-route",
     "question": "Can you arrange a custom or multi-stop route?",
-    "answer": "Yes. Share any origin, destination, or multi-stop itinerary. Our current relationship focus centers on Dubai, Delhi NCR, Mumbai, Rajasthan, and Goa, while custom domestic and international routes are checked for feasibility before quoting.",
+    "answer": "Yes. Share any origin, destination, or multi-stop itinerary. Our current relationship focus centers on Delhi NCR, Mumbai, Rajasthan, and Goa, while custom domestic and international routes are checked for feasibility before quoting.",
     "scopes": ["home", "private-jets", "group-charter", "how-it-works"]
   },
   {

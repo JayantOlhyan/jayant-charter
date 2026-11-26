@@ -199,7 +199,7 @@ export function JeskoCloudPhilosophy({
                 Jayant Charter
               </p>
               <p className="jc-sky-legible mt-1 m-0 max-w-[26ch] text-[13px] leading-snug text-[var(--jc-ivory)]">
-                Custom private aviation inquiries across Dubai, Delhi NCR, Mumbai, Rajasthan, Goa, and worldwide corridors.
+                Custom private aviation inquiries across Delhi NCR, Mumbai, Rajasthan, Goa, and worldwide corridors.
               </p>
             </div>
           </div>

@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { Plus } from "lucide-react";
 import type { MediaAsset } from "@/content/schemas";
+import { useLocalClock } from "@/lib/use-local-clock";
 import { cn } from "@/lib/utils";
 
 interface TrustEditorialSplitProps {
@@ -61,11 +62,11 @@ const EXPERIENCE_ROWS = [
  * Jesko step_20 synced Benefits/Advantages split:
  * - Spacious horizontal-rule expandable rows with rotating + icon
  * - Right-hand flush architectural frame with counter-parallax slide-up & de-zoom reveal (initBenefitsAccordion parity)
- * - Lower 3-column honest status strip with live Dubai local time (initCurrentTime parity)
+ * - Lower 3-column honest status strip with visitor local time (IP-aware / browser timezone)
  */
 export function TrustEditorialSplit({ mediaById }: TrustEditorialSplitProps) {
   const [activeId, setActiveId] = useState<string>(EXPERIENCE_ROWS[0].id);
-  const [dubaiClock, setDubaiClock] = useState<string>("--:--");
+  const localClock = useLocalClock();
   const frameWrapRef = useRef<HTMLDivElement>(null);
   const frameImgRef = useRef<HTMLImageElement>(null);
 
@@ -73,26 +74,6 @@ export function TrustEditorialSplit({ mediaById }: TrustEditorialSplitProps) {
     EXPERIENCE_ROWS.find((row) => row.id === activeId) || EXPERIENCE_ROWS[0];
   const activeMedia = mediaById[activeRow.mediaId] || mediaById["hawker-hero"];
   const isRender = activeMedia.type === "render";
-
-  useEffect(() => {
-    const tick = () => {
-      try {
-        setDubaiClock(
-          new Intl.DateTimeFormat("en-GB", {
-            timeZone: "Asia/Dubai",
-            hour: "2-digit",
-            minute: "2-digit",
-            hour12: false,
-          }).format(new Date())
-        );
-      } catch {
-        setDubaiClock("");
-      }
-    };
-    tick();
-    const id = window.setInterval(tick, 15_000);
-    return () => window.clearInterval(id);
-  }, []);
 
   // Jesko exact counter-parallax slide-up + scale 1.35 -> 1 reveal on row switch
   useEffect(() => {
@@ -210,7 +191,7 @@ export function TrustEditorialSplit({ mediaById }: TrustEditorialSplitProps) {
         </div>
       </div>
 
-      {/* Jesko step_22 honest 3-column lower architectural strip with live local Dubai clock */}
+      {/* Jesko step_22 honest 3-column lower architectural strip with visitor local time */}
       <div className="mt-20 grid grid-cols-1 gap-6 border-t border-[var(--jc-line-light)] pt-7 sm:grid-cols-3">
         <div>
           <p className="m-0 text-[12px] font-medium text-[var(--jc-muted)]">
@@ -226,16 +207,16 @@ export function TrustEditorialSplit({ mediaById }: TrustEditorialSplitProps) {
             Active focus markets
           </p>
           <p className="mt-1 m-0 text-[15px] font-semibold text-[var(--jc-ink)]">
-            Dubai, Delhi NCR, Mumbai, Rajasthan, Goa
+            Delhi NCR, Mumbai, Rajasthan, Goa &amp; international
           </p>
         </div>
 
         <div className="sm:text-right">
           <p className="m-0 text-[12px] font-medium text-[var(--jc-muted)]">
-            Local time (Dubai)
+            Local time ({localClock.zoneLabel})
           </p>
           <p className="jc-display-title mt-0.5 m-0 text-[var(--jc-ink)] tabular-nums">
-            {dubaiClock}
+            {localClock.time}
           </p>
         </div>
       </div>

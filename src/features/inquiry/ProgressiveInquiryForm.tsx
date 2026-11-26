@@ -523,7 +523,7 @@ export function ProgressiveInquiryForm({
             id={`${formId}-phone`}
             type="tel"
             autoComplete="tel"
-            placeholder="+971 50 123 4567 or +91 98765 43210"
+            placeholder="+91 98765 43210 or +44 7700 900123"
             aria-invalid={Boolean(errors.contact?.phone)}
             aria-describedby={errors.contact?.phone ? `${formId}-phone-err` : `${formId}-phone-hint`}
             className="jc-field mt-2 tabular-nums"
@@ -692,7 +692,7 @@ export function ProgressiveInquiryForm({
                       </Label>
                       <Input
                         id={`${formId}-from-${index}`}
-                        placeholder="e.g. Dubai (OMDB / DWC)"
+                        placeholder="e.g. New Delhi (VIDP) or Mumbai (VABB)"
                         className="jc-field mt-1.5"
                         {...register(`trip.legs.${index}.from`)}
                       />

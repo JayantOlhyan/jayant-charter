@@ -48,6 +48,7 @@ async function main() {
     "/sitemap.xml",
     "/robots.txt",
     "/api/health",
+    "/api/visitor-time",
   ];
   const expected404 = [
     "/case-studies",
