@@ -310,7 +310,7 @@ export function JeskoPlanformBlueprint({
           >
             <div className="mt-auto grid grid-cols-[minmax(0,1fr)_minmax(240px,34vw)_minmax(0,1fr)] items-center gap-6">
               <div>
-                <h2 className="jc-display-wing m-0 text-[var(--jc-ink)]">
+                <h2 className="jc-display-wing m-0 whitespace-nowrap text-[var(--jc-ink)]">
                   Fly on
                 </h2>
                 <p className="jc-display-title mt-5 m-0 text-[var(--jc-ink)]">
@@ -320,7 +320,7 @@ export function JeskoPlanformBlueprint({
                 </p>
               </div>
               <div />
-              <div className="text-right">
+              <div className="pr-8 text-right xl:pr-14">
                 <p
                   aria-hidden="true"
                   className="jc-display-wing m-0 text-[var(--jc-ink)]"
@@ -333,7 +333,7 @@ export function JeskoPlanformBlueprint({
             <div className="mt-auto grid grid-cols-[minmax(0,1fr)_minmax(240px,34vw)_minmax(0,1fr)] items-end gap-6">
               <div />
               <div />
-              <div className="ml-auto max-w-[360px] border-t border-[var(--jc-line-light)] pt-4">
+              <div className="ml-auto max-w-[360px] border-t border-[var(--jc-line-light)] pr-6 pt-4 xl:pr-12">
                 <div className="flex items-center justify-between text-[12px] font-semibold text-[var(--jc-ink)]">
                   <span>Hawker Beechcraft</span>
                   <span>Hawker 4000</span>
@@ -391,7 +391,7 @@ export function JeskoPlanformBlueprint({
             <div />
 
             {/* Right margin: Architectural narrative + manual Exterior / Blueprint toggle + 3D Showroom link */}
-            <div className="flex h-full flex-col justify-between py-6 text-left">
+            <div className="flex h-full flex-col justify-between py-6 pr-6 text-left xl:pr-12">
               <div className="ml-auto max-w-[340px] border-t border-[var(--jc-line-light)] pt-4">
                 <p className="m-0 text-[12px] font-semibold text-[var(--jc-ink)]">
                   Direct feasibility verification
@@ -455,7 +455,7 @@ export function JeskoPlanformBlueprint({
       data-chapter="planform"
       data-nav-theme="light"
       data-surface="light"
-      className="jc-light-stone border-b border-[var(--jc-line-light)] pb-28 pt-20 text-[var(--jc-ink)] md:py-24"
+      className="jc-light-stone jc-planform-mobile-section border-b border-[var(--jc-line-light)] pb-28 pt-20 text-[var(--jc-ink)] md:py-24"
     >
       <div className="jc-container">
         <div className="flex flex-wrap items-end justify-between gap-4">
@@ -501,7 +501,7 @@ export function JeskoPlanformBlueprint({
         </div>
 
         {/* Dramatic Jesko-proportioned vertical nose-up showcase (with exterior toggle) */}
-        <div className="mt-8 flex min-h-[380px] items-center justify-center py-4 sm:min-h-[460px]">
+        <div className="jc-planform-mobile-stage mt-8 flex min-h-[380px] items-center justify-center py-4 sm:min-h-[460px]">
           {showMobileExterior ? (
             <img
               src={heroPoster.path}
