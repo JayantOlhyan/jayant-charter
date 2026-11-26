@@ -11,6 +11,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { useCallbackDrawer } from "@/components/layout/CallbackDrawerProvider";
 import { cn } from "@/lib/utils";
 import type { SiteSettings } from "@/content/schemas";
 
@@ -38,6 +39,50 @@ const SERVICE_LINKS = [
   },
 ];
 
+function RollLink({
+  href,
+  label,
+  active,
+  lightTheme,
+}: {
+  href: string;
+  label: string;
+  active: boolean;
+  lightTheme: boolean;
+}) {
+  return (
+    <Link
+      href={href}
+      className={cn(
+        "group inline-flex min-h-11 items-center text-[14px] font-medium whitespace-nowrap transition-colors duration-200",
+        lightTheme
+          ? active
+            ? "text-[var(--jc-ink)]"
+            : "text-[var(--jc-muted)] hover:text-[var(--jc-ink)]"
+          : active
+            ? "text-[var(--jc-ivory)]"
+            : "text-[var(--jc-ivory-soft)] hover:text-[var(--jc-ivory)]"
+      )}
+    >
+      <span className="relative inline-flex h-[1.25em] overflow-hidden leading-[1.25]">
+        <span className="inline-block transition-transform duration-300 ease-out group-hover:-translate-y-full">
+          {label}
+        </span>
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute left-0 top-0 inline-block translate-y-full transition-transform duration-300 ease-out group-hover:translate-y-0"
+        >
+          {label}
+        </span>
+      </span>
+    </Link>
+  );
+}
+
+/**
+ * Jesko-inspired floating edge-to-edge navigation with dynamic dark/light section
+ * theme switching, live Dubai clock, dual-layer roll-up links, and direct callback drawer trigger.
+ */
 export function SiteHeader({
   settings,
   showCaseStudies,
@@ -45,33 +90,61 @@ export function SiteHeader({
 }: SiteHeaderProps) {
   const pathname = usePathname();
   const isHome = pathname === "/";
+  const { openDrawer } = useCallbackDrawer();
+
   const [servicesOpen, setServicesOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [lightTheme, setLightTheme] = useState(false);
+  const [dubaiTime, setDubaiTime] = useState<string>("");
   const headerRef = useRef<HTMLElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
 
+  // Sync live Dubai (GST) time every second (Jesko initCurrentTime parity)
   useEffect(() => {
-    const el = headerRef.current;
-    if (!el) return;
-    const syncChromeHeight = () => {
-      document.documentElement.style.setProperty(
-        "--chrome-height",
-        `${Math.round(el.getBoundingClientRect().height)}px`
-      );
+    const updateClock = () => {
+      try {
+        const formatted = new Intl.DateTimeFormat("en-GB", {
+          timeZone: "Asia/Dubai",
+          hour: "2-digit",
+          minute: "2-digit",
+          hour12: false,
+        }).format(new Date());
+        setDubaiTime(formatted);
+      } catch {
+        setDubaiTime("");
+      }
     };
-    syncChromeHeight();
-    const ro = new ResizeObserver(syncChromeHeight);
-    ro.observe(el);
-    return () => ro.disconnect();
+    updateClock();
+    const id = window.setInterval(updateClock, 15_000);
+    return () => window.clearInterval(id);
   }, []);
 
+  // Track scroll & active light/dark section beneath the header midpoint (Jesko initThemeChange parity)
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 48);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+    const evaluateHeaderTheme = () => {
+      setScrolled(window.scrollY > 40);
+      const midY = 34;
+      const sections = document.querySelectorAll<HTMLElement>("[data-nav-theme]");
+      let nextLight = false;
+      for (const sec of sections) {
+        const rect = sec.getBoundingClientRect();
+        if (rect.top <= midY && rect.bottom >= midY) {
+          nextLight = sec.getAttribute("data-nav-theme") === "light";
+          break;
+        }
+      }
+      setLightTheme(nextLight);
+    };
+
+    evaluateHeaderTheme();
+    window.addEventListener("scroll", evaluateHeaderTheme, { passive: true });
+    window.addEventListener("resize", evaluateHeaderTheme, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", evaluateHeaderTheme);
+      window.removeEventListener("resize", evaluateHeaderTheme);
+    };
+  }, [pathname]);
 
   useEffect(() => {
     setServicesOpen(false);
@@ -101,17 +174,19 @@ export function SiteHeader({
   return (
     <header
       ref={headerRef}
-      data-surface="dark"
+      data-surface={lightTheme ? "light" : "dark"}
       className={cn(
-        "z-[var(--z-sticky-nav)] w-full border-b transition-[background-color,border-color] duration-300",
+        "z-[var(--z-sticky-nav)] w-full border-b transition-[background-color,border-color,color] duration-300",
         isHome ? "fixed inset-x-0 top-0" : "sticky top-0",
         isHome && !scrolled
           ? "border-transparent bg-transparent"
-          : "border-[var(--jc-line-dark)] bg-[var(--jc-nav-scrolled)] backdrop-blur-md"
+          : lightTheme
+            ? "border-[var(--jc-line-light)] bg-[var(--jc-nav-scrolled-light)] backdrop-blur-md"
+            : "border-[var(--jc-line-dark)] bg-[var(--jc-nav-scrolled-dark)] backdrop-blur-md"
       )}
     >
       <div className="mx-auto grid h-[var(--header-height)] w-full max-w-[1600px] grid-cols-[1fr_auto_1fr] items-center gap-4 px-[var(--gutter)]">
-        {/* Left: Compact whisper navigation (Jesko architectural balance) */}
+        {/* Left: Compact Jesko-proportioned navigation */}
         <nav
           aria-label="Primary navigation"
           className="hidden items-center gap-7 lg:flex"
@@ -123,10 +198,14 @@ export function SiteHeader({
               aria-controls="services-desktop-menu"
               onClick={() => setServicesOpen((prev) => !prev)}
               className={cn(
-                "inline-flex min-h-11 items-center gap-1.5 text-[14px] font-medium whitespace-nowrap transition-colors duration-150 cursor-pointer",
-                isServiceActive || servicesOpen
-                  ? "text-[var(--jc-ivory)]"
-                  : "text-[var(--jc-ivory-soft)] hover:text-[var(--jc-ivory)]"
+                "inline-flex min-h-11 items-center gap-1.5 text-[14px] font-medium whitespace-nowrap transition-colors duration-200 cursor-pointer",
+                lightTheme
+                  ? isServiceActive || servicesOpen
+                    ? "text-[var(--jc-ink)]"
+                    : "text-[var(--jc-muted)] hover:text-[var(--jc-ink)]"
+                  : isServiceActive || servicesOpen
+                    ? "text-[var(--jc-ivory)]"
+                    : "text-[var(--jc-ivory-soft)] hover:text-[var(--jc-ivory)]"
               )}
             >
               Services
@@ -142,7 +221,8 @@ export function SiteHeader({
             {servicesOpen && (
               <div
                 id="services-desktop-menu"
-                className="absolute left-0 top-full mt-2 w-[330px] rounded-[4px] border border-[var(--jc-line-dark-strong)] bg-[var(--jc-teal-deep)] p-2"
+                data-surface="dark"
+                className="absolute left-0 top-full mt-2 w-[330px] rounded-[8px] border border-[var(--jc-line-dark-strong)] bg-[var(--jc-teal-deep)] p-2 text-[var(--jc-ivory)]"
               >
                 <ul className="m-0 list-none p-0">
                   {SERVICE_LINKS.map((item) => (
@@ -150,7 +230,7 @@ export function SiteHeader({
                       <Link
                         href={item.href}
                         className={cn(
-                          "block rounded-[3px] px-4 py-3 transition-colors duration-150",
+                          "block rounded-[6px] px-4 py-3 transition-colors duration-150",
                           pathname === item.href
                             ? "bg-[var(--jc-teal-elevated)] text-[var(--jc-ivory)]"
                             : "text-[var(--jc-ivory)] hover:bg-[var(--jc-teal)]"
@@ -170,96 +250,94 @@ export function SiteHeader({
             )}
           </div>
 
-          <Link
+          <RollLink
             href="/aircraft"
-            className={cn(
-              "inline-flex min-h-11 items-center text-[14px] font-medium whitespace-nowrap transition-colors duration-150",
-              pathname.startsWith("/aircraft")
-                ? "text-[var(--jc-ivory)]"
-                : "text-[var(--jc-ivory-soft)] hover:text-[var(--jc-ivory)]"
-            )}
-          >
-            Aircraft
-          </Link>
-
-          <Link
+            label="Aircraft"
+            active={pathname.startsWith("/aircraft")}
+            lightTheme={lightTheme}
+          />
+          <RollLink
             href="/how-it-works"
-            className={cn(
-              "inline-flex min-h-11 items-center text-[14px] font-medium whitespace-nowrap transition-colors duration-150",
-              pathname === "/how-it-works"
-                ? "text-[var(--jc-ivory)]"
-                : "text-[var(--jc-ivory-soft)] hover:text-[var(--jc-ivory)]"
-            )}
-          >
-            How it works
-          </Link>
-
-          <Link
+            label="How it works"
+            active={pathname === "/how-it-works"}
+            lightTheme={lightTheme}
+          />
+          <RollLink
             href="/about"
-            className={cn(
-              "inline-flex min-h-11 items-center text-[14px] font-medium whitespace-nowrap transition-colors duration-150",
-              pathname === "/about"
-                ? "text-[var(--jc-ivory)]"
-                : "text-[var(--jc-ivory-soft)] hover:text-[var(--jc-ivory)]"
-            )}
-          >
-            About
-          </Link>
+            label="About"
+            active={pathname === "/about"}
+            lightTheme={lightTheme}
+          />
 
           {showCaseStudies && (
-            <Link
+            <RollLink
               href="/case-studies"
-              className={cn(
-                "inline-flex min-h-11 items-center text-[14px] font-medium whitespace-nowrap transition-colors duration-150",
-                pathname.startsWith("/case-studies")
-                  ? "text-[var(--jc-ivory)]"
-                  : "text-[var(--jc-ivory-soft)] hover:text-[var(--jc-ivory)]"
-              )}
-            >
-              Case studies
-            </Link>
+              label="Case studies"
+              active={pathname.startsWith("/case-studies")}
+              lightTheme={lightTheme}
+            />
           )}
-
           {showInsights && (
-            <Link
+            <RollLink
               href="/insights"
-              className={cn(
-                "inline-flex min-h-11 items-center text-[14px] font-medium whitespace-nowrap transition-colors duration-150",
-                pathname.startsWith("/insights")
-                  ? "text-[var(--jc-ivory)]"
-                  : "text-[var(--jc-ivory-soft)] hover:text-[var(--jc-ivory)]"
-              )}
-            >
-              Insights
-            </Link>
+              label="Insights"
+              active={pathname.startsWith("/insights")}
+              lightTheme={lightTheme}
+            />
           )}
         </nav>
 
-        {/* Mobile left spacer for centered wordmark */}
         <div className="lg:hidden" />
 
-        {/* Center: Poised editorial wordmark */}
+        {/* Center: Expanded Jesko-proportioned Jayant Charter wordmark */}
         <Link
           href="/"
-          className="justify-self-center font-serif text-[22px] leading-none tracking-[-0.015em] text-[var(--jc-ivory)] whitespace-nowrap sm:text-[24px]"
+          data-header-logo="true"
+          className={cn(
+            "jc-wordmark justify-self-center text-[19px] leading-none whitespace-nowrap transition-colors duration-300 sm:text-[21px]",
+            lightTheme ? "text-[var(--jc-ink)]" : "text-[var(--jc-ivory)]"
+          )}
         >
-          {settings.brandMarkFirst}{" "}
-          <span className="text-[var(--jc-gold)]">{settings.brandMarkSecond}</span>
+          {settings.brandMarkFirst} {settings.brandMarkSecond}
         </Link>
 
-        {/* Right: Quiet direct inquiry link (no bulky box) + mobile drawer trigger */}
-        <div className="flex items-center justify-end gap-4">
-          <Link
-            href={isHome ? "#inquire" : "/inquire"}
-            className="hidden min-h-11 items-center text-[14px] font-medium text-[var(--jc-ivory)] underline decoration-[var(--jc-gold)] decoration-1 underline-offset-8 transition-colors hover:text-[var(--jc-gold)] whitespace-nowrap lg:inline-flex"
+        {/* Right: Dubai clock + Direct callback trigger + mobile menu */}
+        <div className="flex items-center justify-end gap-6">
+          {dubaiTime && (
+            <span
+              className={cn(
+                "hidden text-[13px] tabular-nums transition-colors duration-300 xl:inline-block",
+                lightTheme
+                  ? "text-[var(--jc-muted)]"
+                  : "text-[var(--jc-ivory-soft)]"
+              )}
+            >
+              Dubai {dubaiTime}
+            </span>
+          )}
+
+          <button
+            type="button"
+            onClick={() => openDrawer()}
+            className={cn(
+              "hidden min-h-11 items-center text-[14px] font-medium underline underline-offset-8 whitespace-nowrap transition-colors duration-200 cursor-pointer lg:inline-flex",
+              lightTheme
+                ? "text-[var(--jc-ink)] decoration-[var(--jc-line-strong)] hover:decoration-[var(--jc-ink)]"
+                : "text-[var(--jc-ivory)] decoration-[var(--jc-line-dark-strong)] hover:decoration-[var(--jc-ivory)]"
+            )}
           >
             Request a callback
-          </Link>
+          </button>
 
           <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
             <SheetTrigger
               aria-label="Open navigation menu"
-              className="inline-flex size-11 items-center justify-center rounded-full border border-[var(--jc-line-dark-strong)] text-[var(--jc-ivory)] transition-colors hover:border-[var(--jc-ivory)] lg:hidden cursor-pointer"
+              className={cn(
+                "inline-flex size-11 items-center justify-center rounded-full border transition-colors lg:hidden cursor-pointer",
+                lightTheme
+                  ? "border-[var(--jc-line-strong)] text-[var(--jc-ink)]"
+                  : "border-[var(--jc-line-dark-strong)] text-[var(--jc-ivory)]"
+              )}
             >
               <Menu aria-hidden="true" className="size-4" />
             </SheetTrigger>
@@ -269,11 +347,8 @@ export function SiteHeader({
               className="w-[min(88vw,360px)] border-l border-[var(--jc-line-dark)] bg-[var(--jc-teal-deep)] text-[var(--jc-ivory)]"
             >
               <SheetHeader className="border-b border-[var(--jc-line-dark)] px-6 py-5 text-left">
-                <SheetTitle className="font-serif text-[22px] font-normal text-[var(--jc-ivory)]">
-                  {settings.brandMarkFirst}{" "}
-                  <span className="text-[var(--jc-gold)]">
-                    {settings.brandMarkSecond}
-                  </span>
+                <SheetTitle className="jc-wordmark text-[20px] font-medium text-[var(--jc-ivory)]">
+                  {settings.brandMarkFirst} {settings.brandMarkSecond}
                 </SheetTitle>
               </SheetHeader>
 
@@ -288,7 +363,7 @@ export function SiteHeader({
                   <Link
                     key={item.href}
                     href={item.href}
-                    className="flex min-h-12 flex-col justify-center rounded-[3px] px-3 py-2 text-[var(--jc-ivory)] transition-colors hover:bg-[var(--jc-teal)]"
+                    className="flex min-h-12 flex-col justify-center rounded-[6px] px-3 py-2 text-[var(--jc-ivory)] transition-colors hover:bg-[var(--jc-teal)]"
                   >
                     <span className="text-[16px] font-medium">{item.label}</span>
                     <span className="text-[13px] text-[var(--jc-ivory-soft)]">
@@ -301,43 +376,34 @@ export function SiteHeader({
 
                 <Link
                   href="/aircraft"
-                  className="flex min-h-12 items-center rounded-[3px] px-3 text-[16px] text-[var(--jc-ivory)] hover:bg-[var(--jc-teal)]"
+                  className="flex min-h-12 items-center rounded-[6px] px-3 text-[16px] text-[var(--jc-ivory)] hover:bg-[var(--jc-teal)]"
                 >
                   Explore aircraft
                 </Link>
                 <Link
                   href="/how-it-works"
-                  className="flex min-h-12 items-center rounded-[3px] px-3 text-[16px] text-[var(--jc-ivory)] hover:bg-[var(--jc-teal)]"
+                  className="flex min-h-12 items-center rounded-[6px] px-3 text-[16px] text-[var(--jc-ivory)] hover:bg-[var(--jc-teal)]"
                 >
                   How it works
                 </Link>
                 <Link
                   href="/about"
-                  className="flex min-h-12 items-center rounded-[3px] px-3 text-[16px] text-[var(--jc-ivory)] hover:bg-[var(--jc-teal)]"
+                  className="flex min-h-12 items-center rounded-[6px] px-3 text-[16px] text-[var(--jc-ivory)] hover:bg-[var(--jc-teal)]"
                 >
                   About
                 </Link>
-                {showCaseStudies && (
-                  <Link
-                    href="/case-studies"
-                    className="flex min-h-12 items-center rounded-[3px] px-3 text-[16px] text-[var(--jc-ivory)] hover:bg-[var(--jc-teal)]"
-                  >
-                    Case studies
-                  </Link>
-                )}
-                {showInsights && (
-                  <Link
-                    href="/insights"
-                    className="flex min-h-12 items-center rounded-[3px] px-3 text-[16px] text-[var(--jc-ivory)] hover:bg-[var(--jc-teal)]"
-                  >
-                    Insights
-                  </Link>
-                )}
 
                 <div className="mt-auto pt-6">
-                  <Link href="/inquire" className="jc-btn-gold w-full">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setMobileOpen(false);
+                      openDrawer();
+                    }}
+                    className="jc-btn-gold w-full"
+                  >
                     Request a callback
-                  </Link>
+                  </button>
                 </div>
               </nav>
             </SheetContent>

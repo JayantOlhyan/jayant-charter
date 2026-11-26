@@ -2,7 +2,7 @@
 
 Founder-led private aviation web application for **Jayant Charter**, presenting private jets, group charters, and helicopters around custom itineraries with poster-first interactive 3D aircraft exploration and durable, Jayant-owned inquiry intake.
 
-Built to **Portfolio Website PRD v1.1** (`25 November 2026`) and the canonical [DESIGN.md](./DESIGN.md), pairing Jesko Jets-inspired atmospheric scroll pacing with Digital Jets-style studio aircraft inspection inside Jayant Charter's Deep Teal, Ivory, and restrained Warm Gold design system.
+Built to **Portfolio Website PRD v1.1** (`25 November 2026`), the REA technical dissection in [docs/JESKO-REA-DISSECTION.md](./docs/JESKO-REA-DISSECTION.md), and the canonical [DESIGN.md](./DESIGN.md) — combining Jesko Jets' atmospheric opening cabin-window zoom-through, sky-to-cream scroll choreography, overhead X-ray blueprint wipe, and live 3D `Globe.gl` finale with our full multi-page architecture and interactive Digital Jets-inspired 3D aircraft showroom on `/aircraft`.
 
 ---
 
@@ -23,11 +23,16 @@ Built to **Portfolio Website PRD v1.1** (`25 November 2026`) and the canonical [
   - `POST /api/inquiries` with Zod + `libphonenumber-js` international validation, sliding-window rate limiter, honeypot check, idempotency key + payload hash (`201`/`200`/`409`), internal duplicate flagging, atomic Drizzle/SQLite persistence (`inquiries`, `inquiry_events`, `delivery_jobs`), exponential retry outbox, PII redaction, and explicit onward-handoff consent guard
 - [x] **Milestone E — Signature Scroll Choreography, Visual/A11y Audit & Release Gate**
   - Live desktop (`1440px`) and mobile (`390px`) reference audit of Jesko Jets and Digital Jets documented in [docs/REFERENCE-AUDIT.md](./docs/REFERENCE-AUDIT.md) and [docs/VISUAL-BOARD.md](./docs/VISUAL-BOARD.md)
-  - Whisper-thin floating transparent homepage navigation paired with a persistent bottom-center `Request a callback` pill CTA (auto-hiding cleanly over the 3D Showroom, Inquiry form, and Footer)
-  - Reusable 3D scene specification (`content/scenes.json`) driving the full-bleed `300svh` 3-beat desktop cinema (**Arrival** `-36°` three-quarter → **Cloud-Deck Profile** `0°` broadside → **Warm Stone Architectural Overhead Planform** `90° / 14°`) on a single continuous live 3D Hawker 4000 with zero per-frame React re-renders and automatic single-WebGL-context handoff
-  - Borderless full-width Digital Jets-inspired 3D Showroom (`AircraftStudioViewer` hangar mode with *Twilight hangar*, *Daylight apron*, *Evening silhouette* atmospheres), full-width Before/After **Hawker 4000 ramp comparison slider** (`Parked` vs. `Boarding` airstair), and flush 4-panel macro CGI strip
-  - Flush synced two-column **Trust & Experience** editorial split (`TrustEditorialSplit`), dark focus-markets **Corridors Momentum** wheel (`CorridorsMomentum`), and monumental ghost-wordmark closing horizon (`262 kB` homepage First Load JS)
-  - Automated Vitest contract/privacy/scene suite (`13/13` passing), real-browser desktop/mobile/reduced-motion live verification (`scripts/live-verify.mjs`), and repo-wide Hallmark `sloplint` (`0 FAIL` across 46 files)
+  - Full REA reverse-engineering dissection of `https://jeskojets.com/` documented in [docs/JESKO-REA-DISSECTION.md](./docs/JESKO-REA-DISSECTION.md)
+- [x] **Milestone F — REA-Faithful Jesko Multi-Page Rebuild & Digital Jets 3D Showroom**
+  - **Opening Cabin Window & Shade Pull-Up (`JeskoOpeningHero`)**: Original sculpted espresso bulkhead SVG with true `evenodd` oval aperture, automatic pull-up shade reveal (`1.2s`), mirror-tiled 48-second cloud drift, monumental split display typography (`Archivo` variable `wdth: 125`), and scroll-scrubbed `1 → 6.8x` zoom-through into high-altitude azure sky (`#015AA9 → #8FC2D7`)
+  - **Cloud Philosophy (`JeskoCloudPhilosophy`)**: Scroll-scrubbed word-highlight statement (`0.18 → 1.0`) and blur-to-sharp 2×2 founder pillars transitioning smoothly into warm cream (`#FFF8ED`)
+  - **Live 3D Overhead Planform & X-Ray Blueprint Wipe (`JeskoPlanformBlueprint`)**: Pinned `320svh` warm architectural stone-to-cream studio framing our real-time overhead 3D Hawker 4000 (`90deg 14deg`), hairline metric sheet (`21.08 m / 18.82 m / 6.02 m`), and dual opposing `clip-path` X-ray wipe into an original Swiss CAD technical blueprint (`Scroll wipe | 3D Exterior | Blueprint`)
+  - **Multi-Page Services Gateway & Synced Trust Accordion (`HomeExperience`, `TrustEditorialSplit`)**: Editorial gateway to `/services/private-jets`, `/services/group-charter`, `/services/helicopters`, flush counter-parallax accordion paired with original sunlit cabin imagery, and live Dubai (`Asia/Dubai`) local clock
+  - **Global 3D Globe Finale (`JeskoGlobalGlobe`)**: Feathered looping corridor wheel (`Dubai`, `Delhi NCR`, `Mumbai`, `Rajasthan`, `Goa`, `London`, `Geneva`, `Singapore`, `Zurich`, `Riyadh`) above a rising monumental `Global` wordmark, live rotating WebGL `Globe.gl` sphere (`world-atlas` Natural Earth polygons + animated gold flight arcs), and cursor-following radial spotlight
+  - **Global Magnetic Pill CTA, Slide-Up Callback Drawer & Route Transitions (`CallbackDrawerProvider`, `SiteHeader`, `PageTransition`)**: Dynamic `[data-nav-theme]` header with dual-layer roll links, live Dubai clock, magnetic floating pill (`power4.out` / `elastic.out`) with character-stagger + diagonal plane takeoff hover, and global slide-up `ProgressiveInquiryForm` drawer wired to `POST /api/inquiries`
+  - **Dedicated Digital Jets 3D Aircraft Showroom (`/aircraft`, `/aircraft/[slug]`)**: Full-bleed `AircraftStudioViewer` (*Twilight hangar*, *Daylight apron*, *Evening silhouette*, `In flight` / `Parked` / `Boarding`, Hawker 4000 & Falcon 2000 Classic), edge-to-edge Parked ↔ Boarding airstair comparison slider, and flush 4-panel macro CGI strip
+  - Automated Vitest suite (`13/13` passing), 19-route / 7-viewport / 3D / Globe / Drawer / Mobile / Reduced-motion / E2E Playwright audit (`scripts/live-verify.mjs`, `0` console/page errors), production bundle privacy scan (`npm run verify:bundle`), and repo-wide Hallmark `sloplint` (`0 FAIL, 0 REFLEX` across 49 files)
 
 ---
 
@@ -37,9 +42,9 @@ Built to **Portfolio Website PRD v1.1** (`25 November 2026`) and the canonical [
 |---|---|
 | Framework | Next.js 15 (App Router) + React 19 + TypeScript (`strict`) |
 | Styling & Primitives | Tailwind CSS v4 + CSS custom properties + shadcn/ui (`@base-ui/react`) + `lucide-react` |
-| Typography | `Newsreader` (optical display serif) + `Plus Jakarta Sans` (body, UI, `tabular-nums`) via `next/font/google` |
+| Typography | `Archivo` (variable-width expanded grotesque, `wdth: 125`) + `Plus Jakarta Sans` (body, UI, `tabular-nums`) via `next/font/google` |
 | Motion & Scroll | GSAP + ScrollTrigger + Lenis (desktop fine-pointer only; auto-disabled under reduced motion) + GPU-composited CSS transitions |
-| Interactive 3D | Self-hosted pinned Google `model-viewer` v4.1.0 (Apache-2.0) + self-hosted `meshopt_decoder.js` (MIT) driven by `content/scenes.json` |
+| Interactive 3D & Globe | Self-hosted pinned Google `model-viewer` v4.1.0 (Apache-2.0) + `meshopt_decoder.js` (MIT) + `globe.gl` + `world-atlas` + `topojson-client` |
 | Forms & Validation | `react-hook-form` + `zod` + `libphonenumber-js` |
 | Durable Storage | Drizzle ORM + SQLite (`better-sqlite3`, WAL mode; Postgres-ready adapter seam) |
 | Testing | Vitest + Playwright visual/a11y verification |

@@ -180,5 +180,57 @@
     "license": "Proprietary generated editorial visual",
     "source": "Jayant Charter visual production",
     "permissionStatus": "generated-illustrative"
+  },
+  {
+    "id": "jesko-sky-daylight",
+    "type": "image",
+    "path": "/media/v1/jesko-sky-daylight.webp",
+    "width": 1376,
+    "height": 768,
+    "alt": "High-altitude aerial view over sunlit warm-ivory clouds beneath a clear azure blue sky",
+    "caption": "High-altitude daylight cloudscape prepared for the opening cabin window ascent.",
+    "illustrative": true,
+    "license": "Proprietary generated editorial visual",
+    "source": "Jayant Charter visual production",
+    "permissionStatus": "generated-illustrative"
+  },
+  {
+    "id": "jesko-clouds-marquee",
+    "type": "image",
+    "path": "/media/v1/jesko-clouds-marquee.webp",
+    "width": 1376,
+    "height": 768,
+    "alt": "Soft white cirrus and cumulus cloud deck drifting across a bright pale cerulean sky",
+    "caption": "Panoramic cloud layer for ambient high-altitude motion.",
+    "illustrative": true,
+    "license": "Proprietary generated editorial visual",
+    "source": "Jayant Charter visual production",
+    "permissionStatus": "generated-illustrative"
+  },
+  {
+    "id": "hawker-blueprint-planform",
+    "type": "image",
+    "path": "/media/v1/hawker-blueprint-planform.webp",
+    "width": 896,
+    "height": 1200,
+    "alt": "Minimalist top-down orthographic architectural blueprint line drawing of a Hawker 4000 super mid-size business jet on warm cream paper",
+    "caption": "Illustrative exterior and schematic study. Exact seating layout and cabin interior vary by operating carrier aircraft.",
+    "illustrative": true,
+    "license": "Proprietary generated architectural blueprint study",
+    "source": "Jayant Charter visual production",
+    "permissionStatus": "generated-illustrative"
+  },
+  {
+    "id": "cabin-editorial",
+    "type": "image",
+    "path": "/media/v1/cabin-editorial.webp",
+    "width": 1200,
+    "height": 896,
+    "alt": "Sun-drenched minimalist private jet cabin with warm ivory leather club seating and natural daylight through oval windows",
+    "caption": "Illustrative cabin atmosphere. Exact interior styling varies by specific aircraft confirmed for your trip.",
+    "illustrative": true,
+    "license": "Proprietary generated editorial visual",
+    "source": "Jayant Charter visual production",
+    "permissionStatus": "generated-illustrative"
   }
 ]

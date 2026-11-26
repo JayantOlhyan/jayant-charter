@@ -1,7 +1,7 @@
 # Acceptance Tests & Release Gate Record (PRD Section 26)
 
-**Verification Date:** 25 November 2026  
-**Environment:** Node v25.2.1 · Next.js 15.5.29 production build (`npm run build`) · Google Chrome headless + SwiftShader WebGL (`scripts/live-verify.mjs`) · Vitest 3.2.7 (`npm test`) · Hallmark `sloplint.mjs`
+**Verification Date:** 26 November 2026  
+**Environment:** Node v25.2.1 · Next.js 15.5.29 production build (`npm run build`) · Google Chrome headless + SwiftShader WebGL (`scripts/live-verify.mjs`) · Vitest 3.2.7 (`npm test`) · Hallmark `sloplint.mjs` · REA Dissection (`docs/JESKO-REA-DISSECTION.md`)
 
 | ID | Acceptance Test | Status | Verification Evidence |
 |---|---|---|---|
@@ -26,8 +26,8 @@
 | AC19 | Add third aircraft | **PASS** | All aircraft pages, hangar switcher, and inquiry preference badges iterate dynamically over `content/aircraft.json`. |
 | AC20 | Draft & private content | **PASS** | `scripts/validate-content.mjs`, `scripts/verify-bundle.mjs`, and Vitest verify drafts excluded, zero source `.blend`/`.zip` files in `public/`, zero client source maps, and zero internal partner names in bundles. |
 | AC21 | Metadata & crawlability | **PASS** | Unique titles, descriptions, canonicals, static `og-default.jpg` (47 KB), JSON-LD (`Organization`, `BreadcrumbList`, `FAQPage`), `/sitemap.xml`, `/robots.txt`, and custom `404` verified. |
-| AC22 | Performance | **PASS (Lab)** | Above-fold hero media: 68.9 KB total WebP; desktop GLBs: 0.70–1.39 MiB (≤ 6 MB target); mobile GLBs: 0.61–1.24 MiB (≤ 3 MB target); `studio-env.hdr`: 319 KB gzip (≤ 1 MB); shared JS: 103 kB gzip; homepage First Load JS: 259 kB (after replacing `motion/react` in `TrustEditorialSplit` with CSS opacity stack). Real-device physical phone test & live field CWV pending deployment. |
-| AC23 | Contact settings absent | **PASS** | Preview banner clearly states local recording & paused channels; email/WhatsApp links stay hidden until configured in `content/site-settings.json`. |
-| AC24 | Claim review | **PASS** | Zero "Our fleet" labels, zero invented stats/logos/testimonials/portraits, zero unverified recovery timing claims. |
-| AC25 | Build & deployment | **PASS** | `npm run typecheck`, `npm run lint` (0 errors, 0 warnings), `npm test` (13/13 including `content/scenes.json`), `npm run build` (22/22 routes + bundle scan), `scripts/live-verify.mjs` (0 console/page errors, bidirectional 3D Arrival → Approach broadside profile scrub, Daylight/Twilight/Boarding/Falcon hangar checks, ramp compare slider, E2E inquiry persistence), and repo-wide Hallmark `sloplint.mjs .` (`0 FAIL` across 44 files) all pass. |
+| AC22 | Performance | **PASS (Lab)** | Above-fold hero sky WebP: `55.6 KB` + `21.8 KB` cloud strip; desktop GLBs: `0.70–1.39 MiB` (≤ 6 MB target); mobile GLBs: `0.61–1.24 MiB` (≤ 3 MB target); `studio-env.hdr`: `319 KB` gzip (≤ 1 MB); shared JS: `103 kB` gzip; homepage First Load JS: `298 kB` (`Globe.gl` dynamically imported only when `#global` enters view). Real-device physical phone test & live field CWV pending deployment. |
+| AC23 | Contact settings absent | **PASS** | Preview banner clearly states local recording & paused channels inside the slide-up Callback Drawer, `/inquire`, and Footer; email/WhatsApp links stay hidden until configured in `content/site-settings.json`. |
+| AC24 | Claim review | **PASS** | Zero "Our fleet" labels, zero invented flight/country metrics, logos, testimonials, or portraits, zero unverified recovery timing claims. |
+| AC25 | Build & deployment | **PASS** | `npm run typecheck`, `npm run lint` (0 errors, 0 warnings), `npm test` (`13/13`), `npm run build` (`22/22` routes + bundle privacy scan), `scripts/live-verify.mjs` (`19/19` routes, `7/7` zero-overflow viewports, `0` console/page errors, cabin window hero, live overhead 3D planform + blueprint X-ray wipe, live 3D `Globe.gl`, slide-up Callback Drawer, `/aircraft` Daylight/Twilight/Boarding/Falcon showroom + ramp compare slider, mobile poster-first gate, reduced motion, E2E SQLite inquiry `JC-261126-46AE03F1`), and repo-wide Hallmark `sloplint.mjs .` (`0 FAIL, 0 REFLEX` across 49 files) all pass. |
 | AC26 | Operational reconciliation | **PASS** | Verified in Vitest: synthetic inquiry ID reconciles cleanly through `received` → `jayant_review` → permissioned `sent_to_partner` with timestamped `inquiry_events`. |

@@ -39,6 +39,10 @@ export default function HomePage() {
 
   const requiredMediaIds = new Set<string>([
     "hero-sky-plate",
+    "jesko-sky-daylight",
+    "jesko-clouds-marquee",
+    "hawker-blueprint-planform",
+    "cabin-editorial",
     "hawker-hero",
     "hawker-low-angle",
     "hawker-parked",

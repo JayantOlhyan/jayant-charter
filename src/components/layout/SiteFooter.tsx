@@ -30,10 +30,9 @@ export function SiteFooter({
           <div>
             <Link
               href="/"
-              className="font-serif text-[28px] leading-none tracking-[-0.02em] text-[var(--jc-ivory)]"
+              className="jc-wordmark text-[24px] leading-none text-[var(--jc-ivory)]"
             >
-              {settings.brandMarkFirst}{" "}
-              <span className="text-[var(--jc-gold)]">{settings.brandMarkSecond}</span>
+              {settings.brandMarkFirst} {settings.brandMarkSecond}
             </Link>
             <p className="mt-5 max-w-[48ch] text-[15px] leading-relaxed text-[var(--jc-ivory-soft)]">
               {settings.roleDisclosure}

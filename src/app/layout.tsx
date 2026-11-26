@@ -1,29 +1,32 @@
 import type { Metadata, Viewport } from "next";
-import { Newsreader, Plus_Jakarta_Sans } from "next/font/google";
+import { Archivo, Plus_Jakarta_Sans } from "next/font/google";
 import { Suspense } from "react";
 import "./globals.css";
 import {
   getMediaAsset,
+  getPublishedAircraft,
   getPublicNavigationVisibility,
   getSiteSettings,
 } from "@/content/repository";
 import { SiteHeader } from "@/components/layout/SiteHeader";
 import { SiteFooter } from "@/components/layout/SiteFooter";
-import { FloatingCallbackPill } from "@/components/layout/FloatingCallbackPill";
 import { SmoothScrollProvider } from "@/features/scroll/SmoothScrollProvider";
 import { AttributionTracker } from "@/features/inquiry/attribution";
+import { CallbackDrawerProvider } from "@/components/layout/CallbackDrawerProvider";
+import { PageTransition } from "@/components/layout/PageTransition";
 
-const newsreader = Newsreader({
+const archivo = Archivo({
   subsets: ["latin"],
-  weight: ["400", "500"],
+  weight: "variable",
+  axes: ["wdth"],
   style: ["normal"],
-  variable: "--font-newsreader",
+  variable: "--font-archivo",
   display: "swap",
 });
 
 const plusJakartaSans = Plus_Jakarta_Sans({
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "500", "600", "700"],
   style: ["normal"],
   variable: "--font-jakarta",
   display: "swap",
@@ -63,7 +66,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#102B2A",
+  themeColor: "#312726",
   width: "device-width",
   initialScale: 1,
 };
@@ -74,6 +77,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const navVisibility = getPublicNavigationVisibility();
+  const aircraftList = getPublishedAircraft();
 
   const organizationLd = {
     "@context": "https://schema.org",
@@ -86,7 +90,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${newsreader.variable} ${plusJakartaSans.variable}`}
+      className={`${archivo.variable} ${plusJakartaSans.variable}`}
     >
       <body className="min-h-screen flex flex-col">
         <a href="#main-content" className="jc-skip-link">
@@ -103,20 +107,24 @@ export default function RootLayout({
         </Suspense>
 
         <SmoothScrollProvider enabled={settings.featureFlags.enableSmoothScroll}>
-          <SiteHeader
+          <CallbackDrawerProvider
             settings={settings}
-            showCaseStudies={navVisibility.showCaseStudies}
-            showInsights={navVisibility.showInsights}
-          />
-          <main id="main-content" className="flex-1">
-            {children}
-          </main>
-          <SiteFooter
-            settings={settings}
-            showCaseStudies={navVisibility.showCaseStudies}
-            showInsights={navVisibility.showInsights}
-          />
-          <FloatingCallbackPill />
+            aircraftOptions={aircraftList}
+          >
+            <SiteHeader
+              settings={settings}
+              showCaseStudies={navVisibility.showCaseStudies}
+              showInsights={navVisibility.showInsights}
+            />
+            <main id="main-content" className="flex flex-1 flex-col">
+              <PageTransition>{children}</PageTransition>
+            </main>
+            <SiteFooter
+              settings={settings}
+              showCaseStudies={navVisibility.showCaseStudies}
+              showInsights={navVisibility.showInsights}
+            />
+          </CallbackDrawerProvider>
         </SmoothScrollProvider>
       </body>
     </html>

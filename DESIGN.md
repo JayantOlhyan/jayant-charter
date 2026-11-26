@@ -1,9 +1,9 @@
 # Jayant Charter — Canonical Design Record (`DESIGN.md`)
 
-**Status:** Active production design system (v1.3 — Full-bleed Jesko × Digital Jets cinema & showroom release)  
-**Updated:** 25 November 2026  
+**Status:** Active production design system (v2.0 — User-approved Jesko aesthetic + multi-page Digital Jets 3D Showroom release)  
+**Updated:** 26 November 2026  
 **Public working brand:** Jayant Charter  
-**Primary references:** Jesko Jets (`jeskojets.com`) for continuous scroll-led visual narrative, multi-stop atmospheric transitions, monumental display typography, and synced editorial splits; Digital Jets (`digital-jets.com/products`) for studio-lit aircraft imagery, daylight/twilight/evening atmosphere modes, interactive Before/After ramp comparisons, and close-up engineering detail. Full live inspection notes live in [docs/REFERENCE-AUDIT.md](./docs/REFERENCE-AUDIT.md) and [docs/VISUAL-BOARD.md](./docs/VISUAL-BOARD.md).
+**Primary references:** Jesko Jets (`jeskojets.com`) reverse-engineered via REA ([docs/JESKO-REA-DISSECTION.md](./docs/JESKO-REA-DISSECTION.md)) for the opening cabin-window shade pull-up & zoom-through, bright high-altitude azure sky (`#015AA9 → #8FC2D7`), warm cream (`#FFF8ED`), architectural stone (`#8A817D → #FFF8ED`), warm espresso charcoal (`#312726 → #000000`), expanded display grotesque typography, overhead X-ray blueprint wipe, synced editorial accordion, looping city wheel, magnetic pill CTA + slide-up callback drawer, and live 3D `Globe.gl` finale; Digital Jets (`digital-jets.com/products`) for the interactive `/aircraft` 3D Showroom, multi-atmosphere studio lighting, Parked-vs-Boarding ramp slider, and macro CGI detail strip. Full inspection notes live in [docs/JESKO-REA-DISSECTION.md](./docs/JESKO-REA-DISSECTION.md), [docs/REFERENCE-AUDIT.md](./docs/REFERENCE-AUDIT.md), and [docs/VISUAL-BOARD.md](./docs/VISUAL-BOARD.md).
 
 ---
 
@@ -18,38 +18,34 @@
 
 ## 2. Colour Tokens (Semantic CSS Variables — No Raw Hex in Components)
 
-All colours live in `src/styles/tokens.css` under `:root` and map into Tailwind v4 `@theme inline`.
+Per explicit user approval (`26 November 2026`), the palette shifted from deep forest teal to the Jesko high-altitude daylight sky, warm editorial cream, architectural stone, and warm espresso charcoal surface progression while retaining restrained warm gold (`#E8C184`) solely for active accents and flight arcs. All colours live in `src/styles/tokens.css` under `:root` and map into Tailwind v4 `@theme inline`.
 
-| Token | Hex | Role | Measured Contrast Pair |
-|---|---|---|---|
-| `--jc-teal-deep` | `#0A1D1C` | Atmospheric horizon base & deepest studio shadow | `--jc-ivory` text: **16.2:1** |
-| `--jc-teal` | `#102B2A` | Primary dark surface (Hero, 3D Hangar, Closing, Footer) & dark CTA | `--jc-ivory` text: **13.7:1** |
-| `--jc-teal-elevated` | `#163836` | Subtle elevated dark panels & hairline borders | `--jc-ivory` text: **11.1:1** |
-| `--jc-ivory` | `#F7F5ED` | Primary editorial reading surface | `--jc-ink` text: **13.4:1** |
-| `--jc-stone` | `#EEECE2` | Secondary warm reading band (Detail gallery, Inquiry shell) | `--jc-ink` text: **12.2:1** |
-| `--jc-paper` | `#FBF9F3` | Input wells & studio specification cards on Stone | `--jc-ink` text: **13.8:1** |
-| `--jc-ink` | `#182C2A` | Primary ink on light surfaces | vs `--jc-ivory`: **13.4:1** |
-| `--jc-muted` | `#4E625D` | Supporting text on Ivory/Stone (refined slightly darker than `#536863` for comfortable AA margin) | vs `--jc-ivory`: **6.1:1**, vs `--jc-stone`: **5.5:1** |
-| `--jc-ivory-soft` | `#C7D3CE` | Supporting text on Deep Teal | vs `--jc-teal`: **9.5:1** |
-| `--jc-gold` | `#E8C184` | Primary CTA fill on Deep Teal (strictly paired with `--jc-teal` ink), focus ring on dark, hairline accent | `--jc-teal` ink on `--jc-gold`: **9.2:1** |
-| `--jc-gold-hover` | `#F0CF9A` | Hover state for primary gold CTA | `--jc-teal` ink: **10.5:1** |
-| `--jc-danger` | `#9E2E1B` | Validation errors on light surfaces | vs `--jc-paper`: **6.4:1** |
-| `--jc-line-light` | `#D7D3C5` | Structural hairlines on Ivory/Stone | UI contrast compliant |
-| `--jc-line-dark` | `rgba(247, 245, 237, 0.16)` | Structural hairlines on Deep Teal | Subtle architectural rule |
-
-**Hard colour rules:**
-- Never place `--jc-gold` text on `--jc-ivory` or `--jc-stone`.
-- Never place `--jc-muted` text on `--jc-teal`.
-- Never use pure `#000000` or `#FFFFFF` outside token definitions.
+| Token | Hex | Role |
+|---|---|---|
+| `--jc-teal-deep` | `#120e0d` | Deepest warm espresso charcoal base (Global finale, 3D Hangar, Footer) |
+| `--jc-teal` | `#312726` | Primary warm espresso charcoal (Cabin bulkhead, dark CTAs, active tabs) |
+| `--jc-teal-elevated` | `#3d3230` | Elevated dark UI chips & controls |
+| `--jc-sky-deep` | `#015aa9` | High-altitude zenith azure sky (Opening window handoff & Cloud Philosophy top) |
+| `--jc-sky-mid` | `#5fa2c9` | Mid-altitude daylight sky progression |
+| `--jc-sky-pale` | `#8fc2d7` | Lower cloud-deck azure transitioning into cream |
+| `--jc-ivory` | `#fff8ed` | Primary warm cream editorial reading surface & blueprint canvas |
+| `--jc-stone` | `#f3ece0` | Secondary warm reading band & card surfaces |
+| `--jc-stone-deep` | `#8a817d` | Architectural warm stone studio top for the Overhead Planform showcase |
+| `--jc-paper` | `#fffcf7` | Crisp elevated paper surface for form inputs and drawer fields |
+| `--jc-ink` | `#181413` | Primary espresso ink on light surfaces (high-contrast AA/AAA) |
+| `--jc-muted` | `#635b57` | Supporting ink on Cream/Stone |
+| `--jc-ivory-soft` | `#e7dfd3` | Supporting text on Espresso dark surfaces |
+| `--jc-gold` | `#e8c184` | Restrained warm gold accent for flight arcs, focus rings, and selected highlights |
+| `--jc-danger` | `#9e2e1b` | Validation errors on light surfaces |
 
 ---
 
 ## 3. Typography
 
-Upgraded from the baseline Georgia proposal per PRD §14.1 & §15.5, self-hosted via `next/font/google` (SIL OFL, zero third-party runtime font tracking, zero layout shift):
+Upgraded per user approval to match Jesko's wide architectural grotesque identity using 100% open-licensed Google Fonts self-hosted via `next/font/google` (SIL OFL, zero third-party runtime requests, zero proprietary font copying):
 
-- **Display Serif (`--font-display`):** `Newsreader` (optical size axis, weights `400`, `500`, normal style; tight `-0.025em` tracking on display heads, `text-wrap: balance`).
-- **UI & Body Sans (`--font-sans`):** `Plus Jakarta Sans` (weights `400`, `500`, `600`; `font-variant-numeric: tabular-nums` on figures, dates, and specifications).
+- **Display Expanded Sans (`--font-display`):** `Archivo` variable font (`weight: "variable"`, `axes: ["wdth"]`), styled at `font-variation-settings: "wdth" 125` with tight `-0.04em` to `-0.06em` display tracking and balanced wrapping (matching `GT America Expanded` proportions).
+- **UI & Body Sans (`--font-sans`):** `Plus Jakarta Sans` (weights `400`, `500`, `600`, `700`; `font-variant-numeric: tabular-nums` on specifications, dimensions, and the live Dubai clock).
 
 ### Scale
 - **Hero Display (`h1`):** `clamp(2.75rem, 5.6vw, 5.25rem)` (44px – 84px), `line-height: 1.04`, `font-weight: 400`.
@@ -72,12 +68,13 @@ Upgraded from the baseline Georgia proposal per PRD §14.1 & §15.5, self-hosted
 
 ## 5. Motion, Scroll Choreography & 3D Rules
 
-- **Signature Move (*Altitude Horizon, Cloud Approach & Overhead Planform*):** Full-bleed `300svh` pinned desktop 3-beat stage floating directly under whisper-thin transparent navigation. Paints an immediate optimized hero poster (`1280×800` above-the-fold safe), upgrades seamlessly to the live Meshopt 3D Hawker 4000 (`-36°` three-quarter, `shadow-intensity="0"` in sky), scrubs bidirectionally through a `0°` broadside Cloud-Deck profile (with upper-sky optical-focus pillars clear of the aircraft) and rises into a luminous Warm Stone architectural overhead vertical planform (`90° / 14° / 94%`, soft studio shadow `0.56`) framed by monumental split typography and hairline airframe metrics. Unmounts its WebGL context via `IntersectionObserver` before Chapter 4 so only one `<model-viewer>` context is ever active.
-- **Persistent Navigation & Inquiry Pill:** Centered wordmark top strip floats transparently over `/` at `y = 0` and adopts `--jc-nav-scrolled` blur on scroll; persistent bottom-center `FloatingCallbackPill` stays effortlessly reachable while auto-hiding over `#inspect-aircraft`, `#inquire`, and `footer`.
-- **Smooth Scroll:** Lenis active on desktop fine-pointer environments only; automatically disabled under `prefers-reduced-motion: reduce` and on touch devices so native mobile scrolling is never altered.
-- **Composited Properties Only:** Animate `transform`, `opacity`, and `clip-path` only. Never `transition: all`; never animate `width`, `height`, `top`, or `left`. Synced editorial imagery (`TrustEditorialSplit`) uses a zero-runtime CSS opacity stack.
-- **Reduced Motion:** `prefers-reduced-motion: reduce` disables Lenis, ambient cloud drift, and scrubbed camera transitions while preserving the complete 8-chapter visual story, high-res aircraft stills, and optional explicit manual 3D inspection.
-- **3D Hangar Policy:** Poster-first always; reusable scene configs in `content/scenes.json`; maximum one active `<model-viewer>` instance per page; desktop (`0.70–1.39 MiB`, ≤ 6 MB) & mobile (`0.61–1.24 MiB`, ≤ 3 MB) versioned GLB tiers; three calibrated studio lighting modes (*Twilight hangar*, *Daylight apron*, *Evening silhouette*); explicit mobile 3D interaction toggle (`touch-action="pan-y"`); 10s timeout & WebGL context-loss fallback; race-safe configuration switching.
+- **Opening Cabin Window & Zoom-Through (`JeskoOpeningHero`):** Sculpted warm-espresso bulkhead SVG (`evenodd` oval cutout — razor-sharp at 6.8× zoom) with a `1.2s` pull-up cabin shade reveal, seamless mirror-tiled 48s cloud drift, monumental split headlines (`Private charter` / `for your itinerary.`), mobile contrast scrim (`--jc-mobile-hero-scrim`), and desktop `230svh` scroll-scrubbed zoom-through into azure sky (`scale 1 → 6.8`).
+- **Cloud Philosophy (`JeskoCloudPhilosophy`):** Scroll-scrubbed word-highlight statement (`0.18 → 1.0`) and blur-to-sharp 2×2 founder pillars handing off smoothly into warm cream.
+- **Overhead Live 3D Planform & X-Ray Blueprint Wipe (`JeskoPlanformBlueprint`):** Pinned `320svh` warm architectural stone-to-cream studio framing our real-time overhead 3D Hawker 4000 (`90deg 14deg`, single active `<model-viewer>` context on `/`), hairline metrics (`21.08 m / 18.82 m / 6.02 m`), and dual opposing `clip-path` X-ray wipe into our original Swiss CAD blueprint (with manual `Scroll wipe | 3D Exterior | Blueprint` controls).
+- **Global 3D Globe Finale (`JeskoGlobalGlobe`):** Feathered vertical looping city wheel above a rising `Global` wordmark and lazy-mounted `Globe.gl` 3D Earth (`world-atlas` Natural Earth polygons + animated corridor arcs + cursor-following `--mask-x` radial spotlight) with strict React DOM isolation.
+- **Persistent Navigation, Magnetic Pill & Global Callback Drawer (`SiteHeader`, `CallbackDrawerProvider`, `PageTransition`):** Dynamic `[data-nav-theme]` dark/light header with dual-layer roll links and live Dubai (`Asia/Dubai`) clock; magnetic floating pill CTA (`power4.out` / `elastic.out`) opening the global slide-up `ProgressiveInquiryForm` drawer from any route and auto-hiding cleanly over `#inspect-aircraft`, `#inquire`, and when open.
+- **Smooth Scroll & Reduced Motion:** Lenis active on desktop fine-pointer environments only; `prefers-reduced-motion: reduce` disables Lenis, shade/zoom scrub, marquee motion, and globe auto-rotation while preserving the complete visual story and explicit manual 3D inspection.
+- **Digital Jets 3D Showroom (`/aircraft`, `/aircraft/[slug]`):** Poster-first always; reusable scene configs in `content/scenes.json`; desktop (`0.70–1.39 MiB`, ≤ 6 MB) & mobile (`0.61–1.24 MiB`, ≤ 3 MB) versioned GLB tiers; *Twilight hangar*, *Daylight apron*, *Evening silhouette* studio modes; explicit mobile 3D toggle (`touch-action="pan-y"`); 10s timeout & WebGL context-loss fallback; race-safe configuration switching; edge-to-edge Parked ↔ Boarding airstair comparison slider.
 
 ---
 
