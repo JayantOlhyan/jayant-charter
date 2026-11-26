@@ -232,11 +232,11 @@
   --font-sans: var(--font-jakarta), system-ui, -apple-system, "Segoe UI", sans-serif;
 
   /* Jesko-proportioned Type Scale tuned across 360px phones through 2560px ultrawides */
-  --text-monumental: clamp(2.15rem, 6.8vw, 6.2rem);
-  --text-wing: clamp(2.1rem, 6.2vw, 5.8rem);
-  --text-hero: clamp(2.05rem, 5.1vw, 4.75rem);
-  --text-section: clamp(1.58rem, 3.8vw, 3.25rem);
-  --text-title: clamp(1.25rem, 2vw, 1.85rem);
+  --text-monumental: clamp(1.95rem, 5.4vw, 6.05rem);
+  --text-wing: clamp(2.05rem, 5.8vw, 5.65rem);
+  --text-hero: clamp(1.95rem, 4.9vw, 4.65rem);
+  --text-section: clamp(1.55rem, 3.6vw, 3.2rem);
+  --text-title: clamp(1.2rem, 1.95vw, 1.85rem);
   --text-lead: clamp(1.0625rem, 1.35vw, 1.25rem);
   --text-body: 1rem;
   --text-label: 0.875rem;
