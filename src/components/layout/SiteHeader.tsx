@@ -346,7 +346,7 @@ export function SiteHeader({
 
               <nav
                 aria-label="Mobile navigation"
-                className="flex flex-1 flex-col gap-1 px-4 py-5"
+                className="flex min-h-0 flex-1 flex-col gap-1 overflow-y-auto px-4 py-4 sm:py-5"
               >
                 <p className="px-3 pb-1 text-[13px] text-[var(--jc-ivory-muted)]">
                   Services
