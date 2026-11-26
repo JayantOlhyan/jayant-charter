@@ -379,7 +379,7 @@ export function JeskoOpeningHero({
 
           {/* Center flight-level climb telemetry */}
           <div className="mx-auto text-center">
-            <p className="jc-wordmark m-0 text-[22px] text-[var(--jc-ivory)] sm:text-[26px]">
+            <p className="jc-brand-mark m-0 text-[24px] text-[var(--jc-ivory)] sm:text-[30px]">
               {brandName}
             </p>
             <p className="mt-2 mb-0 text-[12px] text-[var(--jc-ivory-muted)]">
@@ -437,35 +437,35 @@ export function JeskoOpeningHero({
               className="h-full w-full object-cover object-center"
             />
 
-            {/* Seamless mirror-tiled 48-second horizontal cloud drift */}
+            {/* Seamless mirror-tiled 48-second horizontal cloud drift (2px tile overlap prevents subpixel seam) */}
             <div className="jc-cloud-marquee absolute inset-0 flex w-[400%] opacity-60 mix-blend-screen">
               <img
                 src={cloudsMarquee.path}
                 alt=""
                 width={cloudsMarquee.width}
                 height={cloudsMarquee.height}
-                className="h-full w-1/4 object-cover"
+                className="h-full w-[calc(25%+2px)] shrink-0 object-cover"
               />
               <img
                 src={cloudsMarquee.path}
                 alt=""
                 width={cloudsMarquee.width}
                 height={cloudsMarquee.height}
-                className="h-full w-1/4 -scale-x-100 object-cover"
+                className="-ml-[2px] h-full w-[calc(25%+2px)] shrink-0 -scale-x-100 object-cover"
               />
               <img
                 src={cloudsMarquee.path}
                 alt=""
                 width={cloudsMarquee.width}
                 height={cloudsMarquee.height}
-                className="h-full w-1/4 object-cover"
+                className="-ml-[2px] h-full w-[calc(25%+2px)] shrink-0 object-cover"
               />
               <img
                 src={cloudsMarquee.path}
                 alt=""
                 width={cloudsMarquee.width}
                 height={cloudsMarquee.height}
-                className="h-full w-1/4 -scale-x-100 object-cover"
+                className="-ml-[2px] h-full w-[calc(25%+2px)] shrink-0 -scale-x-100 object-cover"
               />
             </div>
           </div>
@@ -554,15 +554,19 @@ export function JeskoOpeningHero({
           className="hidden lg:block absolute left-1/2 top-[22%] z-30 h-14 w-36 -translate-x-1/2 cursor-grab rounded-full active:cursor-grabbing focus-visible:outline-2 focus-visible:outline-[var(--jc-gold)]"
         />
 
-        {/* Window-centered subtle Jayant Charter mark (glides up toward nav on scroll) */}
+        {/* Window-centered sculpted Jayant Charter crest (high-contrast deep espresso + crisp ivory outline over sunlit clouds) */}
         <div
           ref={centerWordmarkRef}
           aria-hidden="true"
-          className="pointer-events-none absolute inset-0 z-20 hidden items-center justify-center lg:flex will-change-transform"
+          className="pointer-events-none absolute inset-x-0 top-[53%] z-20 hidden -translate-y-1/2 items-center justify-center lg:flex will-change-transform"
         >
-          <span className="jc-wordmark text-[24px] tracking-[-0.02em] text-[var(--jc-ivory)] opacity-90 drop-shadow-sm">
-            {brandName}
-          </span>
+          <div className="inline-flex items-center gap-3 px-4 py-1.5">
+            <span className="h-[1.5px] w-5 bg-[var(--jc-gold-muted)]" />
+            <span className="jc-window-brand text-[21px] leading-none whitespace-nowrap xl:text-[23px]">
+              {brandName}
+            </span>
+            <span className="h-[1.5px] w-5 bg-[var(--jc-gold-muted)]" />
+          </div>
         </div>
 
         {/* LAYER 2: Jesko Monumental Split-Corner Editorial Typography */}
@@ -572,7 +576,7 @@ export function JeskoOpeningHero({
             ref={leftCopyRef}
             className="max-w-[540px] will-change-transform"
           >
-            <h1 className="jc-display-monumental m-0 text-[var(--jc-ivory)]">
+            <h1 className="jc-display-monumental jc-hero-outline m-0 text-[var(--jc-ivory)]">
               Private
               <br />
               charter
@@ -587,7 +591,7 @@ export function JeskoOpeningHero({
           >
             <p
               aria-hidden="true"
-              className="jc-display-monumental m-0 text-[var(--jc-ivory)]"
+              className="jc-display-monumental jc-hero-outline m-0 text-[var(--jc-ivory)]"
             >
               for your
               <br />

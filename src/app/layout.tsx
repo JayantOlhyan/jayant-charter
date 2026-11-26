@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo, Plus_Jakarta_Sans } from "next/font/google";
+import { Archivo, Cinzel, Plus_Jakarta_Sans } from "next/font/google";
 import { Suspense } from "react";
 import "./globals.css";
 import {
@@ -21,6 +21,14 @@ const archivo = Archivo({
   axes: ["wdth"],
   style: ["normal"],
   variable: "--font-archivo",
+  display: "swap",
+});
+
+const cinzel = Cinzel({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  style: ["normal"],
+  variable: "--font-cinzel",
   display: "swap",
 });
 
@@ -90,7 +98,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${archivo.variable} ${plusJakartaSans.variable}`}
+      className={`${archivo.variable} ${cinzel.variable} ${plusJakartaSans.variable}`}
     >
       <body className="min-h-screen flex flex-col">
         <a href="#main-content" className="jc-skip-link">

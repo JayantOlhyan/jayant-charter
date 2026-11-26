@@ -300,12 +300,12 @@ export function SiteHeader({
 
         <div className="lg:hidden" />
 
-        {/* Center: Expanded Jesko-proportioned Jayant Charter wordmark */}
+        {/* Center: Sculpted luxury Cinzel Jayant Charter wordmark */}
         <Link
           href="/"
           data-header-logo="true"
           className={cn(
-            "jc-wordmark justify-self-center text-[19px] leading-none whitespace-nowrap transition-colors duration-300 sm:text-[21px]",
+            "jc-brand-mark justify-self-center text-[19px] leading-none whitespace-nowrap transition-colors duration-300 sm:text-[21px]",
             lightTheme ? "text-[var(--jc-ink)]" : "text-[var(--jc-ivory)]"
           )}
         >
@@ -358,7 +358,7 @@ export function SiteHeader({
               className="w-[min(88vw,360px)] border-l border-[var(--jc-line-dark)] bg-[var(--jc-teal-deep)] text-[var(--jc-ivory)]"
             >
               <SheetHeader className="border-b border-[var(--jc-line-dark)] px-6 py-5 text-left">
-                <SheetTitle className="jc-wordmark text-[20px] font-medium text-[var(--jc-ivory)]">
+                <SheetTitle className="jc-brand-mark text-[20px] font-semibold text-[var(--jc-ivory)]">
                   {settings.brandMarkFirst} {settings.brandMarkSecond}
                 </SheetTitle>
               </SheetHeader>

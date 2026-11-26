@@ -140,7 +140,7 @@ export function JeskoCloudPhilosophy({
             width={cloudsMarquee.width}
             height={cloudsMarquee.height}
             loading="lazy"
-            className="h-full w-1/4 object-cover"
+            className="h-full w-[calc(25%+2px)] shrink-0 object-cover"
           />
           <img
             src={cloudsMarquee.path}
@@ -148,7 +148,7 @@ export function JeskoCloudPhilosophy({
             width={cloudsMarquee.width}
             height={cloudsMarquee.height}
             loading="lazy"
-            className="h-full w-1/4 -scale-x-100 object-cover"
+            className="-ml-[2px] h-full w-[calc(25%+2px)] shrink-0 -scale-x-100 object-cover"
           />
           <img
             src={cloudsMarquee.path}
@@ -156,7 +156,7 @@ export function JeskoCloudPhilosophy({
             width={cloudsMarquee.width}
             height={cloudsMarquee.height}
             loading="lazy"
-            className="h-full w-1/4 object-cover"
+            className="-ml-[2px] h-full w-[calc(25%+2px)] shrink-0 object-cover"
           />
           <img
             src={cloudsMarquee.path}
@@ -164,7 +164,7 @@ export function JeskoCloudPhilosophy({
             width={cloudsMarquee.width}
             height={cloudsMarquee.height}
             loading="lazy"
-            className="h-full w-1/4 -scale-x-100 object-cover"
+            className="-ml-[2px] h-full w-[calc(25%+2px)] shrink-0 -scale-x-100 object-cover"
           />
         </div>
       </div>
@@ -174,7 +174,7 @@ export function JeskoCloudPhilosophy({
         <div className="max-w-[1120px]">
           <p
             ref={highlightRef}
-            className="jc-display-section m-0 leading-[1.12] text-[var(--jc-ivory)]"
+            className="jc-display-section jc-sky-legible m-0 leading-[1.12] text-[var(--jc-ivory)]"
           >
             {words.map((word, idx) => (
               <span key={`${word}-${idx}`} data-hw="1" className="inline-block">
@@ -195,10 +195,10 @@ export function JeskoCloudPhilosophy({
               <Compass className="size-5" />
             </span>
             <div>
-              <p className="jc-wordmark m-0 text-[15px] text-[var(--jc-ivory)]">
+              <p className="jc-brand-mark jc-sky-legible m-0 text-[16px] text-[var(--jc-ivory)]">
                 Jayant Charter
               </p>
-              <p className="mt-1 m-0 max-w-[26ch] text-[13px] leading-snug text-[var(--jc-ivory-soft)]">
+              <p className="jc-sky-legible mt-1 m-0 max-w-[26ch] text-[13px] leading-snug text-[var(--jc-ivory)]">
                 Custom private aviation inquiries across Dubai, Delhi NCR, Mumbai, Rajasthan, Goa, and worldwide corridors.
               </p>
             </div>
@@ -210,11 +210,11 @@ export function JeskoCloudPhilosophy({
           >
             {PILLARS.map((pillar) => (
               <div key={pillar.title} data-pillar="1">
-                <h2 className="jc-display-title m-0 text-[var(--jc-ivory)]">
+                <h2 className="jc-display-title jc-sky-legible m-0 text-[var(--jc-ivory)]">
                   {pillar.title}
                 </h2>
                 <div className="my-4 h-px w-8 bg-[var(--jc-line-dark-strong)]" />
-                <p className="m-0 max-w-[36ch] text-[15px] leading-relaxed text-[var(--jc-ivory-soft)]">
+                <p className="jc-sky-legible m-0 max-w-[36ch] text-[15px] leading-relaxed text-[var(--jc-ivory)]">
                   {pillar.body}
                 </p>
               </div>

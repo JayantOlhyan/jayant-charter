@@ -30,7 +30,7 @@ export function SiteFooter({
           <div>
             <Link
               href="/"
-              className="jc-wordmark text-[24px] leading-none text-[var(--jc-ivory)]"
+              className="jc-brand-mark text-[24px] leading-none text-[var(--jc-ivory)]"
             >
               {settings.brandMarkFirst} {settings.brandMarkSecond}
             </Link>

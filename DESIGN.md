@@ -44,6 +44,7 @@ Per explicit user approval (`26 November 2026`), the palette shifted from deep f
 
 Upgraded per user approval to match Jesko's wide architectural grotesque identity using 100% open-licensed Google Fonts self-hosted via `next/font/google` (SIL OFL, zero third-party runtime requests, zero proprietary font copying):
 
+- **Brand Crest Serif (`--font-cinzel`):** `Cinzel` (`500`, `600`, `700`), used for the sculpted *Jayant Charter* brand emblem in the header, footer, altimeter preloader, and the high-contrast outlined cabin-window centerpiece (deep espresso ink `#181413` with luminous warm ivory outer stroke over sunlit clouds).
 - **Display Expanded Sans (`--font-display`):** `Archivo` variable font (`weight: "variable"`, `axes: ["wdth"]`), styled at `font-variation-settings: "wdth" 125` with tight `-0.04em` to `-0.06em` display tracking and balanced wrapping (matching `GT America Expanded` proportions).
 - **UI & Body Sans (`--font-sans`):** `Plus Jakarta Sans` (weights `400`, `500`, `600`, `700`; `font-variant-numeric: tabular-nums` on specifications, dimensions, and the live Dubai clock).
 

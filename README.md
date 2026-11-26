@@ -42,7 +42,7 @@ Built to **Portfolio Website PRD v1.1** (`25 November 2026`), the REA technical 
 |---|---|
 | Framework | Next.js 15 (App Router) + React 19 + TypeScript (`strict`) |
 | Styling & Primitives | Tailwind CSS v4 + CSS custom properties + shadcn/ui (`@base-ui/react`) + `lucide-react` |
-| Typography | `Archivo` (variable-width expanded grotesque, `wdth: 125`) + `Plus Jakarta Sans` (body, UI, `tabular-nums`) via `next/font/google` |
+| Typography | `Cinzel` (sculpted luxury brand crest) + `Archivo` (variable-width expanded grotesque, `wdth: 125`) + `Plus Jakarta Sans` (body, UI, `tabular-nums`) via `next/font/google` |
 | Motion & Scroll | GSAP + ScrollTrigger + Lenis (desktop fine-pointer only; auto-disabled under reduced motion) + GPU-composited CSS transitions |
 | Interactive 3D & Globe | Self-hosted pinned Google `model-viewer` v4.1.0 (Apache-2.0) + `meshopt_decoder.js` (MIT) + `globe.gl` + `world-atlas` + `topojson-client` |
 | Forms & Validation | `react-hook-form` + `zod` + `libphonenumber-js` |

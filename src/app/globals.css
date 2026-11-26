@@ -259,6 +259,32 @@
   letter-spacing: -0.025em;
 }
 
+/* Sculpted high-craft serif brand crest (Cinzel) for Jayant Charter identity */
+.jc-brand-mark {
+  font-family: var(--font-cinzel), Georgia, serif;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+/* High-contrast outlined cabin-window crest over bright sunlit clouds */
+.jc-window-brand {
+  font-family: var(--font-cinzel), Georgia, serif;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: var(--jc-ink);
+  -webkit-text-stroke: 3.5px var(--jc-ivory);
+  paint-order: stroke fill;
+  text-shadow: var(--jc-window-brand-shadow);
+}
+
+.jc-hero-outline {
+  text-shadow: var(--jc-hero-text-shadow);
+}
+
+.jc-sky-legible {
+  text-shadow: var(--jc-sky-text-shadow);
+}
+
 .jc-aircraft-shadow {
   filter: var(--jc-shadow-aircraft-dark);
 }
