@@ -6,9 +6,8 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   AlertCircle,
+  Check,
   CheckCircle2,
-  ChevronDown,
-  ChevronUp,
   Loader2,
   Plus,
   Trash2,
@@ -34,6 +33,7 @@ interface ProgressiveInquiryFormProps {
   defaultService?: "private-jet" | "group-charter" | "helicopter" | "decide";
   defaultAircraftId?: string | null;
   entryPage: string;
+  embedded?: boolean;
 }
 
 type SubmissionState =
@@ -83,6 +83,7 @@ export function ProgressiveInquiryForm({
   defaultService = "decide",
   defaultAircraftId = null,
   entryPage,
+  embedded = false,
 }: ProgressiveInquiryFormProps) {
   const formId = useId();
   const [detailsOpen, setDetailsOpen] = useState<boolean>(
@@ -337,7 +338,7 @@ export function ProgressiveInquiryForm({
     return (
       <div
         role="status"
-        className="rounded-[4px] border border-[var(--jc-line-light)] bg-[var(--jc-paper)] p-8"
+        className={cn(embedded ? "py-4" : "jc-editorial-card p-8")}
       >
         <h3 className="font-serif text-[28px] text-[var(--jc-ink)]">
           Online inquiries are temporarily paused
@@ -354,7 +355,7 @@ export function ProgressiveInquiryForm({
       <div
         role="status"
         aria-live="polite"
-        className="rounded-[4px] border border-[var(--jc-success-border)] bg-[var(--jc-success-bg)] p-7 sm:p-10"
+        className="rounded-[16px] border border-[var(--jc-success-border)] bg-[var(--jc-success-bg)] p-7 sm:p-10"
       >
         <div className="flex items-start gap-3.5">
           <CheckCircle2
@@ -434,7 +435,7 @@ export function ProgressiveInquiryForm({
       onSubmit={handleSubmit(onSubmit)}
       onFocusCapture={markStarted}
       noValidate
-      className="rounded-[4px] border border-[var(--jc-line-light)] bg-[var(--jc-paper)] p-6 sm:p-10"
+      className={cn(embedded ? "" : "jc-editorial-card p-6 sm:p-10")}
     >
       {/* Hidden honeypot against automated spam */}
       <div className="sr-only" aria-hidden="true">
@@ -452,7 +453,7 @@ export function ProgressiveInquiryForm({
       {(errorEntries.length > 0 || submitState.kind === "error") && (
         <div
           role="alert"
-          className="mb-7 rounded-[3px] border border-[var(--jc-danger-border)] bg-[var(--jc-danger-bg)] p-4 text-[14px] text-[var(--jc-danger)]"
+          className="mb-7 rounded-[12px] border border-[var(--jc-danger-border)] bg-[var(--jc-danger-bg)] p-4 text-[14px] text-[var(--jc-danger)]"
         >
           <div className="flex items-start gap-2.5">
             <AlertCircle aria-hidden="true" className="mt-0.5 size-4 shrink-0" />
@@ -484,11 +485,11 @@ export function ProgressiveInquiryForm({
       )}
 
       {/* Essential Minimum Intake (PRD Section 10.1: Name, Phone, Permission) */}
-      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
         <div>
           <Label
             htmlFor={`${formId}-name`}
-            className="text-[14px] font-medium text-[var(--jc-ink)]"
+            className="text-[13px] font-semibold text-[var(--jc-ink)]"
           >
             Full name <span className="text-[var(--jc-danger)]">*</span>
           </Label>
@@ -496,15 +497,16 @@ export function ProgressiveInquiryForm({
             id={`${formId}-name`}
             type="text"
             autoComplete="name"
+            placeholder="Your name or executive office"
             maxLength={100}
             aria-invalid={Boolean(errors.contact?.name)}
             aria-describedby={errors.contact?.name ? `${formId}-name-err` : undefined}
-            className="mt-2 min-h-12 rounded-[3px] border-[var(--jc-line-strong)] bg-[var(--jc-ivory)] px-3.5 text-[16px] text-[var(--jc-ink)]"
+            className="jc-field mt-2"
             {...register("contact.name")}
           />
           <p
             id={`${formId}-name-err`}
-            className="mt-1.5 min-h-[1.25rem] text-[13px] text-[var(--jc-danger)]"
+            className="mt-1.5 min-h-[1.15rem] text-[12.5px] text-[var(--jc-danger)]"
           >
             {errors.contact?.name?.message || ""}
           </p>
@@ -513,7 +515,7 @@ export function ProgressiveInquiryForm({
         <div>
           <Label
             htmlFor={`${formId}-phone`}
-            className="text-[14px] font-medium text-[var(--jc-ink)]"
+            className="text-[13px] font-semibold text-[var(--jc-ink)]"
           >
             Phone with country code <span className="text-[var(--jc-danger)]">*</span>
           </Label>
@@ -524,20 +526,20 @@ export function ProgressiveInquiryForm({
             placeholder="+971 50 123 4567 or +91 98765 43210"
             aria-invalid={Boolean(errors.contact?.phone)}
             aria-describedby={errors.contact?.phone ? `${formId}-phone-err` : `${formId}-phone-hint`}
-            className="mt-2 min-h-12 rounded-[3px] border-[var(--jc-line-strong)] bg-[var(--jc-ivory)] px-3.5 text-[16px] text-[var(--jc-ink)] tabular-nums"
+            className="jc-field mt-2 tabular-nums"
             {...register("contact.phone")}
           />
           {errors.contact?.phone?.message ? (
             <p
               id={`${formId}-phone-err`}
-              className="mt-1.5 min-h-[1.25rem] text-[13px] text-[var(--jc-danger)]"
+              className="mt-1.5 min-h-[1.15rem] text-[12.5px] text-[var(--jc-danger)]"
             >
               {errors.contact.phone.message}
             </p>
           ) : (
             <p
               id={`${formId}-phone-hint`}
-              className="mt-1.5 min-h-[1.25rem] text-[13px] text-[var(--jc-muted)]"
+              className="mt-1.5 min-h-[1.15rem] text-[12.5px] text-[var(--jc-muted)]"
             >
               Include international prefix so Jayant can reach you directly.
             </p>
@@ -545,12 +547,12 @@ export function ProgressiveInquiryForm({
         </div>
       </div>
 
-      {/* Service Selection */}
-      <fieldset className="mt-4 border-0 p-0">
-        <legend className="text-[14px] font-medium text-[var(--jc-ink)]">
+      {/* Service Selection — Sculpted tactile pill chips matching modal geometry */}
+      <fieldset className="mt-3 border-0 p-0">
+        <legend className="text-[13px] font-semibold text-[var(--jc-ink)]">
           Service <span className="font-normal text-[var(--jc-muted)]">(optional)</span>
         </legend>
-        <div className="mt-2.5 flex flex-wrap gap-2">
+        <div className="mt-3 flex flex-wrap gap-2.5">
           {SERVICE_CHOICES.map((option) => {
             const active = watchedService === option.value;
             return (
@@ -560,13 +562,16 @@ export function ProgressiveInquiryForm({
                 aria-pressed={active}
                 onClick={() => setValue("trip.service", option.value)}
                 className={cn(
-                  "min-h-11 rounded-[3px] border px-4 text-[14px] font-medium transition-colors duration-150 cursor-pointer",
+                  "inline-flex min-h-11 items-center gap-2 rounded-full border px-5 text-[14px] font-medium whitespace-nowrap transition-[background-color,border-color,color] duration-150 cursor-pointer",
                   active
                     ? "border-[var(--jc-teal)] bg-[var(--jc-teal)] text-[var(--jc-ivory)]"
-                    : "border-[var(--jc-line-strong)] bg-[var(--jc-ivory)] text-[var(--jc-ink)] hover:border-[var(--jc-teal)]"
+                    : "border-[var(--jc-line-strong)] bg-[var(--jc-paper)] text-[var(--jc-ink)] hover:border-[var(--jc-teal)]"
                 )}
               >
-                {option.label}
+                {active && (
+                  <Check aria-hidden="true" className="size-3.5 text-[var(--jc-gold)]" />
+                )}
+                <span>{option.label}</span>
               </button>
             );
           })}
@@ -575,7 +580,7 @@ export function ProgressiveInquiryForm({
 
       {/* Removable Aircraft Preference Badge (AC04) */}
       {selectedAircraft && (
-        <div className="mt-5 flex flex-wrap items-center justify-between gap-3 rounded-[3px] border border-[var(--jc-line-light)] bg-[var(--jc-stone)] px-4 py-3 text-[14px]">
+        <div className="mt-6 flex flex-wrap items-center justify-between gap-3 rounded-[14px] border border-[var(--jc-line-light)] bg-[var(--jc-stone)] px-5 py-3.5 text-[14px]">
           <div>
             <span className="text-[var(--jc-muted)]">Aircraft preference attached: </span>
             <strong className="font-semibold text-[var(--jc-ink)]">
@@ -588,7 +593,7 @@ export function ProgressiveInquiryForm({
           <button
             type="button"
             onClick={() => setValue("trip.aircraftPreferenceId", null)}
-            className="inline-flex min-h-9 items-center gap-1 rounded-[3px] border border-[var(--jc-line-strong)] bg-[var(--jc-paper)] px-3 text-[13px] text-[var(--jc-ink)] hover:border-[var(--jc-teal)] cursor-pointer"
+            className="inline-flex min-h-9 items-center gap-1.5 rounded-full border border-[var(--jc-line-strong)] bg-[var(--jc-paper)] px-3.5 text-[13px] font-medium text-[var(--jc-ink)] transition-colors hover:border-[var(--jc-teal)] cursor-pointer"
           >
             <X aria-hidden="true" className="size-3.5" />
             <span>Remove</span>
@@ -596,31 +601,42 @@ export function ProgressiveInquiryForm({
         </div>
       )}
 
-      {/* Progressive Disclosure Toggle for Optional Trip Details */}
-      <div className="mt-6 border-t border-[var(--jc-line-light)] pt-5">
+      {/* Flush Jesko-style Hairline Disclosure Row for Optional Trip Details */}
+      <div className="mt-7 border-y border-[var(--jc-line-light)] py-2">
         <button
           type="button"
           aria-expanded={detailsOpen}
           aria-controls={`${formId}-trip-details`}
           onClick={() => setDetailsOpen((prev) => !prev)}
-          className="inline-flex min-h-11 w-full items-center justify-between rounded-[3px] border border-[var(--jc-line-light)] bg-[var(--jc-ivory)] px-4 py-2.5 text-left text-[15px] font-medium text-[var(--jc-ink)] transition-colors hover:border-[var(--jc-teal)] cursor-pointer"
+          className="group flex min-h-12 w-full items-center justify-between gap-4 py-2 text-left cursor-pointer"
         >
-          <span>Add trip details now (route, dates, passengers, venue)</span>
-          {detailsOpen ? (
-            <ChevronUp aria-hidden="true" className="size-4 text-[var(--jc-muted)]" />
-          ) : (
-            <ChevronDown aria-hidden="true" className="size-4 text-[var(--jc-muted)]" />
-          )}
+          <span className="flex flex-wrap items-baseline gap-x-3 gap-y-0.5">
+            <span className="text-[15px] font-semibold text-[var(--jc-ink)] whitespace-nowrap">
+              Add trip details
+            </span>
+            <span className="text-[13px] font-normal text-[var(--jc-muted)]">
+              Route, dates, passengers, or venue
+            </span>
+          </span>
+          <span
+            aria-hidden="true"
+            className={cn(
+              "inline-flex size-8 shrink-0 items-center justify-center rounded-full border border-[var(--jc-line-strong)] bg-[var(--jc-paper)] text-[var(--jc-ink)] transition-transform duration-300 group-hover:border-[var(--jc-teal)]",
+              detailsOpen && "rotate-45"
+            )}
+          >
+            <Plus className="size-3.5" />
+          </span>
         </button>
 
         {detailsOpen && (
-          <div id={`${formId}-trip-details`} className="mt-5 space-y-5">
+          <div id={`${formId}-trip-details`} className="space-y-6 pb-5 pt-4">
             {/* Trip Type */}
             <fieldset className="border-0 p-0">
-              <legend className="text-[14px] font-medium text-[var(--jc-ink)]">
+              <legend className="text-[13px] font-semibold text-[var(--jc-ink)]">
                 Trip type
               </legend>
-              <div className="mt-2 flex flex-wrap gap-2">
+              <div className="mt-2.5 flex flex-wrap gap-2">
                 {TRIP_TYPE_CHOICES.map((choice) => {
                   const selected = watchedTripType === choice.value;
                   return (
@@ -630,10 +646,10 @@ export function ProgressiveInquiryForm({
                       aria-pressed={selected}
                       onClick={() => setValue("trip.type", choice.value)}
                       className={cn(
-                        "min-h-10 rounded-[3px] border px-3.5 text-[14px] transition-colors cursor-pointer",
+                        "min-h-10 rounded-full border px-4 text-[13.5px] font-medium whitespace-nowrap transition-colors cursor-pointer",
                         selected
                           ? "border-[var(--jc-teal)] bg-[var(--jc-teal)] text-[var(--jc-ivory)]"
-                          : "border-[var(--jc-line-strong)] bg-[var(--jc-ivory)] text-[var(--jc-ink)]"
+                          : "border-[var(--jc-line-strong)] bg-[var(--jc-paper)] text-[var(--jc-ink)] hover:border-[var(--jc-teal)]"
                       )}
                     >
                       {choice.label}
@@ -648,9 +664,9 @@ export function ProgressiveInquiryForm({
               {legFields.map((field, index) => (
                 <div
                   key={field.id}
-                  className="rounded-[3px] border border-[var(--jc-line-light)] bg-[var(--jc-ivory)] p-4"
+                  className="rounded-[14px] border border-[var(--jc-line-light)] bg-[var(--jc-stone)]/60 p-5"
                 >
-                  <div className="mb-3 flex items-center justify-between">
+                  <div className="mb-4 flex items-center justify-between">
                     <span className="text-[13px] font-semibold text-[var(--jc-ink)]">
                       {watchedTripType === "multi-stop" ? `Leg ${index + 1}` : "Route and travel date"}
                     </span>
@@ -677,7 +693,7 @@ export function ProgressiveInquiryForm({
                       <Input
                         id={`${formId}-from-${index}`}
                         placeholder="e.g. Dubai (OMDB / DWC)"
-                        className="mt-1.5 min-h-12 rounded-[3px] border-[var(--jc-line-strong)] bg-[var(--jc-paper)] text-[16px]"
+                        className="jc-field mt-1.5"
                         {...register(`trip.legs.${index}.from`)}
                       />
                     </div>
@@ -692,7 +708,7 @@ export function ProgressiveInquiryForm({
                       <Input
                         id={`${formId}-to-${index}`}
                         placeholder="e.g. New Delhi, Mumbai, or Udaipur"
-                        className="mt-1.5 min-h-12 rounded-[3px] border-[var(--jc-line-strong)] bg-[var(--jc-paper)] text-[16px]"
+                        className="jc-field mt-1.5"
                         {...register(`trip.legs.${index}.to`)}
                       />
                     </div>
@@ -707,7 +723,7 @@ export function ProgressiveInquiryForm({
                       <Input
                         id={`${formId}-date-${index}`}
                         type="date"
-                        className="mt-1.5 min-h-12 rounded-[3px] border-[var(--jc-line-strong)] bg-[var(--jc-paper)] text-[16px] tabular-nums"
+                        className="jc-field mt-1.5 tabular-nums"
                         {...register(`trip.legs.${index}.localDate`)}
                       />
                     </div>
@@ -722,7 +738,7 @@ export function ProgressiveInquiryForm({
                       <Input
                         id={`${formId}-window-${index}`}
                         placeholder="e.g. Morning departure, flexible"
-                        className="mt-1.5 min-h-12 rounded-[3px] border-[var(--jc-line-strong)] bg-[var(--jc-paper)] text-[16px]"
+                        className="jc-field mt-1.5"
                         {...register(`trip.legs.${index}.localTimeWindow`)}
                       />
                     </div>
@@ -736,7 +752,7 @@ export function ProgressiveInquiryForm({
                   onClick={() =>
                     appendLeg({ from: "", to: "", localDate: "", localTimeWindow: "" })
                   }
-                  className="inline-flex min-h-11 items-center gap-1.5 rounded-[3px] border border-[var(--jc-line-strong)] bg-[var(--jc-ivory)] px-4 text-[14px] font-medium text-[var(--jc-ink)] hover:border-[var(--jc-teal)] cursor-pointer"
+                  className="inline-flex min-h-10 items-center gap-1.5 rounded-full border border-[var(--jc-line-strong)] bg-[var(--jc-paper)] px-4 text-[13.5px] font-medium text-[var(--jc-ink)] transition-colors hover:border-[var(--jc-teal)] cursor-pointer"
                 >
                   <Plus aria-hidden="true" className="size-4" />
                   <span>Add another leg</span>
@@ -744,13 +760,13 @@ export function ProgressiveInquiryForm({
               )}
             </div>
 
-            {/* Conditional Return Date + Passengers */}
+            {/* Conditional Return Date + Passengers + Email */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               {watchedTripType === "return" && (
                 <div>
                   <Label
                     htmlFor={`${formId}-return-date`}
-                    className="text-[14px] font-medium text-[var(--jc-ink)]"
+                    className="text-[13px] font-semibold text-[var(--jc-ink)]"
                   >
                     Return date
                   </Label>
@@ -758,11 +774,11 @@ export function ProgressiveInquiryForm({
                     id={`${formId}-return-date`}
                     type="date"
                     aria-invalid={Boolean(errors.trip?.returnDate)}
-                    className="mt-1.5 min-h-12 rounded-[3px] border-[var(--jc-line-strong)] bg-[var(--jc-ivory)] text-[16px] tabular-nums"
+                    className="jc-field mt-1.5 tabular-nums"
                     {...register("trip.returnDate")}
                   />
                   {errors.trip?.returnDate?.message && (
-                    <p className="mt-1.5 text-[13px] text-[var(--jc-danger)]">
+                    <p className="mt-1.5 text-[12.5px] text-[var(--jc-danger)]">
                       {errors.trip.returnDate.message}
                     </p>
                   )}
@@ -772,7 +788,7 @@ export function ProgressiveInquiryForm({
               <div>
                 <Label
                   htmlFor={`${formId}-passengers`}
-                  className="text-[14px] font-medium text-[var(--jc-ink)]"
+                  className="text-[13px] font-semibold text-[var(--jc-ink)]"
                 >
                   Passengers
                 </Label>
@@ -783,7 +799,7 @@ export function ProgressiveInquiryForm({
                   inputMode="numeric"
                   placeholder="e.g. 4, 22, or larger group"
                   aria-invalid={Boolean(errors.trip?.passengers)}
-                  className="mt-1.5 min-h-12 rounded-[3px] border-[var(--jc-line-strong)] bg-[var(--jc-ivory)] text-[16px] tabular-nums"
+                  className="jc-field mt-1.5 tabular-nums"
                   {...register("trip.passengers", {
                     setValueAs: (v: string) => {
                       if (v === "" || v === null || v === undefined) return null;
@@ -793,7 +809,7 @@ export function ProgressiveInquiryForm({
                   })}
                 />
                 {errors.trip?.passengers?.message && (
-                  <p className="mt-1.5 text-[13px] text-[var(--jc-danger)]">
+                  <p className="mt-1.5 text-[12.5px] text-[var(--jc-danger)]">
                     {errors.trip.passengers.message}
                   </p>
                 )}
@@ -802,7 +818,7 @@ export function ProgressiveInquiryForm({
               <div>
                 <Label
                   htmlFor={`${formId}-email`}
-                  className="text-[14px] font-medium text-[var(--jc-ink)]"
+                  className="text-[13px] font-semibold text-[var(--jc-ink)]"
                 >
                   Email <span className="font-normal text-[var(--jc-muted)]">(optional)</span>
                 </Label>
@@ -812,11 +828,11 @@ export function ProgressiveInquiryForm({
                   autoComplete="email"
                   placeholder="you@company.com"
                   aria-invalid={Boolean(errors.contact?.email)}
-                  className="mt-1.5 min-h-12 rounded-[3px] border-[var(--jc-line-strong)] bg-[var(--jc-ivory)] text-[16px]"
+                  className="jc-field mt-1.5"
                   {...register("contact.email")}
                 />
                 {errors.contact?.email?.message && (
-                  <p className="mt-1.5 text-[13px] text-[var(--jc-danger)]">
+                  <p className="mt-1.5 text-[12.5px] text-[var(--jc-danger)]">
                     {errors.contact.email.message}
                   </p>
                 )}
@@ -829,7 +845,6 @@ export function ProgressiveInquiryForm({
                 id={`${formId}-flexible`}
                 checked={Boolean(watchedFlexible)}
                 onCheckedChange={(checked) => setValue("trip.flexibleDates", Boolean(checked))}
-                className="size-5 rounded-[3px] border-[var(--jc-line-strong)]"
               />
               <Label
                 htmlFor={`${formId}-flexible`}
@@ -841,18 +856,18 @@ export function ProgressiveInquiryForm({
 
             {/* Helicopter & Event Venue Fields */}
             {(watchedService === "helicopter" || watchedService === "group-charter") && (
-              <div className="grid grid-cols-1 gap-4 rounded-[3px] border border-[var(--jc-line-light)] bg-[var(--jc-ivory)] p-4 sm:grid-cols-2">
+              <div className="grid grid-cols-1 gap-4 rounded-[14px] border border-[var(--jc-line-light)] bg-[var(--jc-stone)]/60 p-5 sm:grid-cols-2">
                 <div>
                   <Label
                     htmlFor={`${formId}-venue`}
-                    className="text-[14px] font-medium text-[var(--jc-ink)]"
+                    className="text-[13px] font-semibold text-[var(--jc-ink)]"
                   >
                     City and venue or property name
                   </Label>
                   <Input
                     id={`${formId}-venue`}
                     placeholder="e.g. Udaipur resort or hotel name"
-                    className="mt-1.5 min-h-12 rounded-[3px] border-[var(--jc-line-strong)] bg-[var(--jc-paper)] text-[16px]"
+                    className="jc-field mt-1.5"
                     {...register("trip.venue")}
                   />
                   <p className="mt-1.5 text-[12px] text-[var(--jc-muted)]">
@@ -862,10 +877,10 @@ export function ProgressiveInquiryForm({
 
                 {watchedService === "helicopter" && (
                   <div>
-                    <span className="block text-[14px] font-medium text-[var(--jc-ink)]">
+                    <span className="block text-[13px] font-semibold text-[var(--jc-ink)]">
                       Engine preference
                     </span>
-                    <div className="mt-1.5 flex flex-wrap gap-2">
+                    <div className="mt-2 flex flex-wrap gap-2">
                       {ENGINE_CHOICES.map((eng) => {
                         const selected = watch("trip.enginePreference") === eng.value;
                         return (
@@ -875,10 +890,10 @@ export function ProgressiveInquiryForm({
                             aria-pressed={selected}
                             onClick={() => setValue("trip.enginePreference", eng.value)}
                             className={cn(
-                              "min-h-10 rounded-[3px] border px-3 text-[13px] transition-colors cursor-pointer",
+                              "min-h-10 rounded-full border px-3.5 text-[13px] font-medium whitespace-nowrap transition-colors cursor-pointer",
                               selected
                                 ? "border-[var(--jc-teal)] bg-[var(--jc-teal)] text-[var(--jc-ivory)]"
-                                : "border-[var(--jc-line-strong)] bg-[var(--jc-paper)] text-[var(--jc-ink)]"
+                                : "border-[var(--jc-line-strong)] bg-[var(--jc-paper)] text-[var(--jc-ink)] hover:border-[var(--jc-teal)]"
                             )}
                           >
                             {eng.label}
@@ -895,7 +910,7 @@ export function ProgressiveInquiryForm({
             <div>
               <Label
                 htmlFor={`${formId}-notes`}
-                className="text-[14px] font-medium text-[var(--jc-ink)]"
+                className="text-[13px] font-semibold text-[var(--jc-ink)]"
               >
                 Additional notes{" "}
                 <span className="font-normal text-[var(--jc-muted)]">(optional)</span>
@@ -905,7 +920,7 @@ export function ProgressiveInquiryForm({
                 maxLength={1200}
                 rows={3}
                 placeholder="Luggage details, schedule constraints, or questions for Jayant. Please do not include passport numbers or payment card details."
-                className="mt-1.5 min-h-24 rounded-[3px] border-[var(--jc-line-strong)] bg-[var(--jc-ivory)] p-3.5 text-[16px] text-[var(--jc-ink)]"
+                className="jc-field mt-1.5 min-h-24 py-3"
                 {...register("trip.notes")}
               />
             </div>
@@ -914,8 +929,8 @@ export function ProgressiveInquiryForm({
       </div>
 
       {/* Explicit Unchecked Contact Permission (PRD 10.1 & 10.4) */}
-      <div className="mt-6 border-t border-[var(--jc-line-light)] pt-5">
-        <div className="flex items-start gap-3">
+      <div className="mt-6">
+        <div className="flex items-start gap-3.5">
           <Checkbox
             id={`${formId}-consent`}
             checked={watchedConsent === true}
@@ -927,11 +942,11 @@ export function ProgressiveInquiryForm({
               )
             }
             aria-invalid={Boolean(errors.consents?.inquiryContact)}
-            className="mt-0.5 size-5 shrink-0 rounded-[3px] border-[var(--jc-line-strong)]"
+            className="mt-0.5"
           />
           <Label
             htmlFor={`${formId}-consent`}
-            className="block text-[14px] leading-relaxed font-normal text-[var(--jc-ink)] cursor-pointer"
+            className="block text-[13.5px] leading-relaxed font-normal text-[var(--jc-ink)] cursor-pointer"
           >
             I agree that {settings.brandName} (Jayant) may contact me by phone or message about this charter inquiry, as described in the{" "}
             <Link
@@ -943,7 +958,7 @@ export function ProgressiveInquiryForm({
             . Your contact details are not forwarded to an operating partner without your separate permission.
           </Label>
         </div>
-        <p className="mt-1.5 min-h-[1.25rem] pl-8 text-[13px] text-[var(--jc-danger)]">
+        <p className="mt-1.5 min-h-[1.15rem] pl-8 text-[12.5px] text-[var(--jc-danger)]">
           {errors.consents?.inquiryContact?.message || ""}
         </p>
       </div>
@@ -952,19 +967,19 @@ export function ProgressiveInquiryForm({
         <button
           type="submit"
           disabled={submitState.kind === "submitting"}
-          className="jc-btn-teal w-full"
+          className="jc-btn-teal min-h-[54px] w-full whitespace-nowrap"
         >
           {submitState.kind === "submitting" ? (
             <>
               <Loader2 aria-hidden="true" className="size-4 animate-spin" />
-              <span>Recording your inquiry…</span>
+              <span>Recording inquiry…</span>
             </>
           ) : (
             <span>Request a callback</span>
           )}
         </button>
 
-        <p className="mt-3 mb-0 text-[13px] text-[var(--jc-muted)]">
+        <p className="mt-3.5 mb-0 text-[12.5px] leading-relaxed text-[var(--jc-muted)]">
           This submits an inquiry only. Aircraft availability, licensed operator details, and pricing are confirmed separately in your written quote.
         </p>
       </div>

@@ -36,7 +36,7 @@ export default function InquirePage() {
         <div className="jc-container grid grid-cols-1 gap-12 lg:grid-cols-[minmax(0,1.3fr)_minmax(0,0.75fr)] lg:gap-16">
           <Suspense
             fallback={
-              <div className="rounded-[4px] border border-[var(--jc-line-light)] bg-[var(--jc-paper)] p-10 text-[15px] text-[var(--jc-muted)]">
+              <div className="jc-editorial-card p-10 text-[15px] text-[var(--jc-muted)]">
                 Loading inquiry form...
               </div>
             }
@@ -45,7 +45,7 @@ export default function InquirePage() {
           </Suspense>
 
           <aside className="space-y-6">
-            <div className="rounded-[4px] border border-[var(--jc-line-light)] bg-[var(--jc-paper)] p-7">
+            <div className="jc-editorial-card p-7 sm:p-8">
               <h2 className="font-serif text-[24px] text-[var(--jc-ink)]">
                 What happens next
               </h2>
@@ -56,7 +56,7 @@ export default function InquirePage() {
               </ol>
             </div>
 
-            <div className="rounded-[4px] border border-[var(--jc-line-light)] bg-[var(--jc-paper)] p-7">
+            <div className="jc-editorial-card p-7 sm:p-8">
               <h2 className="font-serif text-[24px] text-[var(--jc-ink)]">
                 Privacy and sensitivity
               </h2>

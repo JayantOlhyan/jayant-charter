@@ -376,17 +376,27 @@ export function CallbackDrawerProvider({
 
           <div
             ref={drawerPanelRef}
-            className="relative z-10 max-h-[86svh] w-full max-w-[920px] overflow-y-auto rounded-t-[16px] border border-[var(--jc-line-light)] bg-[var(--jc-ivory)] px-6 pb-24 pt-7 text-[var(--jc-ink)] sm:rounded-[16px] sm:px-10 sm:pb-24 sm:pt-9"
+            data-surface="light"
+            className="jc-drawer-sheet relative z-10 max-h-[88svh] w-full max-w-[820px] overflow-y-auto rounded-t-[28px] border border-[var(--jc-line-light)] bg-[var(--jc-ivory)] px-6 pb-9 pt-5 text-[var(--jc-ink)] sm:rounded-[24px] sm:px-10 sm:pb-10 sm:pt-9"
           >
-            <div className="mb-6 flex items-start justify-between gap-4 border-b border-[var(--jc-line-light)] pb-5">
+            {/* Subtle mobile grab handle */}
+            <div
+              aria-hidden="true"
+              className="mx-auto mb-5 h-1 w-10 rounded-full bg-[var(--jc-line-strong)] sm:hidden"
+            />
+
+            <div className="mb-7 flex items-start justify-between gap-6 border-b border-[var(--jc-line-light)] pb-6">
               <div>
+                <p className="jc-brand-mark m-0 text-[12px] text-[var(--jc-gold-muted)]">
+                  {settings.brandName}
+                </p>
                 <h2
                   id="callback-drawer-title"
-                  className="jc-display-title m-0 text-[var(--jc-ink)]"
+                  className="jc-display-title mt-1.5 m-0 text-[var(--jc-ink)]"
                 >
                   Request a callback
                 </h2>
-                <p className="mt-1.5 m-0 text-[14px] text-[var(--jc-muted)]">
+                <p className="mt-2 m-0 max-w-[54ch] text-[14px] leading-relaxed text-[var(--jc-muted)]">
                   Start with your name, phone number, and contact permission. Jayant responds directly before onward feasibility checks begin.
                 </p>
               </div>
@@ -394,7 +404,7 @@ export function CallbackDrawerProvider({
                 type="button"
                 onClick={closeDrawer}
                 aria-label="Close inquiry drawer"
-                className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-[var(--jc-line-strong)] text-[var(--jc-ink)] transition-colors hover:border-[var(--jc-teal)] cursor-pointer"
+                className="inline-flex size-10 shrink-0 items-center justify-center rounded-full border border-[var(--jc-line-strong)] bg-[var(--jc-paper)] text-[var(--jc-ink)] transition-colors duration-200 hover:border-[var(--jc-teal)] hover:bg-[var(--jc-teal)] hover:text-[var(--jc-ivory)] cursor-pointer"
               >
                 <X className="size-4" />
               </button>
@@ -403,7 +413,7 @@ export function CallbackDrawerProvider({
             {settings.featureFlags.showPreviewBanner && (
               <p
                 role="status"
-                className="mb-6 rounded-[4px] border border-[var(--jc-line-strong)] bg-[var(--jc-paper)] px-4 py-3 text-[13px] text-[var(--jc-ink)]"
+                className="mb-7 border-l-2 border-[var(--jc-gold-muted)] bg-[var(--jc-stone)] px-4 py-2.5 text-[13px] leading-relaxed text-[var(--jc-muted)]"
               >
                 Preview environment: inquiries are recorded locally while direct email and WhatsApp channels remain paused.
               </p>
@@ -416,6 +426,7 @@ export function CallbackDrawerProvider({
               defaultService={defaultService}
               defaultAircraftId={defaultAircraftId}
               entryPage={pathname || "/"}
+              embedded
             />
           </div>
         </div>

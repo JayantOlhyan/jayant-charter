@@ -131,7 +131,7 @@ export default async function AircraftDetailPage({
             </div>
           </div>
 
-          <aside className="rounded-[4px] border border-[var(--jc-line-light)] bg-[var(--jc-paper)] p-7 sm:p-9">
+          <aside className="jc-editorial-card p-7 sm:p-9">
             <h3 className="font-serif text-[26px] text-[var(--jc-ink)]">
               Trip planning considerations
             </h3>
@@ -160,7 +160,7 @@ export default async function AircraftDetailPage({
           </div>
 
           {aircraft.specifications.length > 0 ? (
-            <div className="mt-10 overflow-x-auto rounded-[4px] border border-[var(--jc-line-light)] bg-[var(--jc-paper)]">
+            <div className="jc-editorial-card mt-10 overflow-x-auto">
               <table className="w-full border-collapse text-left text-[15px]">
                 <thead>
                   <tr className="border-b border-[var(--jc-line-light)] bg-[var(--jc-ivory)] text-[13px] font-semibold text-[var(--jc-ink)]">

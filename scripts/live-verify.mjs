@@ -76,7 +76,10 @@ async function main() {
   });
 
   try {
-    const desktopCtx = await browser.newContext({ viewport: { width: 1440, height: 900 } });
+    const desktopCtx = await browser.newContext({
+      viewport: { width: 1440, height: 900 },
+      colorScheme: "dark",
+    });
     const page = await desktopCtx.newPage();
 
     page.on("console", (msg) => {
@@ -274,11 +277,13 @@ async function main() {
       results.overflows.push({ width, ...ov, ok: ov.scrollWidth <= ov.clientWidth });
     }
 
-    // 5. E2E inquiry persistence on /inquire
+    // 5. E2E inquiry persistence on /inquire (also capture standalone /inquire card layout)
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto(`${BASE_URL}/inquire?service=group-charter&ref=jesko_audit`, {
       waitUntil: "networkidle",
     });
+    await page.waitForTimeout(300);
+    await page.screenshot({ path: path.join(OUT_DIR, "13-inquire-page-1440.png") });
     await page.getByLabel(/Full name/i).fill("Jesko Rebuild Verification");
     await page.getByLabel(/Phone with country code/i).fill("+971 50 555 0144");
     await page.getByRole("checkbox", { name: /I agree that Jayant Charter/i }).click();

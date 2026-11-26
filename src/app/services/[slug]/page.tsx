@@ -137,7 +137,7 @@ export default async function ServiceDetailPage({ params }: ServicePageProps) {
             </div>
           </div>
 
-          <aside className="rounded-[4px] border border-[var(--jc-line-light)] bg-[var(--jc-paper)] p-7 sm:p-9">
+          <aside className="jc-editorial-card p-7 sm:p-9">
             <h3 className="font-serif text-[26px] text-[var(--jc-ink)]">
               Helpful details to share
             </h3>

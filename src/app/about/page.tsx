@@ -66,7 +66,7 @@ export default function AboutPage() {
             </p>
           </div>
 
-          <aside className="rounded-[4px] border border-[var(--jc-line-light)] bg-[var(--jc-paper)] p-7 sm:p-9">
+          <aside className="jc-editorial-card p-7 sm:p-9">
             <h3 className="font-serif text-[26px] text-[var(--jc-ink)]">
               Clear service role
             </h3>
@@ -106,7 +106,7 @@ export default function AboutPage() {
             {AUDIENCE_NOTES.map((item) => (
               <article
                 key={item.title}
-                className="rounded-[4px] border border-[var(--jc-line-light)] bg-[var(--jc-paper)] p-7 sm:p-8"
+                className="jc-editorial-card p-7 sm:p-8"
               >
                 <h3 className="font-serif text-[24px] text-[var(--jc-ink)]">
                   {item.title}
