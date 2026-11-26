@@ -55,7 +55,7 @@ export default function AircraftIndexPage() {
       <section
         data-nav-theme="dark"
         data-surface="dark"
-        className="jc-dark-espresso py-20 text-[var(--jc-ivory)] md:py-24"
+        className="jc-dark-espresso py-10 text-[var(--jc-ivory)] md:py-12"
       >
         <div className="jc-container">
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-end">
