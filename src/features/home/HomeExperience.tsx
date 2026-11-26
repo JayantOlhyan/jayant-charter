@@ -1,6 +1,9 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import Link from "next/link";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type {
   AircraftRecord,
   CaseStudyRecord,
@@ -17,9 +20,12 @@ import { JeskoCloudPhilosophy } from "@/features/scroll/JeskoCloudPhilosophy";
 import { JeskoPlanformBlueprint } from "@/features/scroll/JeskoPlanformBlueprint";
 import { TrustEditorialSplit } from "@/features/home/TrustEditorialSplit";
 import { JeskoGlobalGlobe } from "@/features/home/JeskoGlobalGlobe";
+import { FlightAltimeterRail } from "@/components/layout/FlightAltimeterRail";
 import { FaqBlock } from "@/components/blocks/FaqBlock";
 import { ConditionalProofSection } from "@/components/blocks/ConditionalProofSection";
 import { useCallbackDrawer } from "@/components/layout/CallbackDrawerProvider";
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface HomeExperienceProps {
   settings: SiteSettings;
@@ -57,9 +63,12 @@ export function HomeExperience({
   mediaById,
 }: HomeExperienceProps) {
   const { openDrawer } = useCallbackDrawer();
+  const servicesSectionRef = useRef<HTMLElement>(null);
 
   const skyDaylight = mediaById["jesko-sky-daylight"] || mediaById["hero-sky-plate"];
   const cloudsMarquee = mediaById["jesko-clouds-marquee"] || mediaById["hero-sky-plate"];
+  const cabinWindowPhoto = mediaById["jesko-cabin-window-photo"];
+  const windowShadePhoto = mediaById["jesko-window-shade-photo"];
   const heroJet = mediaById["hawker-hero"];
   const blueprintMedia = mediaById["hawker-blueprint-planform"];
   const falconHero = mediaById["falcon-hero"];
@@ -73,14 +82,70 @@ export function HomeExperience({
   const groupSvc = services.find((s) => s.slug === "group-charter");
   const heliSvc = services.find((s) => s.slug === "helicopters");
 
+  // Editorial curtain-wipe + gentle de-zoom reveal on service visual frames
+  useEffect(() => {
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReduced || !servicesSectionRef.current) return;
+
+    const ctx = gsap.context(() => {
+      const frames =
+        servicesSectionRef.current?.querySelectorAll<HTMLElement>(
+          "[data-reveal-frame]"
+        ) ?? [];
+      for (const frame of frames) {
+        const img = frame.querySelector("img");
+        gsap.fromTo(
+          frame,
+          { clipPath: "inset(10% 0 0 0)", opacity: 0.2 },
+          {
+            clipPath: "inset(0% 0 0 0)",
+            opacity: 1,
+            duration: 0.9,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: frame,
+              start: "top 86%",
+              once: true,
+            },
+          }
+        );
+        if (img) {
+          gsap.fromTo(
+            img,
+            { scale: 1.08 },
+            {
+              scale: 1,
+              duration: 1.05,
+              ease: "power3.out",
+              scrollTrigger: {
+                trigger: frame,
+                start: "top 86%",
+                once: true,
+              },
+            }
+          );
+        }
+      }
+    }, servicesSectionRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <div>
+      {/* Subtle vertical flight-level altimeter progress rail (desktop xl+) */}
+      <FlightAltimeterRail />
+
       {/* =====================================================================
-          ACT 1: OPENING CABIN WINDOW SHADE LIFT & ZOOM-THROUGH INTO SKY
+          ACT 1: PHOTOGRAPHIC CABIN WINDOW SHADE LIFT & ZOOM-THROUGH INTO SKY
       ===================================================================== */}
       <JeskoOpeningHero
         skyDaylight={skyDaylight}
         cloudsMarquee={cloudsMarquee}
+        cabinWindowPhoto={cabinWindowPhoto}
+        windowShadePhoto={windowShadePhoto}
         brandName={settings.brandName}
       />
 
@@ -108,6 +173,7 @@ export function HomeExperience({
       ===================================================================== */}
       <section
         id="services"
+        ref={servicesSectionRef}
         data-nav-theme="light"
         data-surface="light"
         className="surface-ivory border-t border-[var(--jc-line-light)] py-24 md:py-32"
@@ -131,7 +197,10 @@ export function HomeExperience({
             {/* 01 Private Jets */}
             {privateJetsSvc && (
               <article className="grid grid-cols-1 items-center gap-12 py-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-16 lg:py-20">
-                <div className="bg-[var(--jc-stone)] px-6 py-10 sm:px-12 sm:py-14">
+                <div
+                  data-reveal-frame="true"
+                  className="overflow-hidden bg-[var(--jc-stone)] px-6 py-10 sm:px-12 sm:py-14"
+                >
                   <img
                     src={falconHero.path}
                     alt={falconHero.alt}
@@ -214,7 +283,10 @@ export function HomeExperience({
                   </div>
                 </div>
 
-                <figure className="order-1 m-0 overflow-hidden bg-[var(--jc-teal-deep)] lg:order-2">
+                <figure
+                  data-reveal-frame="true"
+                  className="order-1 m-0 overflow-hidden bg-[var(--jc-teal-deep)] lg:order-2"
+                >
                   <img
                     src={groupImg.path}
                     alt={groupImg.alt}
@@ -233,7 +305,10 @@ export function HomeExperience({
             {/* 03 Helicopters */}
             {heliSvc && (
               <article className="grid grid-cols-1 items-center gap-12 py-14 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:gap-16 lg:py-20">
-                <figure className="m-0 overflow-hidden bg-[var(--jc-teal-deep)]">
+                <figure
+                  data-reveal-frame="true"
+                  className="m-0 overflow-hidden bg-[var(--jc-teal-deep)]"
+                >
                   <img
                     src={heliImg.path}
                     alt={heliImg.alt}

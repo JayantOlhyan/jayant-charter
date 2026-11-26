@@ -51,11 +51,55 @@ export function JeskoGlobalGlobe() {
   const globeHostRef = useRef<HTMLDivElement>(null);
   const globeMaskRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLParagraphElement>(null);
+  const planeIconRef = useRef<HTMLSpanElement>(null);
+  const globeInstanceRef = useRef<{
+    pointOfView: (
+      pov: { lat?: number; lng?: number; altitude?: number },
+      transitionMs?: number
+    ) => unknown;
+  } | null>(null);
 
   const [activeCityIdx, setActiveCityIdx] = useState(0);
   const [wheelPaused, setWheelPaused] = useState(false);
   const [globeInView, setGlobeInView] = useState(false);
   const [globeReady, setGlobeReady] = useState(false);
+
+  const activeCity = CORRIDOR_CITIES[activeCityIdx];
+
+  const formatCoord = (lat: number, lng: number) => {
+    const ns = lat >= 0 ? "N" : "S";
+    const ew = lng >= 0 ? "E" : "W";
+    return `${Math.abs(lat).toFixed(2)}° ${ns}  ${Math.abs(lng).toFixed(2)}° ${ew}`;
+  };
+
+  // Subtle airplane tick motion on city cycle
+  useEffect(() => {
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReduced || !planeIconRef.current) return;
+    gsap.fromTo(
+      planeIconRef.current,
+      { x: -5, opacity: 0.55 },
+      { x: 0, opacity: 1, duration: 0.45, ease: "power2.out" }
+    );
+  }, [activeCityIdx]);
+
+  // Smoothly fly the live 3D WebGL Globe to the selected city when user clicks a corridor
+  const handleSelectCity = (idx: number) => {
+    setWheelPaused(true);
+    setActiveCityIdx(idx);
+    const target = CORRIDOR_CITIES[idx];
+    if (target && globeInstanceRef.current) {
+      const prefersReduced = window.matchMedia(
+        "(prefers-reduced-motion: reduce)"
+      ).matches;
+      globeInstanceRef.current.pointOfView(
+        { lat: target.lat, lng: target.lng, altitude: 1.95 },
+        prefersReduced ? 0 : 950
+      );
+    }
+  };
 
   // Smooth looping city wheel (exact Jesko initLoopingWords rhythm: ~1.5s cycle, pauses on hover/reduced motion)
   useEffect(() => {
@@ -147,8 +191,9 @@ export function JeskoGlobalGlobe() {
           mat.needsUpdate = true;
         }
 
-        // Center initial camera over Dubai / India / Europe corridor
+        // Center initial camera over Dubai / India / Europe corridor & retain handle for city fly-to
         globe.pointOfView({ lat: 24, lng: 62, altitude: 2.15 }, 0);
+        globeInstanceRef.current = globe;
 
         const controls = globe.controls() as {
           enableZoom: boolean;
@@ -172,6 +217,7 @@ export function JeskoGlobalGlobe() {
         window.addEventListener("resize", resizeHandler);
 
         rendererCleanup = () => {
+          globeInstanceRef.current = null;
           try {
             globe.pauseAnimation?.();
             globe._destructor?.();
@@ -268,13 +314,18 @@ export function JeskoGlobalGlobe() {
               Custom routes
             </h2>
             <p className="mt-2 m-0 text-[14px] text-[var(--jc-ivory-muted)]">
-              Arranged leg by leg around your departure window
+              Select a corridor to orient the globe below
+            </p>
+            <p className="mt-3 m-0 text-[12px] font-medium text-[var(--jc-gold)] tabular-nums">
+              {activeCity.name} / {formatCoord(activeCity.lat, activeCity.lng)}
             </p>
           </div>
 
           <div aria-hidden="true" className="hidden items-center gap-4 lg:flex">
             <span className="h-px w-16 bg-[var(--jc-line-dark-strong)]" />
-            <Plane className="size-4 text-[var(--jc-ivory)]" />
+            <span ref={planeIconRef} className="inline-flex will-change-transform">
+              <Plane className="size-4 text-[var(--jc-ivory)]" />
+            </span>
             <span className="h-px w-16 bg-[var(--jc-line-dark-strong)]" />
           </div>
 
@@ -292,10 +343,7 @@ export function JeskoGlobalGlobe() {
                   type="button"
                   role="tab"
                   aria-selected={isCenter}
-                  onClick={() => {
-                    setWheelPaused(true);
-                    setActiveCityIdx(item.idx);
-                  }}
+                  onClick={() => handleSelectCity(item.idx)}
                   className={cn(
                     "jc-wordmark w-fit text-left leading-[1.14] transition-[opacity,color] duration-300 cursor-pointer",
                     isCenter

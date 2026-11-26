@@ -56,6 +56,7 @@ export function JeskoPlanformBlueprint({
   const jetContainerRef = useRef<HTMLDivElement>(null);
   const exteriorLayerRef = useRef<HTMLDivElement>(null);
   const blueprintLayerRef = useRef<HTMLDivElement>(null);
+  const scanBeamRef = useRef<HTMLDivElement>(null);
   const beat1CopyRef = useRef<HTMLDivElement>(null);
   const beat2SpecsRef = useRef<HTMLDivElement>(null);
 
@@ -141,9 +142,11 @@ export function JeskoPlanformBlueprint({
     if (manualView === "blueprint") {
       ext.style.clipPath = "inset(0 0 100% 0)";
       bp.style.clipPath = "inset(0% 0 0 0)";
+      if (scanBeamRef.current) scanBeamRef.current.style.opacity = "0";
     } else {
       ext.style.clipPath = "inset(0 0 0% 0)";
       bp.style.clipPath = "inset(100% 0 0 0)";
+      if (scanBeamRef.current) scanBeamRef.current.style.opacity = "0";
     }
   }, [manualView]);
 
@@ -169,11 +172,11 @@ export function JeskoPlanformBlueprint({
             jetContainerRef.current.style.transform = `translate3d(0, ${entryY.toFixed(2)}vh, 0) scale(${settleScale.toFixed(3)})`;
           }
 
-          // Subtle live 3D camera poise shift (slight nose-up sweep -> strict vertical orthographic planform)
+          // Subtle live 3D camera poise shift (slight nose-up sweep -> strict vertical orthographic planform matched to blueprint)
           const mv = mvRef.current;
           if (mv && mv.loaded) {
-            const phi = lerp(22, 10, smoothstep(0, 0.55, p));
-            const radius = lerp(82, 92, smoothstep(0.15, 0.65, p));
+            const phi = lerp(20, 8, smoothstep(0, 0.55, p));
+            const radius = lerp(78, 86, smoothstep(0.15, 0.65, p));
             mv.cameraOrbit = `90deg ${phi.toFixed(2)}deg ${radius.toFixed(1)}%`;
           }
 
@@ -192,11 +195,17 @@ export function JeskoPlanformBlueprint({
             beat2SpecsRef.current.style.pointerEvents = b2In > 0.25 ? "auto" : "none";
           }
 
-          // 3. X-Ray Blueprint Wipe (0.68 -> 0.96): morphs live exterior top-to-bottom into CAD blueprint!
+          // 3. X-Ray Blueprint Wipe (0.66 -> 0.94): morphs live exterior top-to-bottom into CAD blueprint with traveling scan hairline!
           if (manualView === "auto" && exteriorLayerRef.current && blueprintLayerRef.current) {
-            const wipePct = smoothstep(0.66, 0.94, p) * 100;
+            const wipeRatio = smoothstep(0.66, 0.94, p);
+            const wipePct = wipeRatio * 100;
             exteriorLayerRef.current.style.clipPath = `inset(0 0 ${wipePct.toFixed(1)}% 0)`;
             blueprintLayerRef.current.style.clipPath = `inset(${(100 - wipePct).toFixed(1)}% 0 0 0)`;
+            if (scanBeamRef.current) {
+              const beamActive = wipeRatio > 0.02 && wipeRatio < 0.98;
+              scanBeamRef.current.style.opacity = beamActive ? "1" : "0";
+              scanBeamRef.current.style.top = `${(100 - wipePct).toFixed(1)}%`;
+            }
           }
         },
       });
@@ -237,7 +246,7 @@ export function JeskoPlanformBlueprint({
                   alt={blueprintMedia.alt}
                   width={blueprintMedia.width}
                   height={blueprintMedia.height}
-                  className="h-[92%] w-full object-contain opacity-45 brightness-[1.055] contrast-[1.09] mix-blend-multiply"
+                  className="h-[92%] w-full object-contain opacity-45"
                 />
               )}
 
@@ -273,7 +282,7 @@ export function JeskoPlanformBlueprint({
             {/* Technical CAD Blueprint Layer directly aligned underneath (X-ray wipe reveal!) */}
             <div
               ref={blueprintLayerRef}
-              className="absolute inset-0 flex items-center justify-center bg-[var(--jc-ivory)] transition-[clip-path] duration-150"
+              className="absolute inset-0 flex items-center justify-center transition-[clip-path] duration-150"
               style={{ clipPath: "inset(100% 0 0 0)" }}
             >
               <img
@@ -282,9 +291,16 @@ export function JeskoPlanformBlueprint({
                 width={blueprintMedia.width}
                 height={blueprintMedia.height}
                 loading="lazy"
-                className="h-[92%] w-full object-contain brightness-[1.07] contrast-[1.12] mix-blend-multiply"
+                className="h-[92%] w-full object-contain"
               />
             </div>
+
+            {/* Precision hairline X-ray scanline tracking the wipe boundary */}
+            <div
+              ref={scanBeamRef}
+              aria-hidden="true"
+              className="jc-xray-beam pointer-events-none absolute inset-x-4 z-30 h-[2px] opacity-0 transition-opacity duration-200"
+            />
           </div>
 
           {/* BEAT 1 OVERLAY: Giant Split Headline framing the wingspan ("Fly on" | "Your Terms") */}

@@ -41,6 +41,8 @@ export default function HomePage() {
     "hero-sky-plate",
     "jesko-sky-daylight",
     "jesko-clouds-marquee",
+    "jesko-cabin-window-photo",
+    "jesko-window-shade-photo",
     "hawker-blueprint-planform",
     "cabin-editorial",
     "hawker-hero",

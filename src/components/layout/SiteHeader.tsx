@@ -125,12 +125,23 @@ export function SiteHeader({
     const evaluateHeaderTheme = () => {
       setScrolled(window.scrollY > 40);
       const midY = 34;
-      const sections = document.querySelectorAll<HTMLElement>("[data-nav-theme]");
+      const sections = document.querySelectorAll<HTMLElement>(
+        "#main-content [data-nav-theme], #main-content [data-surface], #main-content section.surface-ivory, #main-content section.surface-stone, #main-content section.surface-dark"
+      );
       let nextLight = false;
       for (const sec of sections) {
         const rect = sec.getBoundingClientRect();
         if (rect.top <= midY && rect.bottom >= midY) {
-          nextLight = sec.getAttribute("data-nav-theme") === "light";
+          const explicit =
+            sec.getAttribute("data-nav-theme") ||
+            sec.getAttribute("data-surface");
+          if (explicit) {
+            nextLight = explicit === "light";
+          } else {
+            nextLight =
+              sec.classList.contains("surface-ivory") ||
+              sec.classList.contains("surface-stone");
+          }
           break;
         }
       }
@@ -306,7 +317,7 @@ export function SiteHeader({
           {dubaiTime && (
             <span
               className={cn(
-                "hidden text-[13px] tabular-nums transition-colors duration-300 xl:inline-block",
+                "hidden text-[13px] tabular-nums whitespace-nowrap transition-colors duration-300 lg:inline-block",
                 lightTheme
                   ? "text-[var(--jc-muted)]"
                   : "text-[var(--jc-ivory-soft)]"

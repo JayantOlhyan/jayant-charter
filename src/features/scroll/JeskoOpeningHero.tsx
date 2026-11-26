@@ -11,34 +11,43 @@ gsap.registerPlugin(ScrollTrigger);
 interface JeskoOpeningHeroProps {
   skyDaylight: MediaAsset;
   cloudsMarquee: MediaAsset;
+  cabinWindowPhoto: MediaAsset;
+  windowShadePhoto: MediaAsset;
   brandName: string;
 }
 
-function clamp01(v: number): number {
-  return Math.max(0, Math.min(1, v));
-}
-
-function lerp(a: number, b: number, t: number): number {
-  return a + (b - a) * t;
-}
+const ALTIMETER_TICKS = [
+  4500, 4000, 3500, 3000, 2500, 2000, 1500, 1000, 500, 0,
+];
 
 /**
- * Jesko-inspired opening cabin window sequence rebuilt 100% originally for Jayant Charter:
- * - Animated oval cabin window shade + recessed brushed thumb knob glide upward on load
- * - Seamless 48s horizontal cloud marquee framed through the sculpted espresso bulkhead aperture
- * - On scroll, the cabin wall scales 1 -> 6.8x as left/right monumental headlines sweep clear,
- *   flying the visitor smoothly through the oval window directly into open daylight sky.
+ * Awwwards-faithful photographic opening cabin-window experience rebuilt 100% originally:
+ * 1. Fast symmetric left/right aviation altimeter preloader (0 -> FL410, ~0.9s once per session, non-blocking).
+ * 2. Real photographed espresso-suede cabin bulkhead + sculpted 2-step satin bezel (feathered transparent glass cutout)
+ *    paired with a real photographed woven pleated cabin blind & brushed titanium pull handle.
+ * 3. Interactive handle click/tug + subtle desktop mouse-parallax depth (cabin wall vs. sunlit clouds outside).
+ * 4. Scroll-scrubbed zoom-through (scale 1 -> 6.8 anchored dead-center on the oval glass at 50% 49.5%) flying
+ *    straight out into the continuous azure cloud sea.
  */
 export function JeskoOpeningHero({
   skyDaylight,
   cloudsMarquee,
+  cabinWindowPhoto,
+  windowShadePhoto,
   brandName,
 }: JeskoOpeningHeroProps) {
   const trackRef = useRef<HTMLDivElement>(null);
-  const windowWallRef = useRef<HTMLDivElement>(null);
+  const preloaderRef = useRef<HTMLDivElement>(null);
+  const leftScaleRef = useRef<HTMLDivElement>(null);
+  const rightScaleRef = useRef<HTMLDivElement>(null);
+  const flReadoutRef = useRef<HTMLSpanElement>(null);
+
+  const windowZoomRef = useRef<HTMLDivElement>(null);
+  const windowParallaxRef = useRef<HTMLDivElement>(null);
+  const shadeRef = useRef<HTMLImageElement>(null);
+  const glassSheenRef = useRef<HTMLDivElement>(null);
+  const skyParallaxRef = useRef<HTMLDivElement>(null);
   const skyLayerRef = useRef<HTMLDivElement>(null);
-  const shadeRef = useRef<SVGGElement>(null);
-  const knobRef = useRef<SVGGElement>(null);
   const cabinDimRef = useRef<HTMLDivElement>(null);
   const leftCopyRef = useRef<HTMLDivElement>(null);
   const rightCopyRef = useRef<HTMLDivElement>(null);
@@ -47,160 +56,283 @@ export function JeskoOpeningHero({
   const centerWordmarkRef = useRef<HTMLDivElement>(null);
 
   const [usePinnedZoom, setUsePinnedZoom] = useState(false);
+  const [showAltimeter, setShowAltimeter] = useState(false);
+  const [shadePeeking, setShadePeeking] = useState(false);
 
-  // 1. Opening cabin shade pull-up + gentle blur reveal (fast, non-blocking, honors reduced motion)
+  // Desktop fine-pointer gets full pinned zoom-through; mobile & reduced motion stay clean & instant
   useEffect(() => {
     const prefersReduced = window.matchMedia(
       "(prefers-reduced-motion: reduce)"
     ).matches;
     const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
     setUsePinnedZoom(isDesktop && !prefersReduced);
+  }, []);
 
-    let visited = false;
-    try {
-      visited = sessionStorage.getItem("jc_window_opened") === "1";
-      sessionStorage.setItem("jc_window_opened", "1");
-    } catch {
-      // ignore private mode
-    }
+  // Awwwards Element #3 (Symmetric Altimeter Climb) -> Photographic Pleated Shade Pull-Up
+  useEffect(() => {
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    const shadeEl = shadeRef.current;
+    const dimEl = cabinDimRef.current;
 
     if (prefersReduced) {
-      if (shadeRef.current) {
-        shadeRef.current.style.transform = "translateY(-92%) scaleY(0.45)";
-      }
-      if (knobRef.current) {
-        knobRef.current.style.transform = "translateY(-520px)";
-      }
-      if (cabinDimRef.current) {
-        cabinDimRef.current.style.opacity = "0";
-      }
+      if (shadeEl) gsap.set(shadeEl, { yPercent: -73 });
+      if (dimEl) gsap.set(dimEl, { opacity: 0 });
       return;
     }
 
-    const delay = visited ? 0.12 : 0.35;
-    const ctx = gsap.context(() => {
-      if (shadeRef.current) {
-        gsap.fromTo(
-          shadeRef.current,
-          { yPercent: 0, scaleY: 1, transformOrigin: "50% 0%" },
-          {
-            yPercent: -92,
-            scaleY: 0.48,
-            duration: 1.2,
-            delay,
-            ease: "power4.inOut",
-          }
-        );
-      }
-      if (knobRef.current) {
-        gsap.fromTo(
-          knobRef.current,
-          { y: 0 },
-          {
-            y: -520,
-            duration: 1.2,
-            delay,
-            ease: "power4.inOut",
-          }
-        );
-      }
-      if (cabinDimRef.current) {
-        gsap.fromTo(
-          cabinDimRef.current,
-          { opacity: 0.72 },
-          {
-            opacity: 0,
-            duration: 1.15,
-            delay: delay + 0.15,
-            ease: "power3.out",
-          }
-        );
-      }
-      const revealEls = [
-        leftCopyRef.current,
-        rightCopyRef.current,
-        bottomLeftRef.current,
-        bottomRightRef.current,
-      ].filter(Boolean);
-      if (revealEls.length > 0) {
-        gsap.fromTo(
-          revealEls,
-          { opacity: 0, filter: "blur(22px)", y: 12 },
-          {
-            opacity: 1,
-            filter: "blur(0px)",
-            y: 0,
-            duration: 1.0,
-            delay: delay + 0.28,
-            stagger: 0.08,
-            ease: "power3.out",
-            clearProps: "filter",
-          }
-        );
-      }
-    }, trackRef);
+    let alreadySeen = false;
+    try {
+      alreadySeen = window.sessionStorage.getItem("jc_altimeter_seen") === "1";
+    } catch {
+      alreadySeen = false;
+    }
 
-    return () => ctx.revert();
+    const runShadePull = (delaySec: number) => {
+      const ctx = gsap.context(() => {
+        const tl = gsap.timeline({ delay: delaySec });
+        if (shadeEl) {
+          tl.fromTo(
+            shadeEl,
+            { yPercent: 0 },
+            { yPercent: -73, duration: 1.15, ease: "power3.inOut" },
+            0
+          );
+        }
+        if (dimEl) {
+          tl.fromTo(
+            dimEl,
+            { opacity: 0.44 },
+            { opacity: 0, duration: 1.05, ease: "power2.out" },
+            0.05
+          );
+        }
+        if (glassSheenRef.current) {
+          tl.fromTo(
+            glassSheenRef.current,
+            { xPercent: -90, opacity: 0 },
+            {
+              xPercent: 110,
+              opacity: 0.35,
+              duration: 1.25,
+              ease: "power2.inOut",
+            },
+            0.35
+          ).to(glassSheenRef.current, { opacity: 0, duration: 0.35 }, 1.25);
+        }
+      }, trackRef);
+      return ctx;
+    };
+
+    if (alreadySeen) {
+      const ctx = runShadePull(0.18);
+      return () => ctx.revert();
+    }
+
+    // Fresh arrival: quick 0.85s symmetric altimeter climb -> shade lift!
+    setShowAltimeter(true);
+    try {
+      window.sessionStorage.setItem("jc_altimeter_seen", "1");
+    } catch {
+      // ignore private-mode storage errors
+    }
+
+    let shadeCtx: gsap.Context | null = null;
+    const rafId = window.requestAnimationFrame(() => {
+      const altimeterObj = { fl: 0 };
+      const preTl = gsap.timeline({
+        onComplete: () => {
+          setShowAltimeter(false);
+        },
+      });
+
+      if (leftScaleRef.current && rightScaleRef.current) {
+        preTl.fromTo(
+          [leftScaleRef.current, rightScaleRef.current],
+          { yPercent: -52 },
+          { yPercent: 0, duration: 0.82, ease: "power3.inOut" },
+          0
+        );
+      }
+      preTl.to(
+        altimeterObj,
+        {
+          fl: 410,
+          duration: 0.82,
+          ease: "power2.inOut",
+          onUpdate: () => {
+            if (flReadoutRef.current) {
+              const v = Math.round(altimeterObj.fl);
+              flReadoutRef.current.textContent = `FL${String(v).padStart(3, "0")}`;
+            }
+          },
+        },
+        0
+      );
+      if (preloaderRef.current) {
+        preTl.to(
+          preloaderRef.current,
+          { opacity: 0, duration: 0.38, ease: "power2.out" },
+          0.76
+        );
+      }
+
+      shadeCtx = runShadePull(0.68);
+    });
+
+    return () => {
+      window.cancelAnimationFrame(rafId);
+      shadeCtx?.revert();
+    };
   }, []);
 
-  // 2. Scroll-through-the-cabin-window zoom choreography (Jesko initAllParallax parity)
+  // Interactive pleated shade pull handle toggle (fun tactile micro-gimmick!)
+  const handleToggleShade = () => {
+    const shadeEl = shadeRef.current;
+    if (!shadeEl) return;
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    const nextPeek = !shadePeeking;
+    setShadePeeking(nextPeek);
+    const targetY = nextPeek ? -36 : -73;
+    if (prefersReduced) {
+      gsap.set(shadeEl, { yPercent: targetY });
+      return;
+    }
+    gsap.to(shadeEl, {
+      yPercent: targetY,
+      duration: 0.65,
+      ease: "power3.out",
+    });
+  };
+
+  // Subtle 3D desktop mouse-parallax depth: foreground cabin bulkhead moves opposite to clouds outside
+  useEffect(() => {
+    if (!usePinnedZoom) return;
+    const finePointer = window.matchMedia("(pointer: fine)").matches;
+    if (!finePointer) return;
+
+    const winX = windowParallaxRef.current
+      ? gsap.quickTo(windowParallaxRef.current, "x", {
+          duration: 1.1,
+          ease: "power3.out",
+        })
+      : null;
+    const winY = windowParallaxRef.current
+      ? gsap.quickTo(windowParallaxRef.current, "y", {
+          duration: 1.1,
+          ease: "power3.out",
+        })
+      : null;
+    const skyX = skyParallaxRef.current
+      ? gsap.quickTo(skyParallaxRef.current, "x", {
+          duration: 1.2,
+          ease: "power3.out",
+        })
+      : null;
+    const skyY = skyParallaxRef.current
+      ? gsap.quickTo(skyParallaxRef.current, "y", {
+          duration: 1.2,
+          ease: "power3.out",
+        })
+      : null;
+
+    const onMove = (e: MouseEvent) => {
+      if (window.scrollY > window.innerHeight * 0.45) {
+        winX?.(0);
+        winY?.(0);
+        skyX?.(0);
+        skyY?.(0);
+        return;
+      }
+      const nx = e.clientX / window.innerWidth - 0.5;
+      const ny = e.clientY / window.innerHeight - 0.5;
+      winX?.(nx * 14);
+      winY?.(ny * 8);
+      skyX?.(-nx * 24);
+      skyY?.(-ny * 14);
+    };
+
+    window.addEventListener("mousemove", onMove, { passive: true });
+    return () => window.removeEventListener("mousemove", onMove);
+  }, [usePinnedZoom]);
+
+  // Jesko Scroll-Through-the-Cabin-Window Scrub Choreography
   useEffect(() => {
     if (!usePinnedZoom) return;
     const track = trackRef.current;
     if (!track) return;
 
     const ctx = gsap.context(() => {
-      ScrollTrigger.create({
-        trigger: track,
-        start: "top top",
-        end: "bottom bottom",
-        scrub: true,
-        onUpdate: (self) => {
-          const p = clamp01(self.progress);
-
-          // Scale sculpted cabin window wall 1 -> 6.8x right past the viewport edges
-          if (windowWallRef.current) {
-            const wallScale = lerp(1, 6.8, p * p * 0.7 + p * 0.3);
-            const wallX = lerp(0, -1.5, p);
-            const wallOpacity = p > 0.76 ? clamp01(1 - (p - 0.76) / 0.18) : 1;
-            windowWallRef.current.style.transform = `translate3d(${wallX.toFixed(2)}%, 0, 0) scale(${wallScale.toFixed(3)})`;
-            windowWallRef.current.style.opacity = wallOpacity.toFixed(3);
-          }
-
-          // Sky deck behind the window expands gently into full-horizon vista
-          if (skyLayerRef.current) {
-            const skyScale = lerp(1.02, 1.14, p);
-            const skyY = lerp(0, -6, p);
-            skyLayerRef.current.style.transform = `translate3d(0, ${skyY.toFixed(2)}%, 0) scale(${skyScale.toFixed(3)})`;
-          }
-
-          // Monumental split headlines sweep cleanly left & right out of the flight path
-          const copyFade = clamp01(1 - p / 0.44);
-          if (leftCopyRef.current) {
-            leftCopyRef.current.style.transform = `translate3d(${lerp(0, -44, p).toFixed(2)}vw, 0, 0) scale(${lerp(1, 1.35, p).toFixed(3)})`;
-            leftCopyRef.current.style.opacity = copyFade.toFixed(3);
-          }
-          if (rightCopyRef.current) {
-            rightCopyRef.current.style.transform = `translate3d(${lerp(0, 44, p).toFixed(2)}vw, 0, 0) scale(${lerp(1, 1.35, p).toFixed(3)})`;
-            rightCopyRef.current.style.opacity = copyFade.toFixed(3);
-          }
-          if (bottomLeftRef.current) {
-            bottomLeftRef.current.style.transform = `translate3d(${lerp(0, -32, p).toFixed(2)}vw, 0, 0)`;
-            bottomLeftRef.current.style.opacity = copyFade.toFixed(3);
-          }
-          if (bottomRightRef.current) {
-            bottomRightRef.current.style.transform = `translate3d(${lerp(0, 32, p).toFixed(2)}vw, 0, 0)`;
-            bottomRightRef.current.style.opacity = copyFade.toFixed(3);
-          }
-
-          // Window-centered wordmark glides upward toward top-center nav
-          if (centerWordmarkRef.current) {
-            const wmFade = clamp01(1 - p / 0.55);
-            centerWordmarkRef.current.style.transform = `translate3d(0, ${lerp(0, -38, p).toFixed(2)}vh, 0) scale(${lerp(1.18, 0.85, p).toFixed(3)})`;
-            centerWordmarkRef.current.style.opacity = wmFade.toFixed(3);
-          }
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: track,
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 0.65,
         },
       });
+
+      // Zoom the real photographic cabin bulkhead cleanly out through the exact oval glass center (50% 49.5%)
+      if (windowZoomRef.current) {
+        tl.fromTo(
+          windowZoomRef.current,
+          { scale: 1, opacity: 1 },
+          { scale: 6.8, ease: "power2.in", duration: 0.9 },
+          0
+        ).to(
+          windowZoomRef.current,
+          { opacity: 0, duration: 0.25, ease: "power1.out" },
+          0.62
+        );
+      }
+
+      if (skyLayerRef.current) {
+        tl.fromTo(
+          skyLayerRef.current,
+          { scale: 1.14 },
+          { scale: 1.0, ease: "none", duration: 1 },
+          0
+        );
+      }
+
+      if (leftCopyRef.current) {
+        tl.to(
+          leftCopyRef.current,
+          { xPercent: -30, opacity: 0, duration: 0.42, ease: "power2.in" },
+          0.02
+        );
+      }
+      if (rightCopyRef.current) {
+        tl.to(
+          rightCopyRef.current,
+          { xPercent: 30, opacity: 0, duration: 0.42, ease: "power2.in" },
+          0.02
+        );
+      }
+      if (bottomLeftRef.current) {
+        tl.to(
+          bottomLeftRef.current,
+          { yPercent: 30, opacity: 0, duration: 0.36, ease: "power2.in" },
+          0.04
+        );
+      }
+      if (bottomRightRef.current) {
+        tl.to(
+          bottomRightRef.current,
+          { yPercent: 30, opacity: 0, duration: 0.36, ease: "power2.in" },
+          0.04
+        );
+      }
+      if (centerWordmarkRef.current) {
+        tl.to(
+          centerWordmarkRef.current,
+          { y: -220, opacity: 0, scale: 0.85, duration: 0.5, ease: "power2.in" },
+          0.06
+        );
+      }
     }, track);
 
     return () => ctx.revert();
@@ -219,6 +351,66 @@ export function JeskoOpeningHero({
           : "relative min-h-[100svh] overflow-hidden bg-[var(--jc-teal)] text-[var(--jc-ivory)]"
       }
     >
+      {/* =====================================================================
+          AWWWARDS ELEMENT #3: SYMMETRIC AVIATION ALTIMETER INTRO VEIL
+          Non-blocking progressive client veil (~0.9s once per session)
+      ===================================================================== */}
+      {showAltimeter && (
+        <div
+          ref={preloaderRef}
+          aria-hidden="true"
+          className="pointer-events-none fixed inset-0 z-[var(--z-modal)] flex items-center justify-between bg-[var(--jc-teal-deep)] px-8 text-[var(--jc-ivory)] md:px-16"
+        >
+          {/* Left vertical altimeter ruler scale */}
+          <div className="jc-altimeter-mask relative hidden h-[64vh] w-24 overflow-hidden sm:block">
+            <div
+              ref={leftScaleRef}
+              className="flex flex-col gap-10 py-6 text-[11px] font-medium text-[var(--jc-ivory-muted)] tabular-nums"
+            >
+              {ALTIMETER_TICKS.map((alt) => (
+                <div key={`l-${alt}`} className="flex items-center gap-3">
+                  <span className="h-px w-5 bg-[var(--jc-line-dark-strong)]" />
+                  <span>{alt}</span>
+                </div>
+              ))}
+            </div>
+            <span className="absolute left-0 top-1/2 -translate-y-1/2 border-y-[4px] border-l-[6px] border-y-transparent border-l-[var(--jc-gold)]" />
+          </div>
+
+          {/* Center flight-level climb telemetry */}
+          <div className="mx-auto text-center">
+            <p className="jc-wordmark m-0 text-[22px] text-[var(--jc-ivory)] sm:text-[26px]">
+              {brandName}
+            </p>
+            <p className="mt-2 mb-0 text-[12px] text-[var(--jc-ivory-muted)]">
+              Private charter arranged around your itinerary
+            </p>
+            <span
+              ref={flReadoutRef}
+              className="mt-5 inline-block text-[13px] font-semibold text-[var(--jc-gold)] tabular-nums"
+            >
+              FL000
+            </span>
+          </div>
+
+          {/* Right symmetric altimeter ruler scale */}
+          <div className="jc-altimeter-mask relative hidden h-[64vh] w-24 overflow-hidden sm:block">
+            <div
+              ref={rightScaleRef}
+              className="flex flex-col items-end gap-10 py-6 text-[11px] font-medium text-[var(--jc-ivory-muted)] tabular-nums"
+            >
+              {ALTIMETER_TICKS.map((alt) => (
+                <div key={`r-${alt}`} className="flex items-center gap-3">
+                  <span>{alt}</span>
+                  <span className="h-px w-5 bg-[var(--jc-line-dark-strong)]" />
+                </div>
+              ))}
+            </div>
+            <span className="absolute right-0 top-1/2 -translate-y-1/2 border-y-[4px] border-r-[6px] border-y-transparent border-r-[var(--jc-gold)]" />
+          </div>
+        </div>
+      )}
+
       <div
         className={
           usePinnedZoom
@@ -226,208 +418,112 @@ export function JeskoOpeningHero({
             : "relative flex min-h-[100svh] w-full flex-col justify-between overflow-hidden"
         }
       >
-        {/* LAYER 0: Luminous daylight high-altitude sky + infinite 48s cloud marquee */}
+        {/* LAYER 0: Luminous daylight high-altitude sky + infinite mirror-tiled 48s cloud drift */}
         <div
           ref={skyLayerRef}
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 origin-center will-change-transform"
         >
-          <img
-            src={skyDaylight.path}
-            alt=""
-            width={skyDaylight.width}
-            height={skyDaylight.height}
-            fetchPriority="high"
-            className="h-full w-full object-cover object-center"
-          />
+          <div
+            ref={skyParallaxRef}
+            className="absolute -inset-6 will-change-transform"
+          >
+            <img
+              src={skyDaylight.path}
+              alt=""
+              width={skyDaylight.width}
+              height={skyDaylight.height}
+              fetchPriority="high"
+              className="h-full w-full object-cover object-center"
+            />
 
-          {/* Seamless 48-second horizontal cloud drift (mirror-tiled to eliminate seams) */}
-          <div className="jc-cloud-marquee absolute inset-0 flex w-[400%] opacity-60 mix-blend-screen">
-            <img
-              src={cloudsMarquee.path}
-              alt=""
-              width={cloudsMarquee.width}
-              height={cloudsMarquee.height}
-              className="h-full w-1/4 object-cover"
-            />
-            <img
-              src={cloudsMarquee.path}
-              alt=""
-              width={cloudsMarquee.width}
-              height={cloudsMarquee.height}
-              className="h-full w-1/4 -scale-x-100 object-cover"
-            />
-            <img
-              src={cloudsMarquee.path}
-              alt=""
-              width={cloudsMarquee.width}
-              height={cloudsMarquee.height}
-              className="h-full w-1/4 object-cover"
-            />
-            <img
-              src={cloudsMarquee.path}
-              alt=""
-              width={cloudsMarquee.width}
-              height={cloudsMarquee.height}
-              className="h-full w-1/4 -scale-x-100 object-cover"
-            />
+            {/* Seamless mirror-tiled 48-second horizontal cloud drift */}
+            <div className="jc-cloud-marquee absolute inset-0 flex w-[400%] opacity-60 mix-blend-screen">
+              <img
+                src={cloudsMarquee.path}
+                alt=""
+                width={cloudsMarquee.width}
+                height={cloudsMarquee.height}
+                className="h-full w-1/4 object-cover"
+              />
+              <img
+                src={cloudsMarquee.path}
+                alt=""
+                width={cloudsMarquee.width}
+                height={cloudsMarquee.height}
+                className="h-full w-1/4 -scale-x-100 object-cover"
+              />
+              <img
+                src={cloudsMarquee.path}
+                alt=""
+                width={cloudsMarquee.width}
+                height={cloudsMarquee.height}
+                className="h-full w-1/4 object-cover"
+              />
+              <img
+                src={cloudsMarquee.path}
+                alt=""
+                width={cloudsMarquee.width}
+                height={cloudsMarquee.height}
+                className="h-full w-1/4 -scale-x-100 object-cover"
+              />
+            </div>
           </div>
 
           {/* Multi-stop eased azure sky bottom handoff into Cloud Philosophy section */}
           <div className="jc-sky-hero-over absolute inset-x-0 bottom-0 h-[42%]" />
         </div>
 
-        {/* LAYER 1: Sculpted Private-Jet Espresso Bulkhead + Oval Cabin Window + Animated Pull-Up Shade */}
+        {/* LAYER 1: REAL PHOTOGRAPHED ESPRESSO-SUEDE CABIN WINDOW + REAL WOVEN PLEATED BLIND */}
         <div
-          ref={windowWallRef}
+          ref={windowZoomRef}
           data-plane="hero-window"
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 z-10 origin-center will-change-transform"
+          style={{ transformOrigin: "50% 49.5%" }}
+          className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center overflow-hidden will-change-transform"
         >
-          <svg
-            viewBox="0 0 1440 900"
-            preserveAspectRatio="xMidYMid slice"
-            className="h-full w-full"
+          <div
+            ref={windowParallaxRef}
+            className="jc-window-cover-stage relative shrink-0 scale-[1.03] will-change-transform"
           >
-            <defs>
-              {/* Warm espresso sculpted cabin bulkhead radial bounce lighting */}
-              <radialGradient id="jcBulkheadLight" cx="50%" cy="49%" r="64%">
-                <stop offset="0%" stopColor="#655952" />
-                <stop offset="32%" stopColor="#4c413c" />
-                <stop offset="68%" stopColor="#2c2321" />
-                <stop offset="100%" stopColor="#161110" />
-              </radialGradient>
-
-              {/* Sculpted satin outer window surround bezel */}
-              <linearGradient id="jcBezelOuter" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#cbc4bc" />
-                <stop offset="35%" stopColor="#948c84" />
-                <stop offset="70%" stopColor="#6e6660" />
-                <stop offset="100%" stopColor="#b9b0a6" />
-              </linearGradient>
-
-              {/* Recessed inner reveal bevel catching daylight from the clouds */}
-              <linearGradient id="jcBezelInner" x1="15%" y1="0%" x2="85%" y2="100%">
-                <stop offset="0%" stopColor="#726c68" />
-                <stop offset="48%" stopColor="#e8e3dc" />
-                <stop offset="100%" stopColor="#b7c3cc" />
-              </linearGradient>
-
-              {/* Pleated recessed cabin window blind */}
-              <linearGradient id="jcShadeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#cbc3b9" />
-                <stop offset="65%" stopColor="#a79e95" />
-                <stop offset="100%" stopColor="#7f766e" />
-              </linearGradient>
-
-              {/* Clip path strictly inside the oval glass aperture */}
-              <clipPath id="jcWindowApertureClip">
-                <rect x="526" y="132" width="388" height="632" rx="194" ry="194" />
-              </clipPath>
-            </defs>
-
-            {/* Recessed glass inner shadow vignette + animated pull-up cabin blind clipped inside aperture */}
-            <g clipPath="url(#jcWindowApertureClip)">
-              <rect
-                x="526"
-                y="132"
-                width="388"
-                height="632"
-                fill="none"
-                stroke="rgba(20,16,16,0.34)"
-                strokeWidth="26"
+            {/* Exact aligned oval glass aperture slot (x: 38.6%..61.4%, y: 21.3%..77.7%) holding the pleated blind */}
+            <div
+              style={{
+                left: "38.6%",
+                top: "21.3%",
+                width: "22.8%",
+                height: "56.4%",
+              }}
+              className="absolute overflow-hidden"
+            >
+              {/* Subtle animated diagonal curved-glass reflection sheen */}
+              <div
+                ref={glassSheenRef}
+                aria-hidden="true"
+                className="jc-glass-sheen pointer-events-none absolute inset-0 z-20 opacity-0 will-change-transform"
               />
-              {/* Animated pull-up cabin window blind */}
-              <g ref={shadeRef}>
-                <rect x="520" y="128" width="400" height="642" fill="url(#jcShadeGrad)" />
-                {/* Subtle horizontal architectural shade pleats */}
-                {Array.from({ length: 18 }).map((_, i) => (
-                  <line
-                    key={i}
-                    x1="520"
-                    x2="920"
-                    y1={152 + i * 34}
-                    y2={152 + i * 34}
-                    stroke="rgba(49,39,38,0.16)"
-                    strokeWidth="1.5"
-                  />
-                ))}
-                {/* Bottom weighted shade rail */}
-                <rect x="520" y="738" width="400" height="32" fill="#6f665f" />
-              </g>
-              {/* Sculpted recessed shade thumb knob */}
-              <g ref={knobRef}>
-                <rect
-                  x="676"
-                  y="732"
-                  width="88"
-                  height="26"
-                  rx="13"
-                  fill="#d5cec6"
-                  stroke="#5d554f"
-                  strokeWidth="2"
-                />
-                <rect x="694" y="741" width="52" height="8" rx="4" fill="#8b827b" />
-              </g>
-            </g>
 
-            {/* Sculpted outer frame shadow ring */}
-            <rect
-              x="448"
-              y="56"
-              width="544"
-              height="784"
-              rx="272"
-              ry="272"
-              fill="none"
-              stroke="rgba(12,9,8,0.52)"
-              strokeWidth="44"
-            />
+              {/* Real photographed accordion-pleated cabin blind with brushed titanium pull handle */}
+              <img
+                ref={shadeRef}
+                src={windowShadePhoto.path}
+                alt=""
+                width={windowShadePhoto.width}
+                height={windowShadePhoto.height}
+                fetchPriority="high"
+                className="relative z-10 h-full w-full object-cover object-bottom will-change-transform"
+              />
+            </div>
 
-            {/* Main espresso bulkhead wall with true evenodd oval cutout */}
-            <path
-              fillRule="evenodd"
-              fill="url(#jcBulkheadLight)"
-              d="M0 0 H1440 V900 H0 Z M720 120 C834 120 924 210 924 324 V572 C924 686 834 776 720 776 C606 776 516 686 516 572 V324 C516 210 606 120 720 120 Z"
+            {/* Real photographed espresso suede bulkhead & sculpted 2-step bezel with transparent alpha oval glass */}
+            <img
+              src={cabinWindowPhoto.path}
+              alt=""
+              width={cabinWindowPhoto.width}
+              height={cabinWindowPhoto.height}
+              fetchPriority="high"
+              className="relative z-20 h-full w-full object-fill select-none"
             />
-
-            {/* Sculpted satin outer window surround molding */}
-            <rect
-              x="472"
-              y="78"
-              width="496"
-              height="740"
-              rx="248"
-              ry="248"
-              fill="none"
-              stroke="url(#jcBezelOuter)"
-              strokeWidth="52"
-            />
-
-            {/* Inner crisp glass reveal trim */}
-            <rect
-              x="512"
-              y="118"
-              width="416"
-              height="660"
-              rx="208"
-              ry="208"
-              fill="none"
-              stroke="url(#jcBezelInner)"
-              strokeWidth="22"
-            />
-            <rect
-              x="524"
-              y="130"
-              width="392"
-              height="636"
-              rx="196"
-              ry="196"
-              fill="none"
-              stroke="rgba(49,39,38,0.28)"
-              strokeWidth="3"
-            />
-          </svg>
+          </div>
         </div>
 
         {/* Initial dark cabin interior wash that lifts as the blind opens */}
@@ -437,10 +533,25 @@ export function JeskoOpeningHero({
           className="pointer-events-none absolute inset-0 z-15 bg-[var(--jc-teal-deep)] opacity-0"
         />
 
-        {/* Mobile-only contrast scrim so foreground typography stays razor-sharp over sunlit clouds on small screens */}
+        {/* Mobile-only contrast scrim so foreground typography stays crisp over bright clouds */}
         <div
           aria-hidden="true"
           className="jc-mobile-hero-scrim pointer-events-none absolute inset-0 z-15 lg:hidden"
+        />
+
+        {/* Interactive invisible hit target over the upper window shade pull handle (desktop delight!) */}
+        <button
+          type="button"
+          onClick={handleToggleShade}
+          aria-label={
+            shadePeeking
+              ? "Raise cabin window shade"
+              : "Lower cabin window shade partially"
+          }
+          title={
+            shadePeeking ? "Raise window blind" : "Pull window blind down"
+          }
+          className="hidden lg:block absolute left-1/2 top-[22%] z-30 h-14 w-36 -translate-x-1/2 cursor-grab rounded-full active:cursor-grabbing focus-visible:outline-2 focus-visible:outline-[var(--jc-gold)]"
         />
 
         {/* Window-centered subtle Jayant Charter mark (glides up toward nav on scroll) */}
@@ -449,7 +560,7 @@ export function JeskoOpeningHero({
           aria-hidden="true"
           className="pointer-events-none absolute inset-0 z-20 hidden items-center justify-center lg:flex will-change-transform"
         >
-          <span className="jc-wordmark text-[26px] tracking-[-0.02em] text-[var(--jc-ivory)] opacity-90 drop-shadow-sm">
+          <span className="jc-wordmark text-[24px] tracking-[-0.02em] text-[var(--jc-ivory)] opacity-90 drop-shadow-sm">
             {brandName}
           </span>
         </div>
@@ -508,7 +619,7 @@ export function JeskoOpeningHero({
               <div className="flex items-center justify-between gap-4 text-[12px] font-medium text-[var(--jc-ivory)]">
                 <a
                   href="#about"
-                  className="inline-flex items-center gap-2 transition-opacity hover:opacity-80"
+                  className="group inline-flex items-center gap-2 transition-opacity hover:opacity-80"
                 >
                   <ChevronDown
                     aria-hidden="true"

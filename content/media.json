@@ -232,5 +232,31 @@
     "license": "Proprietary generated editorial visual",
     "source": "Jayant Charter visual production",
     "permissionStatus": "generated-illustrative"
+  },
+  {
+    "id": "jesko-cabin-window-photo",
+    "type": "image",
+    "path": "/media/v1/jesko-cabin-window-photo.webp",
+    "width": 1376,
+    "height": 768,
+    "alt": "Photorealistic dark espresso suede private jet cabin wall framing a sculpted oval window opening onto high-altitude daylight clouds",
+    "caption": "Illustrative private jet cabin window framing.",
+    "illustrative": true,
+    "license": "Proprietary generated editorial visual",
+    "source": "Jayant Charter visual production",
+    "permissionStatus": "generated-illustrative"
+  },
+  {
+    "id": "jesko-window-shade-photo",
+    "type": "image",
+    "path": "/media/v1/jesko-window-shade-photo.webp",
+    "width": 720,
+    "height": 964,
+    "alt": "Close-up photograph of a woven warm taupe pleated private jet cabin window blind with a recessed satin titanium pull handle",
+    "caption": "Illustrative cabin window shade detail.",
+    "illustrative": true,
+    "license": "Proprietary generated editorial visual",
+    "source": "Jayant Charter visual production",
+    "permissionStatus": "generated-illustrative"
   }
 ]

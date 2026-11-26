@@ -65,7 +65,7 @@ const EXPERIENCE_ROWS = [
  */
 export function TrustEditorialSplit({ mediaById }: TrustEditorialSplitProps) {
   const [activeId, setActiveId] = useState<string>(EXPERIENCE_ROWS[0].id);
-  const [dubaiClock, setDubaiClock] = useState<string>("—:—");
+  const [dubaiClock, setDubaiClock] = useState<string>("--:--");
   const frameWrapRef = useRef<HTMLDivElement>(null);
   const frameImgRef = useRef<HTMLImageElement>(null);
 

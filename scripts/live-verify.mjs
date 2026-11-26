@@ -86,12 +86,25 @@ async function main() {
       results.pageErrors.push(`[desktop] ${err.message}`);
     });
 
-    // 2. Homepage Opening Cabin Window Hero
+    // 2. Homepage Opening Photographic Cabin Window Hero
     await page.goto(`${BASE_URL}/`, { waitUntil: "networkidle" });
-    await page.waitForTimeout(1900); // allow 1.2s shade pull-up to settle completely
-    results.heroWindowRendered = await page.evaluate(() =>
-      Boolean(document.querySelector("[data-plane='hero-window'] svg"))
-    );
+    await page.waitForTimeout(2500); // allow 0.85s altimeter preloader + 1.15s shade pull-up to settle completely
+    results.heroWindowRendered = await page.evaluate(() => {
+      const winImg = document.querySelector(
+        "[data-plane='hero-window'] img[src*='jesko-cabin-window-photo']"
+      );
+      const shadeImg = document.querySelector(
+        "[data-plane='hero-window'] img[src*='jesko-window-shade-photo']"
+      );
+      return Boolean(
+        winImg &&
+          winImg.complete &&
+          winImg.naturalWidth > 0 &&
+          shadeImg &&
+          shadeImg.complete &&
+          shadeImg.naturalWidth > 0
+      );
+    });
     await page.screenshot({ path: path.join(OUT_DIR, "01-opening-cabin-window-1440.png") });
 
     // Check 1280x800 above-the-fold fit
@@ -274,6 +287,13 @@ async function main() {
     const refText = await page.locator("dd").first().textContent();
     results.e2eInquiryId = refText?.trim() || null;
 
+    // Capture Awwwards-inspired animated 404 flight page on a dedicated page so expected HTTP 404 doesn't pollute app consoleErrors
+    const notFoundPage = await desktopCtx.newPage();
+    await notFoundPage.goto(`${BASE_URL}/does-not-exist`, { waitUntil: "networkidle" });
+    await notFoundPage.waitForTimeout(1200);
+    await notFoundPage.screenshot({ path: path.join(OUT_DIR, "12-not-found-404-1440.png") });
+    await notFoundPage.close();
+
     await desktopCtx.close();
 
     // 6. Mobile 390x844 captures
@@ -287,7 +307,7 @@ async function main() {
       if (msg.type() === "error") results.consoleErrors.push(`[mobile] ${msg.text()}`);
     });
     await mPage.goto(`${BASE_URL}/`, { waitUntil: "networkidle" });
-    await mPage.waitForTimeout(1900);
+    await mPage.waitForTimeout(2500);
     await mPage.screenshot({ path: path.join(OUT_DIR, "09-mobile-390-hero.png") });
 
     await mPage.goto(`${BASE_URL}/aircraft`, { waitUntil: "networkidle" });

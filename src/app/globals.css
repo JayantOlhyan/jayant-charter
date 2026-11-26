@@ -235,6 +235,30 @@
   background: var(--jc-mobile-hero-scrim);
 }
 
+/* Exact object-cover coordinate wrapper for the 1376:768 photographic cabin window + pleated blind */
+.jc-window-cover-stage {
+  width: max(100%, calc(100svh * 1376 / 768));
+  height: max(100%, calc(100vw * 768 / 1376));
+}
+
+.jc-glass-sheen {
+  background: var(--jc-glass-sheen);
+}
+
+.jc-xray-beam {
+  background: var(--jc-xray-beam-grad);
+}
+
+.jc-altimeter-mask {
+  -webkit-mask-image: var(--jc-altimeter-mask);
+  mask-image: var(--jc-altimeter-mask);
+}
+
+.font-serif {
+  font-variation-settings: "wdth" 115;
+  letter-spacing: -0.025em;
+}
+
 .jc-aircraft-shadow {
   filter: var(--jc-shadow-aircraft-dark);
 }
