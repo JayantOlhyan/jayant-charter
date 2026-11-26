@@ -42,7 +42,8 @@ export function NotFoundFlight({
     <section
       data-nav-theme="light"
       data-surface="light"
-      className="jc-light-stone relative flex min-h-[88svh] items-center overflow-hidden py-24 text-[var(--jc-ink)]"
+      data-hide-floating-cta="true"
+      className="jc-light-stone relative flex min-h-[88svh] items-center overflow-hidden py-14 text-[var(--jc-ink)] sm:py-20 lg:py-24"
     >
       {/* Stacked giant translucent 404 numerals behind the aircraft */}
       <div
