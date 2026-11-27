@@ -98,9 +98,10 @@ export default async function AircraftDetailPage({
             </div>
             <Link
               href={`/inquire?service=private-jet&aircraft=${aircraft.id}`}
-              className="jc-btn-gold"
+              className="jc-btn-gold w-full sm:w-auto"
             >
-              Request a callback with this preference
+              <span className="sm:hidden">Request a callback</span>
+              <span className="hidden sm:inline">Request a callback with this preference</span>
             </Link>
           </div>
 
@@ -160,47 +161,84 @@ export default async function AircraftDetailPage({
           </div>
 
           {aircraft.specifications.length > 0 ? (
-            <div className="jc-editorial-card mt-10 overflow-x-auto">
-              <table className="w-full border-collapse text-left text-[15px]">
-                <thead>
-                  <tr className="border-b border-[var(--jc-line-light)] bg-[var(--jc-ivory)] text-[13px] font-semibold text-[var(--jc-ink)]">
-                    <th className="px-5 py-4">Reference item</th>
-                    <th className="px-5 py-4">Value</th>
-                    <th className="px-5 py-4">Qualification</th>
-                    <th className="px-5 py-4">Source and review date</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-[var(--jc-line-light)]">
-                  {aircraft.specifications.map((spec) => (
-                    <tr key={spec.label}>
-                      <td className="px-5 py-4 font-medium text-[var(--jc-ink)]">
+            <>
+              {/* Mobile-first stacked editorial specification cards (zero horizontal table scrolling on phones!) */}
+              <div className="mt-8 space-y-4 md:hidden">
+                {aircraft.specifications.map((spec) => (
+                  <article
+                    key={spec.label}
+                    className="jc-editorial-card p-5"
+                  >
+                    <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-[var(--jc-line-light)] pb-3">
+                      <h3 className="m-0 font-sans text-[14px] font-semibold text-[var(--jc-ink)]">
                         {spec.label}
-                      </td>
-                      <td className="px-5 py-4 font-serif text-[22px] text-[var(--jc-teal)] tabular-nums whitespace-nowrap">
+                      </h3>
+                      <span className="font-serif text-[22px] text-[var(--jc-teal)] tabular-nums whitespace-nowrap">
                         {spec.value}
                         {spec.unit ? ` ${spec.unit}` : ""}
-                      </td>
-                      <td className="px-5 py-4 text-[14px] text-[var(--jc-muted)]">
-                        {spec.qualification}
-                      </td>
-                      <td className="px-5 py-4 text-[13px] text-[var(--jc-muted)]">
-                        <a
-                          href={spec.sourceUrl}
-                          target="_blank"
-                          rel="noreferrer"
-                          className="text-[var(--jc-teal)] underline underline-offset-4"
-                        >
-                          {spec.sourceLabel}
-                        </a>
-                        <span className="mt-1 block tabular-nums">
-                          Reviewed {spec.reviewedAt}
-                        </span>
-                      </td>
+                      </span>
+                    </div>
+                    <p className="mt-3 mb-0 text-[14px] leading-relaxed text-[var(--jc-muted)]">
+                      {spec.qualification}
+                    </p>
+                    <div className="mt-3 flex flex-wrap items-baseline justify-between gap-2 border-t border-[var(--jc-line-light)] pt-3 text-[12.5px] text-[var(--jc-muted)]">
+                      <a
+                        href={spec.sourceUrl}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-[var(--jc-teal)] underline underline-offset-4"
+                      >
+                        {spec.sourceLabel}
+                      </a>
+                      <span className="tabular-nums">Reviewed {spec.reviewedAt}</span>
+                    </div>
+                  </article>
+                ))}
+              </div>
+
+              {/* Tablet & desktop structured 4-column reference table */}
+              <div className="jc-editorial-card mt-10 hidden overflow-x-auto md:block">
+                <table className="w-full border-collapse text-left text-[15px]">
+                  <thead>
+                    <tr className="border-b border-[var(--jc-line-light)] bg-[var(--jc-ivory)] text-[13px] font-semibold text-[var(--jc-ink)]">
+                      <th className="px-5 py-4">Reference item</th>
+                      <th className="px-5 py-4">Value</th>
+                      <th className="px-5 py-4">Qualification</th>
+                      <th className="px-5 py-4">Source and review date</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody className="divide-y divide-[var(--jc-line-light)]">
+                    {aircraft.specifications.map((spec) => (
+                      <tr key={spec.label}>
+                        <td className="px-5 py-4 font-medium text-[var(--jc-ink)]">
+                          {spec.label}
+                        </td>
+                        <td className="px-5 py-4 font-serif text-[22px] text-[var(--jc-teal)] tabular-nums whitespace-nowrap">
+                          {spec.value}
+                          {spec.unit ? ` ${spec.unit}` : ""}
+                        </td>
+                        <td className="px-5 py-4 text-[14px] text-[var(--jc-muted)]">
+                          {spec.qualification}
+                        </td>
+                        <td className="px-5 py-4 text-[13px] text-[var(--jc-muted)]">
+                          <a
+                            href={spec.sourceUrl}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="text-[var(--jc-teal)] underline underline-offset-4"
+                          >
+                            {spec.sourceLabel}
+                          </a>
+                          <span className="mt-1 block tabular-nums">
+                            Reviewed {spec.reviewedAt}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
           ) : (
             <p className="mt-6 text-[15px] text-[var(--jc-muted)]">
               Specific tail specifications are confirmed directly by the operating carrier for each itinerary.

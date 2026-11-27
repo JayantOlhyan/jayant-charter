@@ -455,7 +455,7 @@ export function JeskoPlanformBlueprint({
       data-chapter="planform"
       data-nav-theme="light"
       data-surface="light"
-      className="jc-light-stone jc-planform-mobile-section border-b border-[var(--jc-line-light)] pb-28 pt-20 text-[var(--jc-ink)] md:py-24"
+      className="jc-light-stone jc-planform-mobile-section border-b border-[var(--jc-line-light)] pb-24 pt-16 text-[var(--jc-ink)] sm:pb-28 sm:pt-20 md:py-24"
     >
       <div className="jc-container">
         <div className="flex flex-wrap items-end justify-between gap-4">
@@ -501,7 +501,7 @@ export function JeskoPlanformBlueprint({
         </div>
 
         {/* Dramatic Jesko-proportioned vertical nose-up showcase (with exterior toggle) */}
-        <div className="jc-planform-mobile-stage mt-8 flex min-h-[380px] items-center justify-center py-4 sm:min-h-[460px]">
+        <div className="jc-planform-mobile-stage mt-6 flex min-h-[320px] items-center justify-center py-3 sm:mt-8 sm:min-h-[460px] sm:py-4">
           {showMobileExterior ? (
             <img
               src={heroPoster.path}
@@ -553,7 +553,10 @@ export function JeskoPlanformBlueprint({
           </div>
         </dl>
 
-        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-[var(--jc-line-light)] pt-5">
+        <div
+          id="flight-footer-cta"
+          className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-[var(--jc-line-light)] pt-5"
+        >
           <p className="m-0 max-w-[48ch] text-[12px] leading-relaxed text-[var(--jc-muted)]">
             Seating layout, operating range under load, and availability are confirmed per itinerary by the licensed operating carrier.
           </p>

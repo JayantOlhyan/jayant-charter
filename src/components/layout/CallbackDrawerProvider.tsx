@@ -55,8 +55,8 @@ export function CallbackDrawerProvider({
   children,
 }: CallbackDrawerProviderProps) {
   const pathname = usePathname();
-  const isPillSuppressedRoute =
-    pathname === "/inquire" || pathname.startsWith("/aircraft");
+  const isHomeRoute = pathname === "/";
+  const isPillSuppressedRoute = !isHomeRoute;
 
   const [isOpen, setIsOpen] = useState(false);
   const [defaultService, setDefaultService] = useState<ServicePref>("decide");
@@ -128,7 +128,7 @@ export function CallbackDrawerProvider({
     };
   }, [isOpen]);
 
-  // Auto-hide pill over #inspect-aircraft, #inquire, #global, footer, or any [data-hide-floating-cta="true"] page (e.g. 404)
+  // Auto-hide pill over #global, footer, and (on < lg mobile) over interactive inline-CTA / accordion sections so it never overlaps taps or copy
   useEffect(() => {
     if (isPillSuppressedRoute) {
       setHiddenBySection(true);
@@ -140,10 +140,16 @@ export function CallbackDrawerProvider({
       return;
     }
 
+    const isCompactViewport = window.matchMedia("(max-width: 1023px)").matches;
+    const baseIds = ["inspect-aircraft", "inquire", "global"];
+    const mobileExtraIds = isCompactViewport
+      ? ["flight-footer-cta", "services", "benefits", "home-faq"]
+      : [];
+
     const targets = [
-      document.getElementById("inspect-aircraft"),
-      document.getElementById("inquire"),
-      document.getElementById("global"),
+      ...[...baseIds, ...mobileExtraIds].map((id) =>
+        document.getElementById(id)
+      ),
       document.querySelector("footer"),
     ].filter((el): el is HTMLElement => Boolean(el));
 
@@ -161,7 +167,7 @@ export function CallbackDrawerProvider({
         }
         setHiddenBySection(visibleSet.size > 0);
       },
-      { threshold: 0.08 }
+      { threshold: 0.06 }
     );
 
     for (const el of targets) observer.observe(el);
@@ -275,13 +281,13 @@ export function CallbackDrawerProvider({
     <CallbackDrawerContext.Provider value={{ openDrawer, closeDrawer, isOpen }}>
       {children}
 
-      {/* Persistent Jesko-style Magnetic Floating Pill CTA (z-30 so Header z-45, Mobile Sheet z-50, and Drawer z-55 always sit cleanly above) */}
+      {/* Persistent Jesko-style Magnetic Floating Pill CTA on Homepage (z-30 so Header z-45, Mobile Sheet z-50, and Drawer z-55 always sit cleanly above) */}
       {!isPillSuppressedRoute && (
         <div
           data-floating-pill="true"
           data-pill-visible={showPill ? "true" : "false"}
           className={cn(
-            "jc-floating-pill-wrap pointer-events-none fixed inset-x-0 bottom-6 z-[var(--z-sticky)] flex justify-center px-4 transition-[opacity,transform] duration-300",
+            "jc-floating-pill-wrap pointer-events-none fixed inset-x-0 bottom-4 z-[var(--z-sticky)] flex justify-center px-4 transition-[opacity,transform] duration-300 sm:bottom-6",
             showPill
               ? "translate-y-0 opacity-100"
               : "translate-y-6 opacity-0"
@@ -298,7 +304,7 @@ export function CallbackDrawerProvider({
             aria-hidden={!showPill}
             tabIndex={showPill ? 0 : -1}
             className={cn(
-              "jc-floating-pill-btn jc-pill-shadow pointer-events-auto inline-flex min-h-[52px] items-center gap-2 rounded-full border border-[var(--jc-line-light)] bg-[var(--jc-ivory)] py-1.5 pl-6 pr-1.5 text-[14px] font-semibold text-[var(--jc-teal)] whitespace-nowrap cursor-pointer",
+              "jc-floating-pill-btn jc-pill-shadow pointer-events-auto inline-flex min-h-[44px] items-center gap-2 rounded-full border border-[var(--jc-line-light)] bg-[var(--jc-ivory)] py-1 pl-4 pr-1 text-[13px] font-semibold text-[var(--jc-teal)] whitespace-nowrap cursor-pointer sm:min-h-[52px] sm:py-1.5 sm:pl-6 sm:pr-1.5 sm:text-[14px]",
               !showPill && "pointer-events-none"
             )}
           >
@@ -307,7 +313,7 @@ export function CallbackDrawerProvider({
                 <span className="pr-2">Close inquiry</span>
                 <span
                   aria-hidden="true"
-                  className="jc-floating-pill-icon inline-flex size-10 items-center justify-center rounded-full bg-[var(--jc-teal)] text-[var(--jc-ivory)]"
+                  className="jc-floating-pill-icon inline-flex size-8 items-center justify-center rounded-full bg-[var(--jc-teal)] text-[var(--jc-ivory)] sm:size-10"
                 >
                   <X className="size-4" />
                 </span>
@@ -346,7 +352,7 @@ export function CallbackDrawerProvider({
 
                 <span
                   aria-hidden="true"
-                  className="jc-floating-pill-icon relative inline-flex size-10 items-center justify-center overflow-hidden rounded-full bg-[var(--jc-teal)] text-[var(--jc-ivory)]"
+                  className="jc-floating-pill-icon relative inline-flex size-8 items-center justify-center overflow-hidden rounded-full bg-[var(--jc-teal)] text-[var(--jc-ivory)] sm:size-10"
                 >
                   <span
                     ref={plane1Ref}

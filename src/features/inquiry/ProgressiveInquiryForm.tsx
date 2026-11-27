@@ -435,7 +435,7 @@ export function ProgressiveInquiryForm({
       onSubmit={handleSubmit(onSubmit)}
       onFocusCapture={markStarted}
       noValidate
-      className={cn(embedded ? "" : "jc-editorial-card p-6 sm:p-10")}
+      className={cn(embedded ? "" : "jc-editorial-card p-5 sm:p-10")}
     >
       {/* Hidden honeypot against automated spam */}
       <div className="sr-only" aria-hidden="true">
@@ -562,7 +562,7 @@ export function ProgressiveInquiryForm({
                 aria-pressed={active}
                 onClick={() => setValue("trip.service", option.value)}
                 className={cn(
-                  "inline-flex min-h-11 items-center gap-2 rounded-full border px-5 text-[14px] font-medium whitespace-nowrap transition-[background-color,border-color,color] duration-150 cursor-pointer",
+                  "inline-flex min-h-11 items-center gap-2 rounded-full border px-4 text-[13.5px] font-medium whitespace-nowrap transition-[background-color,border-color,color] duration-150 cursor-pointer sm:px-5 sm:text-[14px]",
                   active
                     ? "border-[var(--jc-teal)] bg-[var(--jc-teal)] text-[var(--jc-ivory)]"
                     : "border-[var(--jc-line-strong)] bg-[var(--jc-paper)] text-[var(--jc-ink)] hover:border-[var(--jc-teal)]"
@@ -664,7 +664,7 @@ export function ProgressiveInquiryForm({
               {legFields.map((field, index) => (
                 <div
                   key={field.id}
-                  className="rounded-[14px] border border-[var(--jc-line-light)] bg-[var(--jc-stone)]/60 p-5"
+                  className="rounded-[14px] border border-[var(--jc-line-light)] bg-[var(--jc-stone)]/60 p-4 sm:p-5"
                 >
                   <div className="mb-4 flex items-center justify-between">
                     <span className="text-[13px] font-semibold text-[var(--jc-ink)]">

@@ -113,7 +113,7 @@ export function JeskoCloudPhilosophy({
       ref={sectionRef}
       data-nav-theme="dark"
       data-surface="dark"
-      className="jc-sky-about relative overflow-hidden pb-36 pt-28 text-[var(--jc-ivory)] md:pb-48 md:pt-40"
+      className="jc-sky-about relative overflow-hidden pb-28 pt-20 text-[var(--jc-ivory)] sm:pb-36 sm:pt-28 md:pb-48 md:pt-40"
     >
       {/* Ambient soft drifting sky texture layered gently across the azure sky */}
       <div
@@ -185,9 +185,9 @@ export function JeskoCloudPhilosophy({
           </p>
         </div>
 
-        {/* Jesko step_10 2-column architectural pillars + left founder emblem */}
-        <div className="mt-24 grid grid-cols-1 gap-12 lg:mt-32 lg:grid-cols-[minmax(0,0.65fr)_minmax(0,1.35fr)] lg:gap-16">
-          <div className="flex items-start gap-4 pt-2">
+        {/* Jesko step_10 2-column architectural pillars + left founder emblem (clean vertical stack on mobile phones — zero edge clipping!) */}
+        <div className="mt-14 grid grid-cols-1 gap-10 sm:mt-20 sm:gap-12 lg:mt-32 lg:grid-cols-[minmax(0,0.65fr)_minmax(0,1.35fr)] lg:gap-16">
+          <div className="flex items-start gap-4 pt-1 sm:pt-2">
             <span
               aria-hidden="true"
               className="inline-flex size-11 shrink-0 items-center justify-center rounded-full border border-[var(--jc-line-dark-strong)] text-[var(--jc-ivory)]"
@@ -198,7 +198,7 @@ export function JeskoCloudPhilosophy({
               <p className="jc-brand-mark jc-sky-legible m-0 text-[16px] text-[var(--jc-ivory)]">
                 Jayant Charter
               </p>
-              <p className="jc-sky-legible mt-1 m-0 max-w-[26ch] text-[13px] leading-snug text-[var(--jc-ivory)]">
+              <p className="jc-sky-legible mt-1 m-0 max-w-[30ch] text-[13.5px] leading-snug text-[var(--jc-ivory)]">
                 Custom private aviation inquiries across Delhi NCR, Mumbai, Rajasthan, Goa, and worldwide corridors.
               </p>
             </div>
@@ -206,19 +206,19 @@ export function JeskoCloudPhilosophy({
 
           <div
             ref={pillarsWrapRef}
-            className="jc-hscroll-strip -mx-[var(--gutter)] flex snap-x snap-mandatory gap-6 overflow-x-auto px-[var(--gutter)] pb-2 sm:mx-0 sm:grid sm:grid-cols-2 sm:gap-x-12 sm:gap-y-12 sm:overflow-visible sm:px-0 sm:pb-0"
+            className="grid grid-cols-1 gap-8 sm:grid-cols-2 sm:gap-x-10 sm:gap-y-12 lg:gap-x-12"
           >
             {PILLARS.map((pillar) => (
               <div
                 key={pillar.title}
                 data-pillar="1"
-                className="w-[78vw] shrink-0 snap-start sm:w-auto sm:shrink"
+                className="border-t border-[var(--jc-line-dark-strong)] pt-5 sm:border-t-0 sm:pt-0"
               >
                 <h2 className="jc-display-title jc-sky-legible m-0 text-[var(--jc-ivory)]">
                   {pillar.title}
                 </h2>
-                <div className="my-4 h-px w-8 bg-[var(--jc-line-dark-strong)]" />
-                <p className="jc-sky-legible m-0 max-w-[36ch] text-[15px] leading-relaxed text-[var(--jc-ivory)]">
+                <div className="my-3.5 hidden h-px w-8 bg-[var(--jc-line-dark-strong)] sm:my-4 sm:block" />
+                <p className="jc-sky-legible mt-2.5 m-0 max-w-[44ch] text-[15px] leading-relaxed text-[var(--jc-ivory)] sm:mt-0 sm:max-w-[36ch]">
                   {pillar.body}
                 </p>
               </div>

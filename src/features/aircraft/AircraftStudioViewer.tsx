@@ -477,7 +477,7 @@ export function AircraftStudioViewer({
                 <div
                   role="tablist"
                   aria-label="Choose aircraft example"
-                  className="flex items-center gap-6"
+                  className="flex flex-wrap items-center gap-x-5 gap-y-2 sm:gap-6"
                 >
                   {aircraftList.map((item) => {
                     const active = item.id === aircraft.id;
@@ -489,7 +489,7 @@ export function AircraftStudioViewer({
                         aria-selected={active}
                         onClick={() => handleSelectAircraft(item.id)}
                         className={cn(
-                          "min-h-11 border-b-2 pb-1 font-serif text-[26px] leading-none whitespace-nowrap transition-colors duration-150 cursor-pointer sm:text-[32px]",
+                          "min-h-11 border-b-2 pb-1 font-serif text-[20px] leading-none whitespace-nowrap transition-colors duration-150 cursor-pointer min-[375px]:text-[23px] sm:text-[32px]",
                           active
                             ? isLightStage
                               ? "border-[var(--jc-teal)] text-[var(--jc-ink)]"

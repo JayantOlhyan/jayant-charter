@@ -140,7 +140,7 @@ export function TrustEditorialSplit({ mediaById }: TrustEditorialSplitProps) {
                 </button>
 
                 {isOpen && (
-                  <div className="pb-7 pl-8 sm:pl-10">
+                  <div className="pb-7 pl-0 sm:pl-10">
                     <p className="m-0 max-w-[50ch] text-[15px] leading-relaxed text-[var(--jc-ink)] sm:text-[16px]">
                       {row.summary}
                     </p>
@@ -217,27 +217,37 @@ export function TrustEditorialSplit({ mediaById }: TrustEditorialSplitProps) {
         </div>
       </div>
 
-      {/* Jesko step_22 honest lower architectural strip (2-col mobile split -> 3-col desktop) */}
-      <div className="mt-16 grid grid-cols-2 gap-6 border-t border-[var(--jc-line-light)] pt-7 sm:grid-cols-3 lg:mt-20">
-        <div className="col-span-2 sm:col-span-1">
-          <p className="m-0 text-[12px] font-medium text-[var(--jc-muted)]">
-            Inquiry desk
-          </p>
-          <p className="mt-1 m-0 text-[15px] font-semibold text-[var(--jc-ink)]">
-            Founder-led, direct first contact
-          </p>
+      {/* Jesko step_22 honest lower architectural strip (balanced mobile stack -> 3-col desktop) */}
+      <div className="mt-12 grid grid-cols-1 gap-5 border-t border-[var(--jc-line-light)] pt-7 sm:mt-16 sm:grid-cols-3 sm:gap-6 lg:mt-20">
+        <div className="flex items-start justify-between gap-4 sm:block">
+          <div>
+            <p className="m-0 text-[12px] font-medium text-[var(--jc-muted)]">
+              Inquiry desk
+            </p>
+            <p className="mt-1 m-0 text-[15px] font-semibold text-[var(--jc-ink)]">
+              Founder-led, direct first contact
+            </p>
+          </div>
+          <div className="shrink-0 text-right sm:hidden">
+            <p className="m-0 text-[12px] font-medium text-[var(--jc-muted)]">
+              Local ({localClock.zoneLabel})
+            </p>
+            <p className="jc-display-title mt-0.5 m-0 text-[var(--jc-ink)] tabular-nums">
+              {localClock.time}
+            </p>
+          </div>
         </div>
 
         <div>
           <p className="m-0 text-[12px] font-medium text-[var(--jc-muted)]">
             Active focus markets
           </p>
-          <p className="mt-1 m-0 text-[14px] font-semibold text-[var(--jc-ink)] sm:text-[15px]">
+          <p className="mt-1 m-0 text-[14.5px] font-semibold text-[var(--jc-ink)] sm:text-[15px]">
             Delhi NCR, Mumbai, Rajasthan, Goa &amp; international
           </p>
         </div>
 
-        <div className="text-right">
+        <div className="hidden text-right sm:block">
           <p className="m-0 text-[12px] font-medium text-[var(--jc-muted)]">
             Local time ({localClock.zoneLabel})
           </p>

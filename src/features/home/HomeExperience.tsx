@@ -176,7 +176,7 @@ export function HomeExperience({
         ref={servicesSectionRef}
         data-nav-theme="light"
         data-surface="light"
-        className="surface-ivory border-t border-[var(--jc-line-light)] py-24 md:py-32"
+        className="surface-ivory border-t border-[var(--jc-line-light)] py-16 md:py-28 lg:py-32"
       >
         <div className="jc-container">
           <div className="grid grid-cols-1 gap-6 pb-16 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-end">
@@ -365,7 +365,7 @@ export function HomeExperience({
         id="benefits"
         data-nav-theme="light"
         data-surface="light"
-        className="surface-ivory py-24 md:py-32"
+        className="surface-ivory py-16 md:py-28 lg:py-32"
       >
         <div className="jc-container">
           <div className="grid grid-cols-1 gap-6 pb-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:items-end">
@@ -399,9 +399,10 @@ export function HomeExperience({
 
       {/* Compact Editorial FAQ */}
       <section
+        id="home-faq"
         data-nav-theme="light"
         data-surface="light"
-        className="surface-ivory border-t border-[var(--jc-line-light)] py-20 md:py-24"
+        className="surface-ivory border-t border-[var(--jc-line-light)] py-16 md:py-24"
       >
         <div className="jc-container">
           <FaqBlock items={faqs} />

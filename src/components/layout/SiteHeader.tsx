@@ -177,7 +177,7 @@ export function SiteHeader({
             : "border-[var(--jc-line-dark)] bg-[var(--jc-nav-scrolled-dark)] backdrop-blur-md"
       )}
     >
-      <div className="mx-auto grid h-[var(--header-height)] w-full max-w-[1600px] grid-cols-[1fr_auto_1fr] items-center gap-4 px-[var(--gutter)]">
+      <div className="mx-auto grid h-[var(--header-height)] w-full max-w-[1600px] grid-cols-[1fr_auto_1fr] items-center gap-2 px-[var(--gutter)] sm:gap-4">
         {/* Left: Compact Jesko-proportioned navigation */}
         <nav
           aria-label="Primary navigation"
@@ -286,7 +286,7 @@ export function SiteHeader({
           href="/"
           data-header-logo="true"
           className={cn(
-            "jc-brand-mark justify-self-center text-[19px] leading-none whitespace-nowrap transition-colors duration-300 sm:text-[21px]",
+            "jc-brand-mark justify-self-center text-[15.5px] leading-none whitespace-nowrap transition-colors duration-300 min-[375px]:text-[18px] sm:text-[21px]",
             lightTheme ? "text-[var(--jc-ink)]" : "text-[var(--jc-ivory)]"
           )}
         >

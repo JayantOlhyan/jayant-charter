@@ -60,9 +60,9 @@ export function ConfigurationCompareSlider({
         </div>
       </div>
 
-      {/* Full-width interactive wipe canvas (exact 1025/535 ratio matching Blender camera) */}
+      {/* Full-width interactive wipe canvas (generous mobile 4:3 framing -> exact 1025/535 ratio on sm+) */}
       <div className="relative mx-auto w-full select-none overflow-hidden border-t border-[var(--jc-line-light)] bg-[var(--jc-paper)]">
-        <div className="relative mx-auto aspect-[1025/535] max-h-[500px] w-full max-w-[1120px] px-4 py-4 sm:px-10 sm:py-6">
+        <div className="relative mx-auto aspect-[4/3] max-h-[500px] w-full max-w-[1120px] px-4 py-10 sm:aspect-[1025/535] sm:px-10 sm:py-6">
           {/* Base layer: Parked closed configuration */}
           <img
             src={closedMedia.path}
@@ -70,7 +70,7 @@ export function ConfigurationCompareSlider({
             width={closedMedia.width}
             height={closedMedia.height}
             loading="lazy"
-            className="jc-aircraft-shadow-light pointer-events-none absolute inset-x-4 inset-y-4 h-[calc(100%-2rem)] w-[calc(100%-2rem)] object-contain object-top sm:inset-x-10 sm:inset-y-6 sm:h-[calc(100%-3rem)] sm:w-[calc(100%-5rem)]"
+            className="jc-aircraft-shadow-light pointer-events-none absolute inset-x-4 inset-y-10 h-[calc(100%-5rem)] w-[calc(100%-2rem)] object-contain object-center sm:inset-x-10 sm:inset-y-6 sm:h-[calc(100%-3rem)] sm:w-[calc(100%-5rem)] sm:object-top"
           />
 
           {/* Overlay layer: Boarding deployed airstair clipped via GPU clip-path */}
@@ -85,7 +85,7 @@ export function ConfigurationCompareSlider({
               width={openMedia.width}
               height={openMedia.height}
               loading="lazy"
-              className="jc-aircraft-shadow-light absolute inset-x-4 inset-y-4 h-[calc(100%-2rem)] w-[calc(100%-2rem)] object-contain object-top sm:inset-x-10 sm:inset-y-6 sm:h-[calc(100%-3rem)] sm:w-[calc(100%-5rem)]"
+              className="jc-aircraft-shadow-light absolute inset-x-4 inset-y-10 h-[calc(100%-5rem)] w-[calc(100%-2rem)] object-contain object-center sm:inset-x-10 sm:inset-y-6 sm:h-[calc(100%-3rem)] sm:w-[calc(100%-5rem)] sm:object-top"
             />
           </div>
 
@@ -95,17 +95,19 @@ export function ConfigurationCompareSlider({
             className="pointer-events-none absolute inset-y-0 z-10 w-[2px] bg-[var(--jc-teal)]"
             style={{ left: `${splitPercent}%` }}
           >
-            <div className="absolute left-1/2 top-1/2 flex size-12 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-[var(--jc-gold)] bg-[var(--jc-teal)] text-[var(--jc-ivory)]">
-              <MoveHorizontal className="size-4" />
+            <div className="absolute left-1/2 top-1/2 flex size-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border-2 border-[var(--jc-gold)] bg-[var(--jc-teal)] text-[var(--jc-ivory)] sm:size-12">
+              <MoveHorizontal className="size-3.5 sm:size-4" />
             </div>
           </div>
 
-          {/* Minimal architectural corner labels */}
-          <span className="pointer-events-none absolute left-4 top-4 rounded-full bg-[var(--jc-teal)] px-3.5 py-1 text-[12px] font-medium text-[var(--jc-ivory)] sm:left-6 sm:top-6">
-            Boarding (open airstair)
+          {/* Minimal architectural corner labels (compact on phones so they never collide) */}
+          <span className="pointer-events-none absolute left-3 top-3 rounded-full bg-[var(--jc-teal)] px-3 py-1 text-[11px] font-medium text-[var(--jc-ivory)] sm:left-6 sm:top-6 sm:px-3.5 sm:text-[12px]">
+            <span className="sm:hidden">Boarding</span>
+            <span className="hidden sm:inline">Boarding (open airstair)</span>
           </span>
-          <span className="pointer-events-none absolute right-4 top-4 rounded-full border border-[var(--jc-line-strong)] bg-[var(--jc-ivory)] px-3.5 py-1 text-[12px] font-medium text-[var(--jc-ink)] sm:right-6 sm:top-6">
-            Parked (entry closed)
+          <span className="pointer-events-none absolute right-3 top-3 rounded-full border border-[var(--jc-line-strong)] bg-[var(--jc-ivory)] px-3 py-1 text-[11px] font-medium text-[var(--jc-ink)] sm:right-6 sm:top-6 sm:px-3.5 sm:text-[12px]">
+            <span className="sm:hidden">Parked</span>
+            <span className="hidden sm:inline">Parked (entry closed)</span>
           </span>
 
           {/* Accessible range input spanning entire interactive surface */}

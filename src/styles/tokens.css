@@ -86,9 +86,10 @@
   --jc-sky-about-grad: linear-gradient(
     180deg,
     #014d94 0%,
-    #1f6eb0 42%,
-    #5596c4 72%,
-    #efe8dc 93%,
+    #1b66a8 48%,
+    #3c80b6 78%,
+    #9abed6 92%,
+    #efe8dc 97%,
     #fff8ed 100%
   );
   --jc-light-stone-grad: linear-gradient(

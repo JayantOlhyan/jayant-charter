@@ -35,7 +35,7 @@ export function FaqBlock({
             value={item.id}
             className="border-b border-[var(--jc-line-light)]"
           >
-            <AccordionTrigger className="py-5 font-serif text-[21px] leading-snug font-normal text-[var(--jc-ink)] hover:no-underline">
+            <AccordionTrigger className="py-4 font-serif text-[17.5px] leading-snug font-normal text-[var(--jc-ink)] hover:no-underline sm:py-5 sm:text-[20px] lg:text-[21px]">
               {item.question}
             </AccordionTrigger>
             <AccordionContent className="pb-6 text-[15px] leading-relaxed text-[var(--jc-muted)]">

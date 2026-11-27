@@ -395,7 +395,7 @@ export function JeskoGlobalGlobe() {
               className="absolute inset-0 flex items-center justify-center"
             />
             {!globeReady && (
-              <div className="pointer-events-none relative z-10 flex size-[320px] items-center justify-center rounded-full border border-[var(--jc-line-dark)] bg-[var(--jc-panel-dark)] sm:size-[440px]">
+              <div className="pointer-events-none relative z-10 flex size-[min(78vw,320px)] items-center justify-center rounded-full border border-[var(--jc-line-dark)] bg-[var(--jc-panel-dark)] sm:size-[440px]">
                 <span className="text-[13px] text-[var(--jc-ivory-muted)]">
                   Custom worldwide itineraries
                 </span>
@@ -405,20 +405,20 @@ export function JeskoGlobalGlobe() {
         </div>
 
         {/* Left & Right closing editorial anchors framing the sphere */}
-        <div className="jc-container relative z-20 -mt-12 grid grid-cols-1 items-end gap-10 lg:-mt-44 lg:grid-cols-[minmax(0,1fr)_minmax(240px,1.1fr)_minmax(0,1fr)]">
+        <div className="jc-container relative z-20 mt-6 grid grid-cols-1 items-end gap-10 sm:-mt-8 lg:-mt-44 lg:grid-cols-[minmax(0,1fr)_minmax(240px,1.1fr)_minmax(0,1fr)]">
           <div>
             <h3 className="jc-display-title m-0 max-w-[20ch] text-[var(--jc-ivory)]">
               Fly on your terms with total clarity and control
             </h3>
-            <div className="mt-6 flex flex-wrap items-center gap-4">
+            <div className="mt-6 flex flex-wrap items-center gap-3 sm:gap-4">
               <button
                 type="button"
                 onClick={() => openDrawer()}
-                className="jc-btn-gold"
+                className="jc-btn-gold w-full sm:w-auto"
               >
                 Request a callback
               </button>
-              <Link href="/aircraft" className="jc-btn-outline-light">
+              <Link href="/aircraft" className="jc-btn-outline-light w-full sm:w-auto">
                 Explore aircraft
               </Link>
             </div>
